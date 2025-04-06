@@ -25,3 +25,14 @@ Projetado especialmente para otimizar a rotina de quem lida diariamente com tick
 - Criado o `service-worker.js` para gerenciamento de cache, possibilitando **acesso offline** e **melhoria de desempenho no carregamento**.
 - Adicionadas meta tags no `index.html` para vincular o manifest e definir a cor do tema no navegador.
 - Estruturada a instalação do PWA, permitindo que o usuário adicione o SindauTools_Web à tela inicial de dispositivos móveis e desktop.
+
+---
+
+### Commit #3 – Interface aprimorada e novas funcionalidades
+
+- Adicionada nova **página de extensões** com link na navegação `extensoes.html`.
+- Aplicado gradiente de fundo para melhorar o visual da interface.
+- Botões da navbar agora possuem funcionalidades, permitindo navegação entre páginas.
+- Botão "Sobre" redireciona para o repositório no GitHub, onde será futuramente substituído por uma página dedicada.
+- Botão "Dúvida" agora exibe um container sobreposto, que futuramente terá informações e orientações para o usuário.
+- Botão "Swagger" renomeado para "Autenticação", e implementada funcionalidade que exibe input dinâmico para futuramente ser a inserção de token.

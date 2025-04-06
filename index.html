@@ -15,20 +15,18 @@
         </div>
         <nav class="nav">
             <a href="#" class="active">INICIO</a>
-            <a href="#">SOBRE</a>
-            <a href="#">EXTENSÕES</a>
+            <a href="https://github.com/D-Jefferson/SindauTools_Web">SOBRE</a>
+            <a href="extensoes.html">EXTENSÕES</a>
         </nav>
         <div class="info">
-            <div class="informacao">?</div>
+            <div class="informacao" onclick="info()">?</div>
         </div>
     </header>
     
     <main class="container">
         <h1 class="titulo">SINDAU<span>TOOLS</span></h1>
         
-        <div class="swagger-botao">
-            <a href="#">SWAGGER</a>
-        </div>
+        <div class="auto-botao" onclick="auto()"><a>Autenticação</a></div>
         
         <div class="menu">
             <div class="ferramenta">
@@ -52,6 +50,11 @@
             </div>
         </div>
     </main>
+
+    <div id="fundo-sobrepor" class="fundo-sobrepor">
+        <span id="fechar" class="fechar">&times;</span>
+        <div class="sobrepor" id="conteudo-sobrepor"></div>
+      </div>
     
     <footer class="footer">
         <p>BY JEFFERSON LEVY</p>

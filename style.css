@@ -7,7 +7,7 @@
 
 body {
     height: 100%;
-    background-color: #f5f5f5;
+    background: radial-gradient(circle, #f5f5f5 30%, #b9b9b9 100%);
     overflow-x: hidden;
 }
 
@@ -79,6 +79,8 @@ body {
     animation: bounce 1s ease-in-out infinite;
     display: inline-block;
     position: relative;
+    padding: 0 10px;
+    cursor: pointer;
 }
 
 .container {
@@ -100,13 +102,14 @@ body {
     color: #a80303;
 }
 
-.swagger-botao {
+.auto-botao {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 20px;
+    cursor: pointer;
 }
 
-.swagger-botao a {
+.auto-botao a {
     border: 2px solid #999;
     color: #999;
     padding: 10px 15px;
@@ -117,7 +120,7 @@ body {
     font-size: 14px;
 }
 
-.swagger-botao a::after {
+.auto-botao a::after {
     content: "→";
     margin-left: 5px;
     font-size: 20px;
@@ -142,6 +145,7 @@ body {
     text-align: center;
     background-color: #fff;
     transition: transform 0.3s;
+    cursor: pointer;
 }
 
 .ferramenta:hover {
@@ -162,6 +166,36 @@ body {
     font-size: 18px;
     font-weight: bold;
 }
+
+.fundo-sobrepor {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+}
+  
+.sobrepor {
+    background-color: #ffffff;
+    margin: 10% auto;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 90%;
+    height: 88%;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    margin-top: 3% !important;
+}
+  
+.fechar {
+    color: #aaa9a9;
+    float: right;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
 
 
 
