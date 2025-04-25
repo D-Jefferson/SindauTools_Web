@@ -6,7 +6,7 @@ Projetado especialmente para otimizar a rotina de quem lida diariamente com tick
 
 ---
 
-## 🖥️ Frontend
+## 🖥️ Frontend, Backend & API
 
 ### Commit #1 – Preparação do Ambiente & Estrutura Inicial
 
@@ -36,3 +36,14 @@ Projetado especialmente para otimizar a rotina de quem lida diariamente com tick
 - Botão "Sobre" redireciona para o repositório no GitHub, onde será futuramente substituído por uma página dedicada.
 - Botão "Dúvida" agora exibe um container sobreposto, que futuramente terá informações e orientações para o usuário.
 - Botão "Swagger" renomeado para "Autenticação", e implementada funcionalidade que exibe input dinâmico para futuramente ser a inserção de token.
+
+---
+
+### Commit #4 – Front do primeiro formatador e navegação lateral para formatadores
+
+- Adicionado **formatador de notificações** com a nova página `notificacao.html`, que futuramente fará transformação automática dos dados.
+- Adicionada uma **barra lateral de navegação rápida**, projetada para agilizar a troca entre diferentes tipos de formatadores.
+- Novo arquivo de estilo `style_form.css` criado para dar identidade visual própria aos formatadores, com foco em organização, clareza e escalabilidade.
+
+---
+

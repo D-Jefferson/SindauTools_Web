@@ -26,3 +26,13 @@ function auto(){
   document.getElementById("fundo-sobrepor").style.display = "block";
   document.getElementById("fundo-sobrepor").style.padding = "200px 500px" ;
 }
+
+  /*  Menu Lateral  */
+function lateral() {
+  document.getElementById("menuLateral").classList.toggle("aberto");
+}
+
+  /*  Botoes do menu  */
+function formatar1(){ 
+  window.location.href = "notificacao.html";
+}

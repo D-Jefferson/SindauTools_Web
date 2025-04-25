@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SindauTools - Formatador Notificação</title>
+    <link rel="stylesheet" href="style_form.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="icone" onclick="lateral()">
+            <div class="icone-lateral"><span></span><span></span><span></span></div>
+            <div class="menu-lateral" id="menuLateral">
+                <a href="#"><i class="fa-solid fa-share-from-square"></i>  NOTIFICAÇÃO</a>
+                <a href="#"><i class="fa-solid fa-share-from-square"></i>  VINCULAR</a>
+                <a href="#"><i class="fa-solid fa-share-from-square"></i>  DESVINCULAR</a>
+                <a href="#"><i class="fa-solid fa-share-from-square"></i>  MATRICULA</a>
+            </div>
+        </div>
+        <nav class="nav">
+            <a href="index.html" class="active">INICIO</a>
+            <a href="https://github.com/D-Jefferson/SindauTools_Web">SOBRE</a>
+            <a href="extensoes.html">EXTENSÕES</a>
+        </nav>
+        <div class="info">
+            <div class="informacao" onclick="info()">?</div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <h1>FORMATADOR <span>NOTIFICAÇÃO</span></h1>
+        <div class="inserir-area">
+            <textarea id="colocar" placeholder="Cole aqui os dados para a notificação financeira..."></textarea>
+            <div id="resultados-area" class="resultados-area"></div>
+        </div>
+        <div class="botoes">
+            <button onclick="formatar()" class="formatar">Formatar</button>
+            <div class="apagar"><button onclick="limparResultados()">Limpar</button></div>
+            <button class="exportar">Exportar Csv</button>
+        </div>
+    </div>
+    
+        <footer class="footer">
+            <p>BY JEFFERSON LEVY</p>
+        </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
