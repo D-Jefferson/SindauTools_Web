@@ -146,6 +146,13 @@ h1 span {
   animation: bounce 1s ease-in-out infinite;
 }
 
+h1 span2 {
+  color: #8d1111;
+  font-size: 14px;
+  font-weight: bold;
+  animation: bounce 1s ease-in-out infinite;
+}
+
 .inserir-area {
   display: flex;
   gap: 20px;
@@ -184,6 +191,56 @@ textarea {
   max-height: 420px;
   overflow-y: auto;
   border-radius: 10px;
+}
+
+.resultados-item {
+  background-color: #2b3d5000;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 7px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 165px;
+  max-height: 150px;
+  text-align: center;
+  border: 2px solid rgba(0, 0, 0, 0.459);
+}
+
+.botao-copiar {
+  margin-top: 2px;
+  padding: 2px;
+  padding-left: 50px;
+  padding-right: 50px;
+  background-color: #1a5cc0;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  border-radius: 5px;
+}
+
+.botao-enviar {
+  background-color: #4d4c4c;
+  border: 1px solid #aaa;
+  cursor: not-allowed;
+  opacity: 0.7;
+  margin-top: 2px;
+  padding: 2px;
+  padding-left: 50px;
+  padding-right: 50px;
+  color: white;
+  font-size: 12px;
+  border-radius: 5px;
+}
+
+.botao-enviar:hover {
+  cursor: not-allowed;
+}
+
+.botao-copiar:hover {
+  background-color: #18174e;
 }
 
 .apagar {
@@ -281,9 +338,34 @@ textarea {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
   outline: none;
 }
+
 .exportar:hover {
   background-color: #27ae60;
   color: rgb(255, 255, 255);
+}
+
+.cpf{
+  background-color: #07070700;
+  color: #202020;
+  border: 1px solid #7f8c8d;
+  padding: 10px;
+  resize: none;
+  border-radius: 10px;
+  width: 120px;
+  height: 40px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.operacao{
+  background-color: #07070700;
+  color: #202020;
+  border: 1px solid #7f8c8d;
+  padding: 10px;
+  resize: none;
+  border-radius: 10px;
+  width: 120px;
+  height: 40px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 
 .footer {

@@ -36,3 +36,15 @@ function lateral() {
 function formatar1(){ 
   window.location.href = "notificacao.html";
 }
+
+function formatar2(){ 
+  window.location.href = "vincular.html";
+}
+
+function formatar3(){ 
+  window.location.href = "vincular.html";
+}
+
+function formatar4(){ 
+  window.location.href = "matricula.html";
+}

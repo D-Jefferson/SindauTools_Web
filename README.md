@@ -47,3 +47,14 @@ Projetado especialmente para otimizar a rotina de quem lida diariamente com tick
 
 ---
 
+### Commit #5 – Novos formatadores, exibição de JSON e script dedicado
+
+- Adicionados os novos formatadores:
+  - `vincular.html` – Para formatar dados de vinculação.
+  - `matricula.html` – Para formatação de informações de matrícula.
+- Criado o arquivo `script_form.js`, que concentra as **funções de formatação** para todos os formatadores, promovendo melhor organização e reutilização de código.
+- Após a formatação, os dados são exibidos em **formato JSON** para copiar e colar na API através botão **"Copiar"** que está presente em cada resultado JSON (Futuramente será possivel envio via API).
+
+---
+
+
