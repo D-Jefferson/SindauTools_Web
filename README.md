@@ -57,4 +57,14 @@ Projetado especialmente para otimizar a rotina de quem lida diariamente com tick
 
 ---
 
+### Commit #6 – Novo Design de Sistema e Expansão de Funcionalidades
+
+- Novo Design completo do Layout:
+  - Páginas `index.html` e `extensoes.html` foram **totalmente redesenhadas** com foco em criar uma experiência visual e funcional similar a um **sistema de gestão profissional**.
+  - Alterado ao **tema escuro**, trazendo uma identidade visual mais robusta e alinhada a sistemas **backend corporativos**.
+  - O novo layout exigiu uma reestruturação completa para uma melhor usabilidade.
+- Novas páginas e expansão de funcionalidades:
+  - Adição da página `configuracoes.html`, preparando o sistema para futuras opções de **customização** e **ajustes dinâmicos** pelo usuário.
+
+
 

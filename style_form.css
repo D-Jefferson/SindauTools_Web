@@ -28,6 +28,7 @@ body {
 .icone {
   display: flex;
   align-items: center;
+  z-index: 2;
 }
 
 .icone-lateral {
@@ -142,13 +143,6 @@ h1 {
 h1 span {
   color: #8d1111;
   font-size: 22px;
-  font-weight: bold;
-  animation: bounce 1s ease-in-out infinite;
-}
-
-h1 span2 {
-  color: #8d1111;
-  font-size: 14px;
   font-weight: bold;
   animation: bounce 1s ease-in-out infinite;
 }

@@ -37,7 +37,7 @@
                 <i class="fas fa-history"></i>
                 <span>Sobre</span>
             </a>
-            <a href="extensoes.html" class="active">
+            <a href="extensoes.html">
                 <i class="fas fa-puzzle-piece"></i>
                 <span>Extensões</span>
             </a>
@@ -45,12 +45,12 @@
                 <i class="fas fa-info-circle"></i>
                 <span>Ajuda</span>
             </a>
-            <a href="configuracoes.html">
+            <a href="#"class="active">
                 <i class="fas fa-cog"></i>
                 <span>Configurações</span>
             </a>
         </nav>
-
+        
         <div class="assina" style="background-color: rgba(240, 248, 255, 0);">
             <p style="color: #b8b8b8;">@By Jefferson Levy</p>
         </div>
@@ -73,39 +73,30 @@
                 <div class="sub-info">
                     <a href="index.html">Início</a>
                     <span class="separado">/</span>
-                    <span>Extensões</span>
+                    <span>Configurações</span>
                 </div>
                 </div>
                 
-                <h1 class=".sub-titulo">Extensões</h1>
+                <h1 class=".sub-titulo">Configurações</h1>
 
                 <div class="extensoes">
-                    <div class="extensao">
-                        <i class="fas fa-puzzle-piece extensao-fundo"></i>
-                        <div class="extensao-titulo">Vincular API Renova</div>
-                        <div class="extensao-descricao">Está funcionalidade permite enviar requisições direto do SindauTools sem a necessidade de sites externos.</div>
-                        <button class="extensao-botao" id="extensao-botao" onclick="instalarapi()"><div id="carregamento" class="carregamento"></div><span>Instalar</span></button>
+                    <h3 class=".sub-titulo" style="color: #b8b8b8;">Tema</h3>
+                    <div class="tema">
+                        <span>Modo Escuro</span>
+                        <label class="tema-troca">
+                            <input type="checkbox" id="tema-troca" checked>
+                            <span class="barra"></span>
+                        </label>
                     </div>
-
-                    <h3 class=".sub-titulo" style="color: #b8b8b8;">Instalados</h3>
-                    
-                    <div class="extensao">
-                        <i class="fas fa-puzzle-piece extensao-fundo"></i>
-                        <div class="extensao-titulo">Dashboard</div>
-                        <div class="extensao-descricao">Exibe e monitora o uso dos formatadores padrões.</div>
-                        <div class="extensao-status positivo">
-                            <i class="fas fa-circle-check"></i>Instalado
-                        </div>
-                    </div>
-
-                    <div class="extensao">
-                        <i class="fas fa-puzzle-piece extensao-fundo"></i>
-                        <div class="extensao-titulo">Formatadores</div>
-                        <div class="extensao-descricao">Utilizados para transformar linhas copiadas do Banco de Dados Sindauto em Json para enviar por API</div>
-                        <div class="extensao-status positivo">
-                            <i class="fas fa-circle-check"></i>Instalado
-                        </div>
-                    </div>
+                    <!--
+                    <h3 class=".sub-titulo" style="color: #b8b8b8;">Desempenho</h3>
+                    <div class="tema">
+                        <span>Desativar animações</span>
+                        <label class="tema-troca">
+                            <input type="checkbox" id="tema-troca" checked>
+                            <span class="barra"></span>
+                        </label>
+                    </div>-->
                 </div>
 
                 

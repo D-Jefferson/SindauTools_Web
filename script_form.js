@@ -135,7 +135,10 @@ function obterDataHoraAtual() {
         minute: '2-digit', 
         second: '2-digit'
     };
-    return now.toLocaleString('pt-BR', options).replace(',', '');
+    let dataHora = now.toLocaleString('pt-BR', options).replace(',', '');
+    let [data, hora] = dataHora.split(' ');
+    let [dia, mes, ano] = data.split('/');
+    return `${ano}-${mes}-${dia} ${hora}`;
 }
 
 function formatar_vincular() {
