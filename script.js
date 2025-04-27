@@ -35,7 +35,7 @@ function formatar2(){
 }
 
 function formatar3(){ 
-  window.location.href = "vincular.html";
+  window.location.href = "desvincular.html";
 }
 
 function formatar4(){ 

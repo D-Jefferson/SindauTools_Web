@@ -82,3 +82,14 @@ Projetado especialmente para otimizar a rotina de quem lida diariamente com tick
   - Desenvolvimento de um sistema básico de login:
     - Controle de sessão com `sessionStorage` para restringir o acesso às páginas protegidas.
     - Redirecionamento automático para a tela de login caso o usuário não esteja autenticado.
+    
+---
+
+### Commit #8 – Aplicado o novo Design nos formatadores e página desvincular
+
+- Criação da página `desvincular.html`:
+- **Reestruturação dos Formatadores**:
+  - Revisão e otimização do layout dos formatadores de dados, com foco na melhoria da experiência do usuário.
+  - Melhoria na organização e responsividade dos componentes, visando tornar a interação mais fluida e intuitiva.
+  - Ajustes no estilo e na estrutura dos formatadores para um alinhamento mais consistente com o novo design do sistema.
+
