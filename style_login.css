@@ -1,0 +1,346 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #1a1a1a;
+    color: white;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.barra-lateral {
+    width: 250px;
+    background-color: #212121;
+    padding: 20px 0;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 2;
+}
+
+.logotipo {
+    padding: 10px 20px;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 50px;
+    letter-spacing: 0.5px;
+    position: relative;
+}
+
+.logotipo span {
+    color: #e74c3c;
+}
+
+.logotipo::after {
+    content: "";
+    position: absolute;
+    bottom: -15px;
+    left: 20px;
+    right: 20px;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.info-lateral {
+    padding: 0 20px;
+    margin-top: 20px;
+    font-size: 13px;
+    color: #aaa;
+}
+
+.info-lateral p {
+    margin-bottom: 10px;
+}
+
+.conteudo-principal {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    background-image: radial-gradient(circle at top right, rgba(35, 35, 35, 0.8), rgba(25, 25, 25, 0.8), rgba(15, 15, 15, 0.8));
+    position: relative;
+}
+
+.conteudo-principal::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('/api/placeholder/1200/800') center/cover no-repeat;
+    opacity: 0.1;
+    z-index: -1;
+}
+
+.container-login {
+    background-color: #2c2c2c;
+    border-radius: 10px;
+    padding: 40px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    transform: translateY(0);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.container-login:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+}
+
+.cabecalho-login {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.cabecalho-login h1 {
+    font-size: 28px;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.cabecalho-login p {
+    color: #aaa;
+    font-size: 15px;
+}
+
+.formulario-login .grupo-formulario {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.formulario-login label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #ddd;
+}
+
+.formulario-login .grupo-input {
+    position: relative;
+}
+
+.formulario-login .icone-input {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #777;
+}
+
+.formulario-login input {
+    width: 100%;
+    padding: 14px 14px 14px 40px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background-color: #333;
+    color: white;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.formulario-login input:focus {
+    outline: none;
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.25);
+    background-color: #3a3a3a;
+}
+
+.formulario-login input::placeholder {
+    color: #777;
+}
+
+.formulario-login .mostrar-senha {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #777;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 5px;
+}
+
+.formulario-login .mostrar-senha:hover {
+    color: #e74c3c;
+}
+
+.lembrar-me {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.lembrar-me input {
+    width: auto;
+    margin-right: 8px;
+    accent-color: #e74c3c;
+}
+
+.lembrar-me label {
+    margin-bottom: 0;
+    cursor: pointer;
+    font-size: 14px;
+    color: #aaa;
+}
+
+.formulario-login button {
+    width: 100%;
+    padding: 14px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.formulario-login button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: all 0.6s ease;
+}
+
+.formulario-login button:hover {
+    background-color: #c0392b;
+}
+
+.formulario-login button:hover::before {
+    left: 100%;
+}
+
+.esqueceu-senha {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.esqueceu-senha a {
+    color: #e74c3c;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.esqueceu-senha a:hover {
+    color: #ff6b5b;
+    text-decoration: underline;
+}
+
+.rodape-login {
+    text-align: center;
+    margin-top: 35px;
+    color: #888;
+    font-size: 13px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 20px;
+}
+
+.icone-login {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.circulo-icone {
+    width: 90px;
+    height: 90px;
+    background-color: #333;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
+
+.circulo-icone:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(231, 76, 60, 0.25);
+}
+
+.alerta {
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    background-color: rgba(231, 76, 60, 0.15);
+    border: 1px solid rgba(231, 76, 60, 0.3);
+    color: #ff9b91;
+}
+
+.alerta i {
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+.icone-ajuda {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background-color: #333;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.icone-ajuda:hover {
+    background-color: #e74c3c;
+    transform: translateY(-3px);
+}
+
+.icone-ajuda i {
+    font-size: 18px;
+}
+
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+    
+    .barra-lateral {
+        width: 100%;
+        padding: 15px 0;
+    }
+    
+    .logotipo {
+        margin-bottom: 15px;
+    }
+    
+    .info-lateral {
+        display: none;
+    }
+    
+    .conteudo-principal {
+        padding: 20px;
+    }
+    
+    .container-login {
+        padding: 25px;
+    }
+}

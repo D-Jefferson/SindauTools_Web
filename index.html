@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#7d0c0c">
+    <meta name="theme-color" content="#111111">
     <title>SindauTools - Web</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
@@ -79,7 +79,7 @@
                     <a href="#">Início</a>
                 </div>
                 
-                <h1 class=".sub-titulo">Estatísticas</h1>
+                <div class="h22"><h2 class=".sub-titulo">Estatísticas</h2></div>
 
                 <div class="infos">
                     <div class="cartao-info">
@@ -119,32 +119,47 @@
                     </div>
                 </div>
 
-                <section class="section">
-                    <div class="section-header">
-                        <h2 class="section-title">
-                            <i class="fas fa-wrench"></i>
-                            Formatadores
-                        </h2>
+                <div class="h22"><h2>Formatadores</h2></div>
                         
                         <div class="menu">
                             <div class="ferramenta" onclick="formatar1()">
-                                <img src="icones/notificacao.png" alt="Notificação" class="icone-ferramenta">
+                                <div class="icone-ferramenta">
+                                    <i class="fas fa-bell notification-icon"></i>
+                                </div>
                                 <h2 class="titulo-ferramenta">NOTIFICAÇÃO FINANCEIRA</h2>
+                                <p class="descricao-ferramenta">
+                                    Envie notificações financeiras aos candidatos sobre pagamentos pendentes e confirmações.
+                                </p>
                             </div>
                             
                             <div class="ferramenta" onclick="formatar2()">
-                                <img src="icones/vincular.png" alt="Vincular" class="icone-ferramenta">
+                                <div class="icone-ferramenta">
+                                    <i class="fas fa-link link-icon"></i>
+                                </div>
                                 <h2 class="titulo-ferramenta">VINCULAR CANDIDATO</h2>
+                                <p class="descricao-ferramenta">
+                                    Associe candidatos a processos seletivos, cursos ou outras entidades dentro do sistema.
+                                </p>
                             </div>
                             
                             <div class="ferramenta" onclick="formatar3()">
-                                <img src="icones/desvincular.png" alt="Desvincular" class="icone-ferramenta">
+                                <div class="icone-ferramenta">
+                                    <i class="fas fa-unlink unlink-icon"></i>
+                                </div>
                                 <h2 class="titulo-ferramenta">DESVINCULAR CANDIDATO</h2>
+                                <p class="descricao-ferramenta">
+                                    Remova vínculos entre candidatos e processos seletivos, cursos ou outras entidades.
+                                </p>
                             </div>
                             
                             <div class="ferramenta" onclick="formatar4()">
-                                <img src="icones/matricula.png" alt="Matrícula" class="icone-ferramenta">
+                                <div class="icone-ferramenta">
+                                    <i class="fas fa-user-graduate send-icon"></i>
+                                </div>
                                 <h2 class="titulo-ferramenta">ENVIAR MATRÍCULA</h2>
+                                <p class="descricao-ferramenta">
+                                    Confirme matrículas de candidatos e envie documentação necessária para conclusão do processo.
+                                </p>
                             </div>
                         </div>
                     </main>
@@ -154,5 +169,6 @@
         <div class="sobrepor" id="conteudo-sobrepor"></div>
     </div>
     <script src="script.js"></script>
+    <script>verificarlogado()</script>
 </body>
 </html>

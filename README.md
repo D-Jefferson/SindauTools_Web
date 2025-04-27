@@ -65,6 +65,20 @@ Projetado especialmente para otimizar a rotina de quem lida diariamente com tick
   - O novo layout exigiu uma reestruturação completa para uma melhor usabilidade.
 - Novas páginas e expansão de funcionalidades:
   - Adição da página `configuracoes.html`, preparando o sistema para futuras opções de **customização** e **ajustes dinâmicos** pelo usuário.
+  
+---
 
+### Commit #7 – Ajustes de Design e Implementação do Sistema de Login
 
+- **Melhorias no Design do Site**:
+  - Ajustes finos no layout geral para maior consistência visual e melhor adaptação ao tema escuro.
+  - Correções e melhorias de estilo aplicadas nas páginas principais.
 
+- **Implementação da Tela de Login**:
+  - Adição do arquivo `login.html` com design dedicado para autenticação de usuários.
+  - Criação do arquivo `style_login.css` para estilo da tela de login.
+
+- **Sistema de Verificação de Acesso**:
+  - Desenvolvimento de um sistema básico de login:
+    - Controle de sessão com `sessionStorage` para restringir o acesso às páginas protegidas.
+    - Redirecionamento automático para a tela de login caso o usuário não esteja autenticado.

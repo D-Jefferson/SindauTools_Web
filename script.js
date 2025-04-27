@@ -15,16 +15,9 @@ window.onclick = (e) => {
 
 function info(){
   const container = document.getElementById("conteudo-sobrepor");
-  container.innerHTML = "---";
+  container.innerHTML = 'Sem Notificações';
   document.getElementById("fundo-sobrepor").style.display = "block";
-  document.getElementById("fundo-sobrepor").style.padding = "0 250px" ;
-}
-
-function auto(){
-  const container = document.getElementById("conteudo-sobrepor");
-  container.innerHTML = "---";
-  document.getElementById("fundo-sobrepor").style.display = "block";
-  document.getElementById("fundo-sobrepor").style.padding = "200px 500px" ;
+  document.getElementById("fundo-sobrepor").style.padding = "30px 80px" ;
 }
 
   /*  Menu Lateral  */
@@ -110,3 +103,59 @@ span.textContent = palavras[palavraIndex];
 letraIndex = palavras[palavraIndex].length;
 setTimeout(digitar, 1000);
 digitar();
+
+
+/*  Tela de login e redirecionamento  */
+function versenha() {
+  const campoSenha = document.getElementById('senha');
+  const iconeAlternar = document.getElementById('iconeAlternarSenha');
+  
+  if (campoSenha.type === 'password') {
+      campoSenha.type = 'text';
+      iconeAlternar.classList.remove('fa-eye');
+      iconeAlternar.classList.add('fa-eye-slash');
+  } else {
+      campoSenha.type = 'password';
+      iconeAlternar.classList.remove('fa-eye-slash');
+      iconeAlternar.classList.add('fa-eye');
+  }
+}
+
+function entrar() {
+      const usuario = document.getElementById('usuario').value;
+      const senha = document.getElementById('senha').value;
+      const erro = document.getElementById("erro");
+
+      if (usuario === 'Suporte' && senha === 'Suporte') {
+          sessionStorage.setItem('loggedIn', 'true');
+          window.location.href = 'index.html';
+      } else {
+          erro.innerHTML = '<div class="alerta"><i class="fas fa-exclamation-circle"></i>Usuário ou senha incorretos. Por favor, tente novamente.</div>';
+      }
+  };
+
+function verificarlogado() {
+  document.addEventListener("DOMContentLoaded", function () {
+      const temaSalvo = localStorage.getItem('tema');
+  if (temaSalvo === 'claro') {
+      document.body.classList.add('claro');
+  }
+
+      if (window.location.pathname !== 'login.html') {
+          if (sessionStorage.getItem('loggedIn') !== "true") {
+              window.location.href = 'login.html';
+          }
+      }
+  });
+}
+
+function trocarmodo() {
+  document.body.classList.toggle('claro');
+  
+  if (document.body.classList.contains('claro')) {
+      localStorage.setItem('tema', 'claro');
+  } else {
+      localStorage.setItem('tema', 'escuro');
+  }
+}
+

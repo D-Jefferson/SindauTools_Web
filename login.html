@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#111111">
+    <title>SindauTools - Web</title>
+    <link rel="stylesheet" href="style_login.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="icones/sindautools.png" type="image/x-icon">
+</head>
+<body>
+    <div class="barra-lateral">
+        <div class="logotipo">
+            SINDAU<span>TOOLS</span>
+        </div>
+        <div class="info-lateral">
+            <h1>Bem-vindo(a)</h1>
+            <p>SindauTools_Web é a versão aprimorada do SindauTools, desenvolvida especialmente para otimizar as operações dos analistas de dados e analistas de suporte técnico do Sindauto-BA. Com foco na agilidade, praticidade e eficiência, este sistema integrado de gerenciamento visa transformar a maneira como os analistas lidam com tickets e demandas relacionadas à API e Banco de Dados.</p>
+            <p></p>
+            <p>Versão Definitiva</p>
+        </div>
+    </div>
+    
+    <div class="conteudo-principal">
+        <div class="container-login">
+            <div class="cabecalho-login">
+                <div class="icone-login">
+                    <div class="circulo-icone">
+                        <i class="fas fa-user-lock" style="font-size: 32px; color: #e74c3c;"></i>
+                    </div>
+                </div>
+                <h1>Acesso ao Sistema</h1>
+                <p>Insira suas credenciais para continuar</p>
+            </div>
+            <div id="erro"></div>
+            <form class="formulario-login">
+                <div class="grupo-formulario">
+                    <label for="usuario">Nome de usuário</label>
+                    <div class="grupo-input">
+                        <span class="icone-input">
+                            <i class="fas fa-user"></i>
+                        </span>
+                        <input type="text" id="usuario" name="usuario" placeholder="Digite seu nome de usuário" required autocomplete="username">
+                    </div>
+                </div>
+                
+                <div class="grupo-formulario">
+                    <label for="senha">Senha</label>
+                    <div class="grupo-input">
+                        <span class="icone-input">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                        <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required autocomplete="current-password">
+                        <span class="mostrar-senha" onclick="versenha()">
+                            <i class="fas fa-eye" id="iconeAlternarSenha"></i>
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="lembrar-me">
+                    <input type="checkbox" id="lembrar" name="lembrar">
+                    <label for="lembrar">Lembrar de mim</label>
+                </div>
+                
+                <button onclick="entrar()" type="button">ENTRAR</button>
+            </form>
+            
+            <div class="esqueceu-senha">
+                <a href="#">Esqueceu sua senha?</a>
+            </div>
+            
+            <div class="rodape-login">
+                © 2025 Jefferson Levy. Todos os direitos reservados.
+            </div>
+        </div>
+        
+        <div class="icone-ajuda" title="Ajuda">
+            <i class="fas fa-question"></i>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

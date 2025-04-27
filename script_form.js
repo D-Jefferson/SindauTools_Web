@@ -1,5 +1,5 @@
 let resultados = [];
-
+verificarlogado()
 
 //---------- Notificação ----------
 function formatar_notificacao() {
