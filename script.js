@@ -159,3 +159,51 @@ function trocarmodo() {
   }
 }
 
+/*  Aba de ajuda  */
+function ajuda() {
+  document.addEventListener('DOMContentLoaded', () => {
+    const abasFiltro = document.querySelectorAll('.aba-filtro');
+    const cartoesAjuda = document.querySelectorAll('.ajuda-itens');
+    const pesquisaInput = document.querySelector('.pesquisa-ajuda input');
+    const botaoPesquisa = document.querySelector('.botao-pesquisa');
+    const categoriasMap = {
+      'todos': [0, 1, 2, 3],
+      'erros comuns': [3],
+      'dúvidas frequentes': [0, 1, 2],
+      'contatos': [4,5,6,7,8]
+    };
+    function filtrar(categoria) {
+      const filtro = categoria.toLowerCase().trim();
+      const indices = categoriasMap[filtro] || [];
+      
+      cartoesAjuda.forEach((cartao, i) => {
+        cartao.style.display = filtro === 'todos' || indices.includes(i) ? 'flex' : 'none';
+      });
+    }
+    abasFiltro.forEach(aba => {
+      aba.addEventListener('click', function() {
+        abasFiltro.forEach(t => t.classList.remove('ativo'));
+        this.classList.add('ativo');
+        filtrar(this.textContent);
+      });
+    });
+    if (botaoPesquisa && pesquisaInput) {
+      const buscar = () => {
+        const termo = pesquisaInput.value.toLowerCase().trim();
+        if (!termo) {
+          filtrar(document.querySelector('.aba-filtro.ativo')?.textContent || 'todos');
+          return;
+        }
+        
+        cartoesAjuda.forEach(cartao => {
+          const texto = cartao.textContent.toLowerCase();
+          cartao.style.display = texto.includes(termo) ? 'flex' : 'none';
+        });
+      };
+      
+      botaoPesquisa.addEventListener('click', buscar);
+      pesquisaInput.addEventListener('keypress', e => e.key === 'Enter' && buscar());
+    }
+    filtrar('todos');
+  });
+}

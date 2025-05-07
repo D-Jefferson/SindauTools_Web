@@ -92,4 +92,14 @@ Projetado especialmente para otimizar a rotina de quem lida diariamente com tick
   - Revisão e otimização do layout dos formatadores de dados, com foco na melhoria da experiência do usuário.
   - Melhoria na organização e responsividade dos componentes, visando tornar a interação mais fluida e intuitiva.
   - Ajustes no estilo e na estrutura dos formatadores para um alinhamento mais consistente com o novo design do sistema.
+      
+---
 
+### Commit #9 – Criação de páginas e ajustes
+
+- **Criação das páginas `sobre.html` e `ajuda.html`**:
+  - Estruturação inicial das páginas informativas "Sobre" e "Ajuda", seguindo o novo padrão visual do sistema.
+  - Inclusão de conteúdo introdutório para auxiliar em demandas do sistema e duvidas.
+
+- **Integração com o botão de ferramentas**:
+  - Implementado redirecionamento para as novas páginas a partir do botão de ferramentas no sistema.
