@@ -28,48 +28,25 @@
             <div class="cabecalho-login">
                 <div class="icone-login">
                     <div class="circulo-icone">
-                        <i class="fas fa-user-lock" style="font-size: 32px; color: #e74c3c;"></i>
+                        <i class="fas fa-right-to-bracket" style="font-size: 32px; color: #e74c3c;"></i>
                     </div>
                 </div>
                 <h1>Acesso ao Sistema</h1>
-                <p>Insira suas credenciais para continuar</p>
             </div>
-            <div id="erro"></div>
-            <form class="formulario-login">
-                <div class="grupo-formulario">
-                    <label for="usuario">Nome de usuário</label>
-                    <div class="grupo-input">
-                        <span class="icone-input">
-                            <i class="fas fa-user"></i>
-                        </span>
-                        <input type="text" id="usuario" name="usuario" placeholder="Digite seu nome de usuário" required autocomplete="username">
-                    </div>
+            <div class="info-perfil">
+                <div class="icone-perfil">
+                    <i class="fas fa-user" style="font-size: 32px; color: #e74c3c;"></i>
                 </div>
                 
-                <div class="grupo-formulario">
-                    <label for="senha">Senha</label>
-                    <div class="grupo-input">
-                        <span class="icone-input">
-                            <i class="fas fa-lock"></i>
-                        </span>
-                        <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required autocomplete="current-password">
-                        <span class="mostrar-senha" onclick="versenha()">
-                            <i class="fas fa-eye" id="iconeAlternarSenha"></i>
-                        </span>
-                    </div>
+                <div class="texto-perfil">
+                    <div class="rotulo-perfil">Perfil de acesso</div>
+                    <div class="valor-perfil">Suporte</div>
                 </div>
+                <div class="ponto-status"></div>
+            </div>
                 
-                <div class="lembrar-me">
-                    <input type="checkbox" id="lembrar" name="lembrar">
-                    <label for="lembrar">Lembrar de mim</label>
-                </div>
-                
-                <button onclick="entrar()" type="button">ENTRAR</button>
+                <button class="botao" onclick="entrar()" type="button">ENTRAR</button>
             </form>
-            
-            <div class="esqueceu-senha">
-                <a href="#">Esqueceu sua senha?</a>
-            </div>
             
             <div class="rodape-login">
                 © 2025 Jefferson Levy. Todos os direitos reservados.

@@ -6,7 +6,7 @@ Projetado especialmente para otimizar a rotina de quem lida diariamente com tick
 
 ---
 
-## 🖥️ Frontend, Backend & API
+## 🖥️ Sistema Simplificado
 
 ### Commit #1 – Preparação do Ambiente & Estrutura Inicial
 
@@ -103,3 +103,25 @@ Projetado especialmente para otimizar a rotina de quem lida diariamente com tick
 
 - **Integração com o botão de ferramentas**:
   - Implementado redirecionamento para as novas páginas a partir do botão de ferramentas no sistema.
+
+---
+
+### Commit #10 – Ajustes na página de login e inclusão de contador
+
+- **Ajuste na página de login para acesso rápido**
+  - Simplificação do fluxo de autenticação, permitindo acesso mais ágil ao sistema.
+
+- **Inclusão do sistema de contador nas estatísticas**
+  - Implementado contador utilizando `localStorage` para rastrear interações de usuários.
+  - Exibição do total de formatações feitas em cartões disponiveis na pagina inicial.
+
+---
+
+
+### Commit #11 – Correções de usabilidade
+
+- Botão de copiar agora não exibe mais alerta, aparece copiado.
+- Removido o botão de enviar.
+- Ajustado linha do `Json` do formatador de matriculas de `matricula_uuid` para `uuid`.
+
+---

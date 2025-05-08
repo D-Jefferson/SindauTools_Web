@@ -41,14 +41,15 @@ function formatar_notificacao() {
                     const copiarBotao = document.createElement('botao');
                     copiarBotao.className = 'botao-copiar';
                     copiarBotao.textContent = 'Copiar';
-                    copiarBotao.onclick = () => copiarTexto(resultadoJson);
-
-                    const enviar = document.createElement('botao2');
-                    enviar.className = 'botao-enviar';
-                    enviar.textContent = 'Enviar';
+                    copiarBotao.onclick = () => {
+                        copiarTexto(resultadoJson);
+                        copiarBotao.innerText = "Copiado!";
+                        copiarBotao.style.backgroundColor = "#264d88";
+                        copiarBotao.style.pointerEvents = "none";
+                        contarClique1();
+                    };
 
                     resultItem.appendChild(copiarBotao);
-                    resultItem.appendChild(enviar);
                     document.getElementById('resultados-area').appendChild(resultItem);
                 } catch (e) {
                     console.error('Erro ao processar a linha:', linha, e);
@@ -78,7 +79,7 @@ function formatar_matricula() {
                         "operacao": elementos[1],
                         "data_hora": elementos[2],
                         "matricula": {
-                        "uuid_matricula": elementos[3],
+                        "uuid": elementos[3],
                         "candidato": {
                         "nome": elementos[4],
                         "cpf": elementos[5]
@@ -103,14 +104,15 @@ function formatar_matricula() {
                     const copiarBotao = document.createElement('botao');
                     copiarBotao.className = 'botao-copiar';
                     copiarBotao.textContent = 'Copiar';
-                    copiarBotao.onclick = () => copiarTexto(resultadoJson);
-
-                    const enviar = document.createElement('botao2');
-                    enviar.className = 'botao-enviar';
-                    enviar.textContent = 'Enviar';
+                    copiarBotao.onclick = () => {
+                        copiarTexto(resultadoJson);
+                        copiarBotao.innerText = "Copiado!";
+                        copiarBotao.style.backgroundColor = "#264d88";
+                        copiarBotao.style.pointerEvents = "none";
+                        contarClique4();
+                    };
 
                     resultItem.appendChild(copiarBotao);
-                    resultItem.appendChild(enviar);
                     document.getElementById('resultados-area').appendChild(resultItem);
                 } catch (e) {
                     console.error('Erro ao processar a linha:', linha, e);
@@ -174,14 +176,18 @@ function mostrarResultados(uuids, cpf, operacao) {
         const copiarBotao = document.createElement('botao');
         copiarBotao.className = 'botao-copiar';
         copiarBotao.textContent = 'Copiar';
-        copiarBotao.onclick = () => copiarTexto(resultadoJson);
-
-        const enviar = document.createElement('botao2');
-        enviar.className = 'botao-enviar';
-        enviar.textContent = 'Enviar';
+        copiarBotao.onclick = () => {
+            copiarTexto(resultadoJson);
+            if (operacao === "VINCULADO") {
+                contarClique2();
+            } else if (operacao === "DESVINCULADO") {
+                contarClique3();}
+            copiarBotao.innerText = "Copiado!";
+            copiarBotao.style.backgroundColor = "#264d88";
+            copiarBotao.style.pointerEvents = "none";
+        };
 
         resultItem.appendChild(copiarBotao);
-        resultItem.appendChild(enviar);
         document.getElementById('resultados-area').appendChild(resultItem);
     });
 }
@@ -191,7 +197,7 @@ function mostrarResultados(uuids, cpf, operacao) {
 // Copiar e Limpar
 function copiarTexto(linha) {
     navigator.clipboard.writeText(linha).then(() => {
-        alert("Texto copiado!");
+        console.log("copiado");
     }).catch(err => {
         console.error("Erro ao copiar texto: ", err);
     });
@@ -203,3 +209,144 @@ function limparResultados() {
     document.getElementById('resultados-area').innerHTML = '';
     document.getElementById('cpf').value = '';
 }
+
+function contarClique1() {
+    let contador = parseInt(localStorage.getItem('totalCliques') || '0');
+    contador++;
+    localStorage.setItem('totalCliques', contador);
+    atualizarContadorNaInterface();
+}
+
+function contarClique2() {
+    let contador2 = parseInt(localStorage.getItem('totalCliques2') || '0');
+    contador2++;
+    localStorage.setItem('totalCliques2', contador2);
+    atualizarContadorNaInterface();
+}
+
+function contarClique3() {
+    let contador3 = parseInt(localStorage.getItem('totalCliques3') || '0');
+    contador3++;
+    localStorage.setItem('totalCliques3', contador3);
+    atualizarContadorNaInterface();
+}
+
+function contarClique4() {
+    let contador4 = parseInt(localStorage.getItem('totalCliques4') || '0');
+    contador4++;
+    localStorage.setItem('totalCliques4', contador4);
+    atualizarContadorNaInterface();
+}
+
+
+function atualizarContadorNaInterface() {
+    const elementos = document.querySelectorAll('.cartao-info-valor');
+    elementos.forEach(elemento => {
+        const cartao = elemento.closest('.cartao-info');
+        if (cartao && cartao.querySelector('.cartao-info-titulo').textContent === 'Notificações Financeiras') {
+            const total = localStorage.getItem('totalCliques') || '0';
+            elemento.textContent = total;
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const elementos = document.querySelectorAll('.cartao-info-titulo');
+    elementos.forEach(elemento => {
+        if (elemento.textContent === 'Notificações Financeiras') {
+            const cartao = elemento.closest('.cartao-info');
+            if (cartao) {
+                const valorElemento = cartao.querySelector('.cartao-info-valor');
+                if (valorElemento) {
+                    const total = localStorage.getItem('totalCliques') || '0';
+                    valorElemento.textContent = total;
+                }
+            }
+        }
+    });
+});
+
+
+function atualizarContadorNaInterface() {
+    const elementos = document.querySelectorAll('.cartao-info-valor');
+    elementos.forEach(elemento => {
+        const cartao = elemento.closest('.cartao-info');
+        if (cartao && cartao.querySelector('.cartao-info-titulo').textContent === 'Candidatos Vinculados') {
+            const total = localStorage.getItem('totalCliques2') || '0';
+            elemento.textContent = total;
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const elementos = document.querySelectorAll('.cartao-info-titulo');
+    elementos.forEach(elemento => {
+        if (elemento.textContent === 'Candidatos Vinculados') {
+            const cartao = elemento.closest('.cartao-info');
+            if (cartao) {
+                const valorElemento = cartao.querySelector('.cartao-info-valor');
+                if (valorElemento) {
+                    const total = localStorage.getItem('totalCliques2') || '0';
+                    valorElemento.textContent = total;
+                }
+            }
+        }
+    });
+});
+
+
+function atualizarContadorNaInterface() {
+    const elementos = document.querySelectorAll('.cartao-info-valor');
+    elementos.forEach(elemento => {
+        const cartao = elemento.closest('.cartao-info');
+        if (cartao && cartao.querySelector('.cartao-info-titulo').textContent === 'Candidatos Desvinculados') {
+            const total = localStorage.getItem('totalCliques3') || '0';
+            elemento.textContent = total;
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const elementos = document.querySelectorAll('.cartao-info-titulo');
+    elementos.forEach(elemento => {
+        if (elemento.textContent === 'Candidatos Desvinculados') {
+            const cartao = elemento.closest('.cartao-info');
+            if (cartao) {
+                const valorElemento = cartao.querySelector('.cartao-info-valor');
+                if (valorElemento) {
+                    const total = localStorage.getItem('totalCliques3') || '0';
+                    valorElemento.textContent = total;
+                }
+            }
+        }
+    });
+});
+
+
+
+function atualizarContadorNaInterface() {
+    const elementos = document.querySelectorAll('.cartao-info-valor');
+    elementos.forEach(elemento => {
+        const cartao = elemento.closest('.cartao-info');
+        if (cartao && cartao.querySelector('.cartao-info-titulo').textContent === 'Matrículas Enviadas') {
+            const total = localStorage.getItem('totalCliques4') || '0';
+            elemento.textContent = total;
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const elementos = document.querySelectorAll('.cartao-info-titulo');
+    elementos.forEach(elemento => {
+        if (elemento.textContent === 'Matrículas Enviadas') {
+            const cartao = elemento.closest('.cartao-info');
+            if (cartao) {
+                const valorElemento = cartao.querySelector('.cartao-info-valor');
+                if (valorElemento) {
+                    const total = localStorage.getItem('totalCliques4') || '0';
+                    valorElemento.textContent = total;
+                }
+            }
+        }
+    });
+});

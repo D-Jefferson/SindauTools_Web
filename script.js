@@ -104,34 +104,9 @@ letraIndex = palavras[palavraIndex].length;
 setTimeout(digitar, 1000);
 digitar();
 
-
-/*  Tela de login e redirecionamento  */
-function versenha() {
-  const campoSenha = document.getElementById('senha');
-  const iconeAlternar = document.getElementById('iconeAlternarSenha');
-  
-  if (campoSenha.type === 'password') {
-      campoSenha.type = 'text';
-      iconeAlternar.classList.remove('fa-eye');
-      iconeAlternar.classList.add('fa-eye-slash');
-  } else {
-      campoSenha.type = 'password';
-      iconeAlternar.classList.remove('fa-eye-slash');
-      iconeAlternar.classList.add('fa-eye');
-  }
-}
-
 function entrar() {
-      const usuario = document.getElementById('usuario').value;
-      const senha = document.getElementById('senha').value;
-      const erro = document.getElementById("erro");
-
-      if (usuario === 'Suporte' && senha === 'Suporte') {
-          sessionStorage.setItem('loggedIn', 'true');
-          window.location.href = 'index.html';
-      } else {
-          erro.innerHTML = '<div class="alerta"><i class="fas fa-exclamation-circle"></i>Usuário ou senha incorretos. Por favor, tente novamente.</div>';
-      }
+    sessionStorage.setItem('loggedIn', 'true');
+    window.location.href = 'index.html';
   };
 
 function verificarlogado() {
