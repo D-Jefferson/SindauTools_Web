@@ -118,10 +118,12 @@ Projetado especialmente para otimizar a rotina de quem lida diariamente com tick
 ---
 
 
-### Commit #11 – Correções de usabilidade
+### Commit #11 & #12 – Correções de usabilidade
 
 - Botão de copiar agora não exibe mais alerta, aparece copiado.
 - Removido o botão de enviar.
 - Ajustado linha do `Json` do formatador de matriculas de `matricula_uuid` para `uuid`.
+- Ajustado botão de copiar/contador dos formatadores.
+- Ajustado rodapé das páginas.
 
 ---

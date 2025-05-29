@@ -45,9 +45,11 @@ function formatar_notificacao() {
                         copiarTexto(resultadoJson);
                         copiarBotao.innerText = "Copiado!";
                         copiarBotao.style.backgroundColor = "#264d88";
-                        copiarBotao.style.pointerEvents = "none";
-                        contarClique1();
-                    };
+                            if (!copiarBotao.clicado) {
+                                contarClique1();
+                                copiarBotao.clicado = true;
+                            }
+                        };
 
                     resultItem.appendChild(copiarBotao);
                     document.getElementById('resultados-area').appendChild(resultItem);
@@ -108,8 +110,10 @@ function formatar_matricula() {
                         copiarTexto(resultadoJson);
                         copiarBotao.innerText = "Copiado!";
                         copiarBotao.style.backgroundColor = "#264d88";
-                        copiarBotao.style.pointerEvents = "none";
-                        contarClique4();
+                            if (!copiarBotao.clicado) {
+                                contarClique4();
+                                copiarBotao.clicado = true;
+                            }
                     };
 
                     resultItem.appendChild(copiarBotao);
@@ -184,7 +188,6 @@ function mostrarResultados(uuids, cpf, operacao) {
                 contarClique3();}
             copiarBotao.innerText = "Copiado!";
             copiarBotao.style.backgroundColor = "#264d88";
-            copiarBotao.style.pointerEvents = "none";
         };
 
         resultItem.appendChild(copiarBotao);
