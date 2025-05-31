@@ -206,7 +206,6 @@ body::-webkit-scrollbar {
 
 .barra {
     position: absolute;
-    cursor: not-allowed;
     top: 0;
     left: 0;
     right: 0;
@@ -889,11 +888,6 @@ input:checked + .barra:before {
     color: #aaaaaa;
     line-height: 1.5;
 }
-
-.container.fade-out {
-    opacity: 0;
-    transition: opacity 0.5s ease;
-  }
 
 @media screen and (max-width: 1200px) {
     .grade-ajuda {

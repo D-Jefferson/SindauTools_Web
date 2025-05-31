@@ -139,3 +139,15 @@ Projetado especialmente para otimizar a rotina de quem lida diariamente com tick
 
 
 ---
+
+### Commit #14 – Adicionado acesso rápido à API
+
+- Adicionado **iframe interativo lateral** com acesso direto à API (Swagger).
+- Incluído **botão "Token"** com funcionalidade de:
+  - **Salvar token** no `localStorage`
+  - **Copiar token** ao clicar
+  - **Editar token** ao clicar com o botão direito
+- Interface retrátil e responsiva com animações suaves.
+- Instrução adicionada para facilitar a usabilidade.
+
+---

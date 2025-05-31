@@ -607,3 +607,233 @@ function obterDataHoraAtual() {
     let [dia, mes, ano] = data.split('/');
     return `${ano}-${mes}-${dia} ${hora}`;
 }
+
+// Extensão acesso rapido api
+const estilo = document.createElement('style');
+estilo.textContent = `
+  .seta-lateral {
+    position: fixed;
+    right: 0;
+    top: 45%;
+    width: 20px;
+    height: 100px;
+    background-color: rgba(199, 199, 199, 0.45);
+    border-radius: 5px 0 0 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 999;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.4);
+  }
+  
+  .seta-lateral::before {
+    content: '◀';
+    color: #333;
+    font-size: 16px;
+    transition: transform 0.3s;
+  }
+  
+  .seta-lateral.aberto::before {
+    transform: rotate(180deg);
+    color: #c4404b;
+  }
+  
+  .iframe-lateral {
+    position: fixed;
+    right: -35%;
+    top: 0;
+    width: 31%;
+    height: 100%;
+    background-color: white;
+    z-index: 998;
+    box-shadow: -3px 0 10px rgba(0, 0, 0, 0.2);
+    transition: right 0.4s ease;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.4);
+  }
+  
+  .iframe-lateral.aberto {
+    right: 0;
+  }
+  
+  .conteudo-principal {
+    transition: margin-left 0.4s ease;
+    margin-right: 0;
+  }
+  
+  .conteudo-principal.deslocado {
+    margin-right: 30%;
+    margin-left: 0%;
+  }
+`;
+document.head.appendChild(estilo);
+function adicionarIframeLateral() {
+  const setaLateral = document.createElement('div');
+  setaLateral.className = 'seta-lateral';
+  document.body.appendChild(setaLateral);
+  const iframeLateral = document.createElement('div');
+  iframeLateral.className = 'iframe-lateral';
+  iframeLateral.innerHTML = '<iframe src="https://teleaulaapi-prod.renova.app.br/swagger/index.html" style="width:100%; height:100%; border:none;"></iframe>';
+  document.body.appendChild(iframeLateral);
+  const conteudosPrincipais = document.querySelectorAll('.container, #conteudo');
+  conteudosPrincipais.forEach(el => el.classList.add('conteudo-principal'));
+  setaLateral.addEventListener('click', function() {
+    const iframeAberto = iframeLateral.classList.toggle('aberto');
+    setaLateral.classList.toggle('aberto');
+    conteudosPrincipais.forEach(el => {
+        el.classList.toggle('deslocado', iframeAberto);
+        const menuLateral = document.querySelector(".menu-lateral-inicio");
+        const transformAtual = getComputedStyle(menuLateral).transform;
+        if (transformAtual === "none" || transformAtual === "matrix(1, 0, 0, 1, 0, 0)") {
+        menuLateral.style.transform = "translateX(-100%)";
+        } else {
+        menuLateral.style.transform = "translateX(0%)";
+        }
+      });
+  });
+}
+document.addEventListener('DOMContentLoaded', adicionarIframeLateral);
+if (document.readyState === 'interactive' || document.readyState === 'complete') {
+  adicionarIframeLateral();
+}
+
+
+// Botão token
+document.addEventListener('DOMContentLoaded', () => {
+    const container = document.createElement('div');
+    container.style.position = 'fixed';
+    container.style.bottom = '1%';
+    container.style.right = '0px';
+    container.style.zIndex = '1000';
+    container.style.backgroundColor = 'transparent';
+    container.style.padding = '0';
+    container.style.border = 'none';
+    container.style.borderRadius = '0';
+    container.style.fontFamily = 'Arial, sans-serif';
+
+    const botaoToken = document.createElement('button');
+    botaoToken.textContent = 'Token';
+    botaoToken.style.padding = '6px 10px';
+    botaoToken.style.marginRight = '8px';
+    botaoToken.style.cursor = 'pointer';
+    botaoToken.style.backgroundColor = 'rgba(135, 25, 25, 0.62)';
+    botaoToken.style.color = '#fff';
+    botaoToken.style.border = 'none';
+    botaoToken.style.borderRadius = '8px';
+    botaoToken.style.transition = 'background-color 0.3s ease, transform 0.1s ease';
+    botaoToken.style.fontSize = '14px';
+    botaoToken.style.fontWeight = 'bold';
+
+
+    const inputToken = document.createElement('input');
+    inputToken.type = 'text';
+    inputToken.placeholder = 'Insira o token';
+    inputToken.style.padding = '6px';
+    inputToken.style.display = 'none';
+    inputToken.style.marginRight = '8px';
+    inputToken.style.width = 'calc(100% - 100px)';
+    inputToken.style.borderRadius = '8px';
+
+    const botaoSalvar = document.createElement('button');
+    botaoSalvar.textContent = 'Salvar';
+    botaoSalvar.style.padding = '6px 10px';
+    botaoSalvar.style.marginRight = '8px';
+    botaoSalvar.style.cursor = 'pointer';
+    botaoSalvar.style.backgroundColor = 'rgba(135, 25, 25, 0.62)';
+    botaoSalvar.style.color = '#fff';
+    botaoSalvar.style.border = 'none';
+    botaoSalvar.style.borderRadius = '8px';
+    botaoSalvar.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
+    botaoSalvar.style.transition = 'background-color 0.3s ease, transform 0.1s ease';
+    botaoSalvar.style.fontSize = '14px';
+    botaoSalvar.style.fontWeight = 'bold';
+    botaoSalvar.style.display = 'none';
+    botaoSalvar.style.cursor = 'pointer';
+
+    const info = document.createElement('p');
+    info.textContent = 'Salva localmente. Caso queira editar posteriormente clique com botão direito sobre o botão token!';
+    info.style.fontSize = '12px';
+    info.style.color = 'rgba(233, 228, 228, 0.62)';
+    info.style.marginTop = '10px';
+    info.style.fontStyle = 'italic';
+    info.style.userSelect = 'none';
+    info.style.display = 'none';
+
+    container.appendChild(botaoToken);
+    container.appendChild(inputToken);
+    container.appendChild(botaoSalvar);
+    container.appendChild(info);
+
+    document.body.appendChild(container);
+
+    function mostrarEdicao() {
+        const tokenSalvo = localStorage.getItem('meu_token') || '';
+        inputToken.value = tokenSalvo;
+        inputToken.style.display = 'inline-block';
+        botaoSalvar.style.display = 'inline-block';
+        container.style.border = '1px solid #ccc';
+        container.style.borderRadius = '8px';
+        container.style.backgroundColor = 'rgba(0, 0, 0, 0.84)';
+        container.style.padding = '10px 15px';
+        info.style.display = 'block';
+        botaoToken.style.display = 'none';
+    }
+
+    function esconderEdicao() {
+        inputToken.style.display = 'none';
+        botaoSalvar.style.display = 'none';
+        info.style.display = 'none'; 
+        botaoToken.style.display = 'inline-block';
+        container.style.backgroundColor = 'transparent';
+        container.style.padding = '0';
+        container.style.border = 'none';
+        container.style.borderRadius = '0';
+    }
+
+    botaoToken.addEventListener('click', () => {
+        const tokenSalvo = localStorage.getItem('meu_token');
+
+        if (!tokenSalvo) {
+            mostrarEdicao();
+        } else {
+            navigator.clipboard.writeText(tokenSalvo).then(() => {
+                botaoToken.textContent = 'Copiado!';
+                botaoToken.style.backgroundColor = 'rgb(135, 25, 25)';
+                setTimeout(() => {
+                botaoToken.textContent = 'Token';
+                botaoToken.style.backgroundColor = 'rgba(135, 25, 25, 0.62)';
+                }, 1500);
+            });
+        }
+    });
+
+    botaoToken.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        mostrarEdicao();
+    });
+
+    botaoSalvar.addEventListener('click', () => {
+        const token = inputToken.value.trim();
+        if (token) {
+            localStorage.setItem('meu_token', token);
+            esconderEdicao();
+            botaoToken.textContent = 'Salvo!';
+            botaoToken.style.backgroundColor ='rgba(33, 157, 105, 0.93)';
+            setTimeout(() => {
+                botaoToken.style.color = '#fff';
+                botaoToken.textContent = 'Token';
+                botaoToken.style.padding = '6px 10px';
+                botaoToken.style.marginRight = '8px';
+                botaoToken.style.cursor = 'pointer';
+                botaoToken.style.backgroundColor = 'rgba(135, 25, 25, 0.62)';
+                botaoToken.style.border = 'none';
+                botaoToken.style.borderRadius = '8px';
+                botaoToken.style.transition = 'background-color 0.3s ease, transform 0.1s ease';
+                botaoToken.style.fontSize = '14px';
+                botaoToken.style.fontWeight = 'bold';
+              }, 1000);
+        } else {
+            alert('Por favor, insira um token válido.');
+        }
+    });
+});
