@@ -126,4 +126,16 @@ Projetado especialmente para otimizar a rotina de quem lida diariamente com tick
 - Ajustado botão de copiar/contador dos formatadores.
 - Ajustado rodapé das páginas.
 
+
+---
+
+
+### Commit #13 – Reestruturação e Nova Funcionalidade
+
+- **Adicionada a funcionalidade de exportação para CSV**, permitindo a compilação de dados e automação via Postman.
+- **Unificação de páginas**: os arquivos `notificacao.html`, `matricula.html`, `desvincular.html` e `vincular.html` foram consolidados em um único arquivo `formatadores.html`.
+- **Reestruturação de código e funções** para melhorar a organização e facilitar futuras manutenções.
+- **Textos atualizados** para uma melhor clareza nas funções.
+
+
 ---

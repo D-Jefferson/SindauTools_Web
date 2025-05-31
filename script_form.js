@@ -1,13 +1,17 @@
-let resultados = [];
+let resultadosMatricula = [];
+let resultadosVincular = [];
+let resultadosDesvincular = [];
+let resultadosNotificacao = [];
+
 verificarlogado()
 
 //---------- Notificação ----------
 function formatar_notificacao() {
     try {
-        const texto = document.getElementById('colocar').value.trim();
+        const texto = document.getElementById('colocar1').value.trim();
         const linhas = texto.split("\n");
-        resultados = [];
-        document.getElementById('resultados-area').innerHTML = '';
+        resultadosNotificacao = [];
+        document.getElementById('resultados-area1').innerHTML = '';
 
         linhas.forEach((linha) => {
             const elementos = linha.split("\t");
@@ -32,7 +36,7 @@ function formatar_notificacao() {
                         }
                     };
                     const resultadoJson = JSON.stringify(jsonObj, null, 4);
-                    resultados.push(resultadoJson);
+                    resultadosNotificacao.push(resultadoJson);
 
                     const resultItem = document.createElement('div');
                     resultItem.className = 'resultados-item';
@@ -52,7 +56,7 @@ function formatar_notificacao() {
                         };
 
                     resultItem.appendChild(copiarBotao);
-                    document.getElementById('resultados-area').appendChild(resultItem);
+                    document.getElementById('resultados-area1').appendChild(resultItem);
                 } catch (e) {
                     console.error('Erro ao processar a linha:', linha, e);
                 }
@@ -67,10 +71,10 @@ function formatar_notificacao() {
 //---------- Matricula ---------- 
 function formatar_matricula() {
     try {
-        const texto = document.getElementById('colocar').value.trim();
+        const texto = document.getElementById('colocar4').value.trim();
         const linhas = texto.split("\n");
-        resultados = [];
-        document.getElementById('resultados-area').innerHTML = '';
+        resultadosMatricula = [];
+        document.getElementById('resultados-area4').innerHTML = '';
 
         linhas.forEach((linha) => {
             const elementos = linha.split("\t");
@@ -97,7 +101,7 @@ function formatar_matricula() {
                         }
                     };
                     const resultadoJson = JSON.stringify(jsonObj, null, 4);
-                    resultados.push(resultadoJson);
+                    resultadosMatricula.push(resultadoJson);
 
                     const resultItem = document.createElement('div');
                     resultItem.className = 'resultados-item';
@@ -117,7 +121,7 @@ function formatar_matricula() {
                     };
 
                     resultItem.appendChild(copiarBotao);
-                    document.getElementById('resultados-area').appendChild(resultItem);
+                    document.getElementById('resultados-area4').appendChild(resultItem);
                 } catch (e) {
                     console.error('Erro ao processar a linha:', linha, e);
                 }
@@ -129,49 +133,31 @@ function formatar_matricula() {
 }
 
 
-//----------  (Des)Vincular ----------
-function obterDataHoraAtual() {
-    const now = new Date();
-    const options = { 
-        timeZone: 'America/Sao_Paulo', 
-        year: 'numeric', 
-        month: '2-digit', 
-        day: '2-digit', 
-        hour: '2-digit', 
-        minute: '2-digit', 
-        second: '2-digit'
-    };
-    let dataHora = now.toLocaleString('pt-BR', options).replace(',', '');
-    let [data, hora] = dataHora.split(' ');
-    let [dia, mes, ano] = data.split('/');
-    return `${ano}-${mes}-${dia} ${hora}`;
-}
-
+//----------  Vincular ----------
 function formatar_vincular() {
-    const uuids = document.getElementById('colocar').value.trim().split("\n").map(uuid => uuid.trim()).filter(uuid => uuid !== "");
-    const cpf = document.getElementById('cpf').value.trim();
-    const operacao = document.getElementById('operacao').value;
+    const uuids = document.getElementById('colocar2').value.trim().split("\n").map(uuid => uuid.trim()).filter(uuid => uuid !== "");
+    const cpf = document.getElementById('cpf1').value.trim();
     if (!uuids.length || !cpf) {
         alert("Por favor, preencha todos os campos.");
         return;
     }
-    mostrarResultados(uuids, cpf, operacao);
+    mostrarResultados1(uuids, cpf);
 }
 
-function mostrarResultados(uuids, cpf, operacao) {
-    const resultadosDiv = document.getElementById('resultados-area');
+function mostrarResultados1(uuids, cpf) {
+    const resultadosDiv = document.getElementById('resultados-area2');
     resultadosDiv.innerHTML = '';
 
     uuids.forEach((uuid) => {
         const jsonObj = {
             "_id": uuid,
-            "operacao": operacao,
+            "operacao": "VINCULADO",
             "data_hora": obterDataHoraAtual(),
             "agendamento": { "uuid": uuid },
             "candidato": { "cpf": cpf }
         };
         const resultadoJson = JSON.stringify(jsonObj, null, 4);
-        resultados.push(resultadoJson);
+        resultadosVincular.push(resultadoJson);
 
         const resultItem = document.createElement('div');
         resultItem.className = 'resultados-item';
@@ -182,18 +168,68 @@ function mostrarResultados(uuids, cpf, operacao) {
         copiarBotao.textContent = 'Copiar';
         copiarBotao.onclick = () => {
             copiarTexto(resultadoJson);
-            if (operacao === "VINCULADO") {
-                contarClique2();
-            } else if (operacao === "DESVINCULADO") {
-                contarClique3();}
             copiarBotao.innerText = "Copiado!";
             copiarBotao.style.backgroundColor = "#264d88";
+                if (!copiarBotao.clicado) {
+                    contarClique3();
+                    copiarBotao.clicado = true;
+                }
         };
 
         resultItem.appendChild(copiarBotao);
-        document.getElementById('resultados-area').appendChild(resultItem);
+        document.getElementById('resultados-area2').appendChild(resultItem);
     });
 }
+
+
+//----------  Desvincular ----------
+function formatar_desvincular() {
+    const uuids = document.getElementById('colocar3').value.trim().split("\n").map(uuid => uuid.trim()).filter(uuid => uuid !== "");
+    const cpf = document.getElementById('cpf2').value.trim();
+    if (!uuids.length || !cpf) {
+        alert("Por favor, preencha todos os campos.");
+        return;
+    }
+    mostrarResultados2(uuids, cpf);
+}
+
+function mostrarResultados2(uuids, cpf) {
+    const resultadosDiv = document.getElementById('resultados-area3');
+    resultadosDiv.innerHTML = '';
+
+    uuids.forEach((uuid) => {
+        const jsonObj = {
+            "_id": uuid,
+            "operacao": "DESVINCULADO",
+            "data_hora": obterDataHoraAtual(),
+            "agendamento": { "uuid": uuid },
+            "candidato": { "cpf": cpf }
+        };
+        const resultadoJson = JSON.stringify(jsonObj, null, 4);
+        resultadosDesvincular.push(resultadoJson);
+
+        const resultItem = document.createElement('div');
+        resultItem.className = 'resultados-item';
+        resultItem.textContent = resultadoJson;
+
+        const copiarBotao = document.createElement('botao');
+        copiarBotao.className = 'botao-copiar';
+        copiarBotao.textContent = 'Copiar';
+        copiarBotao.onclick = () => {
+            copiarTexto(resultadoJson);
+            copiarBotao.innerText = "Copiado!";
+            copiarBotao.style.backgroundColor = "#264d88";
+                if (!copiarBotao.clicado) {
+                    contarClique3();
+                    copiarBotao.clicado = true;
+                }
+        };
+
+        resultItem.appendChild(copiarBotao);
+        document.getElementById('resultados-area3').appendChild(resultItem);
+    });
+}
+
 
 
 
@@ -206,12 +242,40 @@ function copiarTexto(linha) {
     });
 }
 
-function limparResultados() {
-    document.getElementById('colocar').value = '';
-    resultados = [];
-    document.getElementById('resultados-area').innerHTML = '';
-    document.getElementById('cpf').value = '';
+function limparResultados(tipo) {
+    if (tipo === 'notificacao') {
+        const colocar = document.getElementById('colocar1');
+        if (colocar) colocar.value = '';
+        const resultado = document.getElementById('resultados-area1');
+        if (resultado) resultado.innerHTML = '';
+        resultadosNotificacao = [];}
+
+    if (tipo === 'vincular') {
+        const colocar = document.getElementById('colocar2');
+        if (colocar) colocar.value = '';
+        const resultado = document.getElementById('resultados-area2');
+        if (resultado) resultado.innerHTML = '';
+        const cpf = document.getElementById('cpf1');
+        if (cpf) cpf.value = '';
+        resultadosVincular = [];}
+
+    if (tipo === 'desvincular') {
+        const colocar = document.getElementById('colocar3');
+        if (colocar) colocar.value = '';
+        const resultado = document.getElementById('resultados-area3');
+        if (resultado) resultado.innerHTML = '';
+        const cpf = document.getElementById('cpf2');
+        if (cpf) cpf.value = '';
+        resultadosDesvincular = [];}
+
+    if (tipo === 'matricula') {
+        const colocar = document.getElementById('colocar4');
+        if (colocar) colocar.value = '';
+        const resultado = document.getElementById('resultados-area4');
+        if (resultado) resultado.innerHTML = '';
+        resultadosMatricula = [];}
 }
+
 
 function contarClique1() {
     let contador = parseInt(localStorage.getItem('totalCliques') || '0');
@@ -353,3 +417,193 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// Exportar notificação
+function exportarnoti(){
+    if (!resultadosNotificacao || resultadosNotificacao.length === 0) {
+        alert("Nenhum dado para exportar.");
+        return;
+    }
+    const headers = [
+        "_id", "operacao", "data_hora", "uuid_matricula", "cnpj",
+        "situacao", "numero_cobranca", "operadora",
+        "valor", "data_criacao", "data_atualizacao",
+        "data_vencimento", "status_atual"
+    ];
+    const linhasCSV = [headers.join(",")];
+
+    resultadosNotificacao.forEach(jsonString => {
+        const obj = JSON.parse(jsonString);
+        const linha = [
+            obj._id,
+            obj.operacao,
+            obj.data_hora,
+            obj.uuid_matricula,
+            obj.cnpj,
+            obj.financeiro.situacao,
+            obj.financeiro.numero_cobranca,
+            obj.financeiro.operadora,
+            obj.financeiro.valor,
+            obj.financeiro.data_criacao,
+            obj.financeiro.data_atualizacao,
+            obj.financeiro.data_vencimento,
+            obj.financeiro.status_atual
+        ];
+        linhasCSV.push(linha.join(","));
+    });
+    const blob = new Blob([linhasCSV.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "notificação.csv");
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};
+
+
+// Exportar matricula
+function exportarmatri(){
+    if (!resultadosMatricula || resultadosMatricula.length === 0) {
+        alert("Nenhum dado para exportar.");
+        return;
+    }
+    const headers = [
+        "_id", "operacao", "data_hora", "matricula_uuid", "candidato_nome",
+        "cpf", "renach", "situacao", "servicoCodigo", "cnpj"
+    ];
+    const linhasCSV = [headers.join(",")];
+
+    resultadosMatricula.forEach(jsonString => {
+        const obj = JSON.parse(jsonString);
+        const linha = [
+            obj._id,
+            obj.operacao,
+            obj.data_hora,
+            obj.matricula.uuid,
+            obj.matricula.candidato.nome,
+            obj.matricula.candidato.cpf,
+            obj.matricula.detran.renach,
+            obj.matricula.detran.situacao,
+            obj.matricula.detran.servicoCodigo,
+            obj.cfc.cnpj
+        ];
+        linhasCSV.push(linha.join(","));
+    });
+    const blob = new Blob([linhasCSV.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "resultados.csv");
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};
+
+// Exportar vincular
+function exportarvinc(){
+    if (!resultadosVincular || resultadosVincular.length === 0) {
+        alert("Nenhum dado para exportar.");
+        return;
+    }
+    const headers = [
+        "_id", "operacao", "data_hora", "uuid", "cpf"
+    ];
+    const linhasCSV = [headers.join(",")];
+
+    resultadosVincular.forEach(jsonString => {
+        const obj = JSON.parse(jsonString);
+        const linha = [
+            obj._id,
+            obj.operacao,
+            obj.data_hora,
+            obj.agendamento.uuid,
+            obj.candidato.cpf
+        ];
+        linhasCSV.push(linha.join(","));
+    });
+    const blob = new Blob([linhasCSV.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "resultados.csv");
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};
+
+// Exportar desvincular
+function exportardesvinc(){
+    if (!resultadosDesvincular || resultadosDesvincular.length === 0) {
+        alert("Nenhum dado para exportar.");
+        return;
+    }
+    const headers = [
+        "_id", "operacao", "data_hora", "uuid", "cpf"
+    ];
+    const linhasCSV = [headers.join(",")];
+
+    resultadosDesvincular.forEach(jsonString => {
+        const obj = JSON.parse(jsonString);
+        const linha = [
+            obj._id,
+            obj.operacao,
+            obj.data_hora,
+            obj.agendamento.uuid,
+            obj.candidato.cpf
+        ];
+        linhasCSV.push(linha.join(","));
+    });
+    const blob = new Blob([linhasCSV.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "resultados.csv");
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};
+
+
+
+function mostrar(secaoId) {
+    document.querySelectorAll('section').forEach(sec => {
+        sec.classList.remove('active');
+    });
+    const ativa = document.getElementById(secaoId);
+    if (ativa) {
+        ativa.classList.add('active');
+    }
+  }
+
+window.onload = function() {
+const secaoAtiva = localStorage.getItem('ativaSecao');
+if (secaoAtiva) {
+    document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+    const ativa = document.getElementById(secaoAtiva);
+    if (ativa) ativa.classList.add('active');
+    localStorage.removeItem('ativaSecao');
+}
+};
+
+
+function obterDataHoraAtual() {
+    const now = new Date();
+    const options = { 
+        timeZone: 'America/Sao_Paulo', 
+        year: 'numeric', 
+        month: '2-digit', 
+        day: '2-digit', 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit'
+    };
+    let dataHora = now.toLocaleString('pt-BR', options).replace(',', '');
+    let [data, hora] = dataHora.split(' ');
+    let [dia, mes, ano] = data.split('/');
+    return `${ano}-${mes}-${dia} ${hora}`;
+}

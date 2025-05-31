@@ -25,22 +25,45 @@ function lateral() {
   document.getElementById("menuLateral").classList.toggle("aberto");
 }
 
-  /*  Botoes do menu  */
+  /*  Botoes do formatadores  */
 function formatar1(){ 
-  window.location.href = "notificacao.html";
+  mostrar("notificacao");
 }
 
 function formatar2(){ 
-  window.location.href = "vincular.html";
+
+  mostrar("vincular");
 }
 
 function formatar3(){ 
-  window.location.href = "desvincular.html";
+  mostrar("desvincular");
 }
 
 function formatar4(){ 
-  window.location.href = "matricula.html";
+  mostrar("matricula");
 }
+
+/*  Botoes do menu  */
+function formatador1(){ 
+  localStorage.setItem('ativaSecao', 'notificacao');
+  window.location.href = "formatadores.html";
+}
+
+function formatador2(){ 
+  localStorage.setItem('ativaSecao', 'vincular');
+  window.location.href = "formatadores.html";
+}
+
+function formatador3(){ 
+  localStorage.setItem('ativaSecao', 'desvincular');
+  window.location.href = "formatadores.html";
+}
+
+function formatador4(){ 
+  localStorage.setItem('ativaSecao', 'matricula');
+  window.location.href = "formatadores.html";
+}
+  
 
   /*  Extensoes  */
 function instalarapi(){ 
