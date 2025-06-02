@@ -4,6 +4,8 @@ Bem-vindo(a) ao **SindauTools_Web** — uma versão aprimorada do SindauTools, d
 
 Projetado especialmente para otimizar a rotina de quem lida diariamente com tickets de demanda relacionada a API e Banco de Dados, o SindauTools_Web oferece uma experiência mais fluida, produtiva e alinhada às necessidades do suporte técnico do Sindauto-BA.
 
+O Sindauto é o Sindicato das Autoescolas e Centros de Formação de Condutores do Estado da Bahia, fundado como sindicato patronal em 18 de setembro de 1996. Atualmente, de todos os Centros de Formação de Condutores (CFCs) em atividade no estado, cerca de 87% estão filiados ao sindicato.
+
 ---
 
 ## 🖥️ Sistema Simplificado
@@ -151,3 +153,11 @@ Projetado especialmente para otimizar a rotina de quem lida diariamente com tick
 - Instrução adicionada para facilitar a usabilidade.
 
 ---
+
+
+### Commit #15 – Integração à API
+
+- Integração do formatador de notificação com a API.
+- Envio de dados facilitado: agora é possível enviar as informações com um clique, sem a necessidade de copiar e abrir a API manualmente.
+- Implementado botão para salvar o token de autenticação, que é reutilizado nas requisições.
+- Adicionado botão para buscar dados diretamente da API.

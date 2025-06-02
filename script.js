@@ -63,36 +63,9 @@ function formatador4(){
   localStorage.setItem('ativaSecao', 'matricula');
   window.location.href = "formatadores.html";
 }
-  
-
-  /*  Extensoes  */
-function instalarapi(){ 
-  const progresso = document.getElementById('carregamento');
-  const botaoTexto = document.querySelector('.extensao-botao span');
-  botaoTexto.innerText = '';
-  document.getElementById("extensao-botao").style.padding = "4px 200px";
-  progresso.style.backgroundColor = 'rgb(179, 179, 179)';
-  progresso.style.width = '0%';
-  document.getElementById("extensao-botao").style.pointerEvents = "none";
-  setTimeout(() => {
-    progresso.style.width = '100%';
-  }, 10);
-  setTimeout(() => {
-    document.getElementById("extensao-botao").style.padding = "5px 30px";
-    botaoTexto.innerText = 'Erro ao tentar instalar extensão. Consulte o Desenvolvedor!';
-    progresso.style.backgroundColor = 'rgba(151, 40, 40, 0.61)';
-  }, 5000);
-  setTimeout(() => {
-    progresso.style.width = '0%';
-    progresso.style.backgroundColor = 'rgba(5, 37, 73, 0.61)';
-    botaoTexto.innerText = 'Instalar';
-    document.getElementById("extensao-botao").style.pointerEvents = "all";
-    document.getElementById("extensao-botao").style.padding = "5px 30px";
-  }, 10000);
-}
 
   /*  Animação nome  */
-  const palavras = ["@By Jefferson Levy","@By Jefferson Levy","@By Jefferson Levy","@By Jefferson Levy","Acredite em si mesmo e você será imparável."];
+const palavras = ["@By Jefferson Levy","@By Jefferson Levy","@By Jefferson Levy","@By Jefferson Levy","Acredite em si mesmo e você será imparável."];
   let palavraIndex = 0;
   let letraIndex = 0;
   let escrevendo = true;
@@ -166,9 +139,8 @@ function ajuda() {
     const botaoPesquisa = document.querySelector('.botao-pesquisa');
     const categoriasMap = {
       'todos': [0, 1, 2, 3],
-      'erros comuns': [3],
-      'dúvidas frequentes': [0, 1, 2],
-      'contatos': [4,5,6,7,8]
+      'erros comuns': [0],
+      'contatos': [1, 2, 3,4,5,6,7,8]
     };
     function filtrar(categoria) {
       const filtro = categoria.toLowerCase().trim();
