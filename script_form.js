@@ -674,7 +674,7 @@ document.addEventListener('DOMContentLoaded', () => {
     container.style.borderRadius = '0';
     container.style.fontFamily = 'Arial, sans-serif';
 
-    const botaoToken = document.createElement('button');
+    const botaoToken = document.createElement('button1');
     botaoToken.textContent = 'Token';
     botaoToken.style.padding = '6px 10px';
     botaoToken.style.marginRight = '8px';

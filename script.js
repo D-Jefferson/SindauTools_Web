@@ -177,3 +177,14 @@ function ajuda() {
     filtrar('todos');
   });
 }
+
+function abrirVideo() {
+    document.getElementById('popupVideo').style.display = 'flex';
+    document.getElementById('meuVideo').play();
+}
+
+function fecharVideo() {
+    document.getElementById('popupVideo').style.display = 'none';
+    document.getElementById('meuVideo').pause();
+    document.getElementById('meuVideo').currentTime = 0;
+}

@@ -53,8 +53,14 @@
             </div>
         </div>
         
-        <div class="icone-ajuda" title="Ajuda">
+        <div class="icone-ajuda" title="Ajuda" onclick="abrirVideo()">
             <i class="fas fa-question"></i>
+        </div>
+    </div>
+    <div id="popupVideo">
+        <div class="popup-content">
+            <button class="close-btn" onclick="fecharVideo()"><i class="fa-solid fa-xmark"></i></button>
+            <video id="meuVideo" controls><source src="icones/SindauTools.mp4" type="video/mp4"></video>
         </div>
     </div>
     <script src="script.js"></script>

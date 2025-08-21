@@ -142,6 +142,7 @@ O Sindauto é o Sindicato das Autoescolas e Centros de Formação de Condutores 
 
 ---
 
+
 ### Commit #14 – Adicionado acesso rápido à API
 
 - Adicionado **iframe interativo lateral** com acesso direto à API (Swagger).
@@ -152,6 +153,7 @@ O Sindauto é o Sindicato das Autoescolas e Centros de Formação de Condutores 
 - Interface retrátil e responsiva com animações suaves.
 - Instrução adicionada para facilitar a usabilidade.
 
+
 ---
 
 
@@ -161,3 +163,24 @@ O Sindauto é o Sindicato das Autoescolas e Centros de Formação de Condutores 
 - Envio de dados facilitado: agora é possível enviar as informações com um clique, sem a necessidade de copiar e abrir a API manualmente.
 - Implementado botão para salvar o token de autenticação, que é reutilizado nas requisições.
 - Adicionado botão para buscar dados diretamente da API.
+
+
+---
+
+
+### Commit #16 – Correções
+
+- Ajuste das paginas de `sobre.html`,`configurações.html`, `extensoes.html` e `ajuda.html`.
+
+
+---
+
+
+### Commit #17 – Correções e Nova Função Filtro de CPF  
+
+- ✨ Criada a página `filtrocpf.html` com script dedicado `script_filtro.js`.  
+- 🗑️ Removida a página `configurações.html`.  
+- 🛠️ Ajustado o formatador para exibir corretamente o rodapé.  
+- 🔍 Removido o campo de **busca** (mantido apenas na página de Ajuda).  
+- 🎥 Adicionados **vídeos demonstrativos** de funcionalidades no **login** e na **página inicial**.  
+
