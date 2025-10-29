@@ -1,3 +1,10 @@
+.pagina-login {
+    background-color: #1a1a1a;
+    color: white;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
 * {
     margin: 0;
     padding: 0;
@@ -8,9 +15,9 @@
 body {
     background-color: #1a1a1a;
     color: white;
-    display: flex;
     height: 100vh;
     overflow: hidden;
+    width: 100%;
 }
 
 .barra-lateral {
@@ -182,7 +189,22 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);
-    margin-bottom: 25px;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.button1 {
+    background: linear-gradient(to right, #3c8ce7, #2b67c0);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 5px;
+    width: 100%;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(60, 154, 231, 0.3);
     letter-spacing: 1px;
 }
 
@@ -190,6 +212,12 @@ body {
     background: linear-gradient(to right, #d44637, #b03428);
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(231, 76, 60, 0.4);
+}
+
+.button1:hover{
+    background: linear-gradient(to right, #378dd4, #2890b0);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(60, 168, 231, 0.4);
 }
 
 .rodape-login {
