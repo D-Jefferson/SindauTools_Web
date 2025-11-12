@@ -261,7 +261,7 @@ textarea {
   background-color: #2b3d5000;
   padding: 10px;
   border-radius: 5px;
-  font-size: 7px;
+  font-size: 6px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -293,63 +293,35 @@ textarea {
 .apagar {
   position: relative;
   display: inline-block;
-  padding-top: 5px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-top: 2.5px;
+  padding-bottom: 2.5px;
+  padding-left: 30px;
+  padding-right: 30px;
   cursor: pointer;
-  color: #FFF;
   transition: all 0.5s;
-}
-
-.apagar button {
-  position: relative;
-  z-index: 2;
-  padding: 10px 20px;
-  background-color: #d4363600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
   border: none;
-  color: rgb(255, 255, 255);
+  color: #ffffff;
   border-radius: 10px;
   font-size: 16px;
   outline: none;
+  background-color: #6d1818;
   font-weight: bold;
 }
 
-.apagar::before,
-.apagar::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1; 
-  transition: all 0.5s;
+
+
+.apagar:hover{
+  background-color: #ff2323;
   border-radius: 10px;
-  background-color: rgba(112, 24, 24, 0.753);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.apagar:hover::before{
-  transform: rotate(-45deg);
-  background-color: rgba(255, 0, 0, 0.399);
-  scale: 0.5;
-  z-index: -1;
-}
-
-.apagar:hover::after {
-  transform: rotate(45deg);
-  background-color: rgba(255, 0, 0, 0.399);
-  scale: 0.5;
-}
-
-.apagar.clicked {
-  animation: fadeOut 0.5s forwards;
+  color: #ffffff;
 }
 
 .formatar {
   position: relative;
   display: inline-block;
-  padding-top: 5px;
+  padding-top: 2.5px;
+  padding-bottom: 2.5px;
   padding-left: 30px;
   padding-right: 30px;
   cursor: pointer;

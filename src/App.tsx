@@ -1,36 +1,41 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Manutencao from "./pages/Manutencao/info";
-import Login from "./pages/Login/login"; 
+import Login from "./pages/Login/login";
 import Home from "./pages/Home/home";
-import Ferramentas from "./pages/Formatadores/formatadores";
+import Formatadores from "./pages/Formatadores/formatadores";
 import Sobre from "./pages/Sobre/sobre";
 import FiltroCPF from "./pages/Filtrocpf/filtrocpf";
 import Ajuda from "./pages/Ajuda/ajuda";
+import TokenButton from "./api/autorizacao";
 
-function App() {
-  const emManutencao = false;
+function AppContent() {
+  const location = useLocation();
+  const mostrarBotao = ["/ferramentas", "/matricula", "/notificacao"].includes(
+    location.pathname
+  );
 
   return (
-    <Router>
+    <>
       <Routes>
-        {emManutencao ? (
-          <Route path="*" element={<Manutencao />} />
-        ) : (
-          <>
-            <Route path="/" element={<Login />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/ferramentas" element={<Ferramentas />} />
-            <Route path="/sobre" element={<Sobre />} />
-            <Route path="/filtrocpf" element={<FiltroCPF />} />
-            <Route path="/ajuda" element={<Ajuda />} />
-          </>
-        )}
+        <Route path="/" element={<Login />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/ferramentas" element={<Formatadores />} />
+        <Route path="/sobre" element={<Sobre />} />
+        <Route path="/filtrocpf" element={<FiltroCPF />} />
+        <Route path="/ajuda" element={<Ajuda />} />
       </Routes>
+      {mostrarBotao && <TokenButton />}
       <ToastContainer position="top-right" autoClose={2500} theme="dark" />
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
-    
   );
 }
 

@@ -1,19 +1,49 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./formatadores.module.css";
+import { toast } from "react-toastify";
 
-const Ferramentas: React.FC = () => {
+
+import { useNotificacao } from "../../scripts/notificacao";
+import { useMatricula } from "../../scripts/matricula";
+import { useVincular } from "../../scripts/vincular";
+import { useDesvincular } from "../../scripts/desvincular";
+import { getToken } from "../../utils/tokenManager";
+
+const Formatadores: React.FC = () => {
   const navigate = useNavigate();
-  const [abaAtiva, setAbaAtiva] = useState<"notificacao" | "vincular" | "desvincular" | "matricula">("notificacao");
 
-  // === Funções simulando as originais ===
-  const limparResultados = (secao: string) => console.log(`Limpando ${secao}`);
-  const formatarNotificacao = () => console.log("Formatar notificação");
-  const formatarVincular = () => console.log("Formatar vincular");
-  const formatarDesvincular = () => console.log("Formatar desvincular");
-  const formatarMatricula = () => console.log("Formatar matrícula");
-  const exportarCsv = (tipo: string) => console.log(`Exportar CSV de ${tipo}`);
-  const getMatricula = () => console.log("GET matrícula");
+  const [abaAtiva, setAbaAtiva] = useState<
+    "notificacao" | "vincular" | "desvincular" | "matricula"
+  >("notificacao");
+
+  const [texto, setTexto] = useState("");
+  const [cpf, setCpf] = useState("");
+
+  const notificacao = useNotificacao();
+  const matricula = useMatricula();
+  const vincular = useVincular();
+  const desvincular = useDesvincular();
+
+  const limparResultados = (secao: string) => {
+    setTexto("");
+    setCpf("");
+    if (secao === "notificacao") notificacao.limpar();
+    if (secao === "matricula") matricula.limpar();
+    if (secao === "vincular") vincular.limpar();
+    if (secao === "desvincular") desvincular.limpar();
+  };
+
+  const handleEnviar = async (item: any) => {
+    try {
+      const token = getToken();
+      await notificacao.enviar(item, token);
+      toast.success("Enviado com sucesso!");
+    } catch (err) {
+      toast.error("Erro ao enviar!");
+      console.error(err);
+    }
+  };
 
   return (
     <div className={styles["page-container"]}>
@@ -56,104 +86,251 @@ const Ferramentas: React.FC = () => {
           </a>
         </nav>
 
-        <div className={styles["assina"]} style={{ backgroundColor: "transparent" }}>
+        <div
+          className={styles["assina"]}
+          style={{ backgroundColor: "transparent" }}
+        >
           <p style={{ color: "#b8b8b8" }}>@By Jefferson Levy</p>
         </div>
       </aside>
 
       {/* CONTEÚDO PRINCIPAL */}
       <main className={styles["container"]}>
-        {/* BOTÕES DE NAVEGAÇÃO ENTRE FORMATADORES */}
+        {/* Botões de navegação entre os formatadores */}
         <div className={styles["nav-menus"]}>
           <button
-            className={`${styles["nav-menu"]} ${abaAtiva === "notificacao" ? styles["active"] : ""}`}
+            className={`${styles["nav-menu"]} ${
+              abaAtiva === "notificacao" ? styles["active"] : ""
+            }`}
             onClick={() => setAbaAtiva("notificacao")}
           >
             Notificação Financeira
           </button>
           <button
-            className={`${styles["nav-menu"]} ${abaAtiva === "vincular" ? styles["active"] : ""}`}
+            className={`${styles["nav-menu"]} ${
+              abaAtiva === "vincular" ? styles["active"] : ""
+            }`}
             onClick={() => setAbaAtiva("vincular")}
           >
             Vincular Candidato
           </button>
           <button
-            className={`${styles["nav-menu"]} ${abaAtiva === "desvincular" ? styles["active"] : ""}`}
+            className={`${styles["nav-menu"]} ${
+              abaAtiva === "desvincular" ? styles["active"] : ""
+            }`}
             onClick={() => setAbaAtiva("desvincular")}
           >
             Desvincular Candidato
           </button>
           <button
-            className={`${styles["nav-menu"]} ${abaAtiva === "matricula" ? styles["active"] : ""}`}
+            className={`${styles["nav-menu"]} ${
+              abaAtiva === "matricula" ? styles["active"] : ""
+            }`}
             onClick={() => setAbaAtiva("matricula")}
           >
             Enviar Matrícula
           </button>
         </div>
 
-        {/* SEÇÕES DE FORMATADORES */}
+        {/* SEÇÃO NOTIFICAÇÃO */}
         {abaAtiva === "notificacao" && (
           <section>
             <div className={styles["h22"]}>
               <h2>FORMATADOR NOTIFICAÇÃO</h2>
             </div>
+
             <div className={styles["inserir-area"]}>
-              <textarea placeholder="Cole aqui os dados para a notificação financeira..." />
-              <div className={styles["resultados-area"]}></div>
+              <textarea
+                placeholder="Cole aqui os dados para a notificação financeira..."
+                value={texto}
+                onChange={(e) => setTexto(e.target.value)}
+              />
+              <div className={styles["resultados-area"]}>
+                {notificacao.resultados.map((r, i) => (
+                  <div key={i} className={styles["resultados-item"]}>
+                    <pre>{JSON.stringify(r, null, 2)}</pre>
+                    <button
+                      className={styles["botao-copiar"]}
+                      onClick={() => handleEnviar(r)}
+                    >
+                      Enviar
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
+
             <div className={styles["botoes"]}>
-              <button className={styles["formatar"]} onClick={formatarNotificacao}>Formatar</button>
-              <button className={styles["apagar"]} onClick={() => limparResultados("notificacao")}>Limpar</button>
-              <button className={styles["exportar"]} onClick={() => exportarCsv("notificacao")}>Exportar CSV</button>
-              <button className={styles["formatar"]} onClick={getMatricula}>Matricula (GET)</button>
-              <input className={styles["cpf"]} type="text" placeholder="Coloque o CPF" />
+              <button
+                className={styles["formatar"]}
+                onClick={() => notificacao.formatar(texto)}
+              >
+                Formatar
+              </button>
+              <button
+                className={styles["apagar"]}
+                onClick={() => limparResultados("notificacao")}
+              >
+                Limpar
+              </button>
+              <button
+                className={styles["exportar"]}
+                onClick={() => notificacao.exportar()}
+              >
+                Exportar CSV
+              </button>
             </div>
           </section>
         )}
 
+        {/* SEÇÃO VINCULAR */}
         {abaAtiva === "vincular" && (
           <section>
-            <div className={styles["h22"]}><h2>FORMATADOR VINCULAR</h2></div>
-            <div className={styles["inserir-area"]}>
-              <textarea placeholder="Cole aqui os UUIDs dos agendamentos..." />
-              <div className={styles["resultados-area"]}></div>
+            <div className={styles["h22"]}>
+              <h2>FORMATADOR VINCULAR</h2>
             </div>
+
+            <div className={styles["inserir-area"]}>
+              <textarea
+                placeholder="Cole aqui os UUIDs dos agendamentos..."
+                value={texto}
+                onChange={(e) => setTexto(e.target.value)}
+              />
+              <div className={styles["resultados-area"]}>
+                {vincular.resultados.map((r, i) => (
+                  <div key={i} className={styles["resultados-item"]}>
+                    <pre>{JSON.stringify(r, null, 2)}</pre>
+                    <button className={styles["botao-copiar"]}>Copiar</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <div className={styles["botoes"]}>
-              <button className={styles["formatar"]} onClick={formatarVincular}>Formatar</button>
-              <input className={styles["cpf"]} type="text" placeholder="Cole aqui o CPF" />
-              <button className={styles["apagar"]} onClick={() => limparResultados("vincular")}>Limpar</button>
-              <button className={styles["exportar"]} onClick={() => exportarCsv("vincular")}>Exportar CSV</button>
+              <button
+                className={styles["formatar"]}
+                onClick={() => vincular.formatar(texto, cpf)}
+              >
+                Formatar
+              </button>
+              <input
+                className={styles["cpf"]}
+                type="text"
+                placeholder="Cole aqui o CPF"
+                value={cpf}
+                onChange={(e) => setCpf(e.target.value)}
+              />
+              <button
+                className={styles["apagar"]}
+                onClick={() => limparResultados("vincular")}
+              >
+                Limpar
+              </button>
+              <button
+                className={styles["exportar"]}
+                onClick={() => vincular.exportar()}
+              >
+                Exportar CSV
+              </button>
             </div>
           </section>
         )}
 
+        {/* SEÇÃO DESVINCULAR */}
         {abaAtiva === "desvincular" && (
           <section>
-            <div className={styles["h22"]}><h2>FORMATADOR DESVINCULAR</h2></div>
-            <div className={styles["inserir-area"]}>
-              <textarea placeholder="Cole aqui os UUIDs dos agendamentos..." />
-              <div className={styles["resultados-area"]}></div>
+            <div className={styles["h22"]}>
+              <h2>FORMATADOR DESVINCULAR</h2>
             </div>
+
+            <div className={styles["inserir-area"]}>
+              <textarea
+                placeholder="Cole aqui os UUIDs dos agendamentos..."
+                value={texto}
+                onChange={(e) => setTexto(e.target.value)}
+              />
+              <div className={styles["resultados-area"]}>
+                {desvincular.resultados.map((r, i) => (
+                  <div key={i} className={styles["resultados-item"]}>
+                    <pre>{JSON.stringify(r, null, 2)}</pre>
+                    <button className={styles["botao-copiar"]}>Copiar</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <div className={styles["botoes"]}>
-              <button className={styles["formatar"]} onClick={formatarDesvincular}>Formatar</button>
-              <input className={styles["cpf"]} type="text" placeholder="Cole aqui o CPF" />
-              <button className={styles["apagar"]} onClick={() => limparResultados("desvincular")}>Limpar</button>
-              <button className={styles["exportar"]} onClick={() => exportarCsv("desvincular")}>Exportar CSV</button>
+              <button
+                className={styles["formatar"]}
+                onClick={() => desvincular.formatar(texto, cpf)}
+              >
+                Formatar
+              </button>
+              <input
+                className={styles["cpf"]}
+                type="text"
+                placeholder="Cole aqui o CPF"
+                value={cpf}
+                onChange={(e) => setCpf(e.target.value)}
+              />
+              <button
+                className={styles["apagar"]}
+                onClick={() => limparResultados("desvincular")}
+              >
+                Limpar
+              </button>
+              <button
+                className={styles["exportar"]}
+                onClick={() => desvincular.exportar()}
+              >
+                Exportar CSV
+              </button>
             </div>
           </section>
         )}
 
+        {/* SEÇÃO MATRÍCULA */}
         {abaAtiva === "matricula" && (
           <section>
-            <div className={styles["h22"]}><h2>FORMATADOR MATRÍCULA</h2></div>
-            <div className={styles["inserir-area"]}>
-              <textarea placeholder="Cole aqui os dados para envio de matrícula..." />
-              <div className={styles["resultados-area"]}></div>
+            <div className={styles["h22"]}>
+              <h2>FORMATADOR MATRÍCULA</h2>
             </div>
+
+            <div className={styles["inserir-area"]}>
+              <textarea
+                placeholder="Cole aqui os dados para envio de matrícula..."
+                value={texto}
+                onChange={(e) => setTexto(e.target.value)}
+              />
+              <div className={styles["resultados-area"]}>
+                {matricula.resultados.map((r, i) => (
+                  <div key={i} className={styles["resultados-item"]}>
+                    <pre>{JSON.stringify(r, null, 2)}</pre>
+                    <button className={styles["botao-copiar"]}>Copiar</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <div className={styles["botoes"]}>
-              <button className={styles["formatar"]} onClick={formatarMatricula}>Formatar</button>
-              <button className={styles["apagar"]} onClick={() => limparResultados("matricula")}>Limpar</button>
-              <button className={styles["exportar"]} onClick={() => exportarCsv("matricula")}>Exportar CSV</button>
+              <button
+                className={styles["formatar"]}
+                onClick={() => matricula.formatar(texto)}
+              >
+                Formatar
+              </button>
+              <button
+                className={styles["apagar"]}
+                onClick={() => limparResultados("matricula")}
+              >
+                Limpar
+              </button>
+              <button
+                className={styles["exportar"]}
+                onClick={() => matricula.exportar()}
+              >
+                Exportar CSV
+              </button>
             </div>
           </section>
         )}
@@ -162,4 +339,4 @@ const Ferramentas: React.FC = () => {
   );
 };
 
-export default Ferramentas;
+export default Formatadores;
