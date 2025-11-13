@@ -8,44 +8,59 @@ const TokenButton: React.FC = () => {
   const [salvando, setSalvando] = useState(false);
   const [editando, setEditando] = useState(false);
   const [statusMsg, setStatusMsg] = useState<string>("");
+  const [temToken, setTemToken] = useState(false);
+  const [estadoBotao, setEstadoBotao] = useState<"padrao" | "salvo">("padrao");
 
   useEffect(() => {
     const salvo = localStorage.getItem("access_token") || "";
     (window as any).tokenGlobal = salvo;
+    if (salvo) {
+      setTemToken(true);
+    }
   }, []);
 
-const autenticar = async (tokenManual: string) => {
-  try {
-    const response = await fetch(`${BASE_URL}/Auth`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+  const autenticar = async (tokenManual: string) => {
+    try {
+      const response = await fetch(`${BASE_URL}/Auth`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
 
-      body: JSON.stringify({ acessToken: tokenManual }),
-    });
+        body: JSON.stringify({ acessToken: tokenManual }),
+      });
 
-    if (!response.ok) throw new Error(`Erro ${response.status}`);
+      if (!response.ok) throw new Error(`Erro ${response.status}`);
 
-    const tokenRecebido = await response.text();
+      const tokenRecebido = await response.text();
 
-    if (tokenRecebido && tokenRecebido.startsWith("ey")) {
-      localStorage.setItem("access_token", tokenRecebido);
-      (window as any).tokenGlobal = tokenRecebido;
-      setStatusMsg("Autenticado com sucesso!");
-      setTimeout(() => setStatusMsg(""), 3000);
-      toast.success("Autenticado com sucesso!");
-      console.log("[Auth] Token salvo com sucesso:", tokenRecebido);
-    } else {
-      throw new Error("Token inválido ou resposta inesperada.");
+      if (tokenRecebido && tokenRecebido.startsWith("ey")) {
+        localStorage.setItem("access_token", tokenRecebido);
+        (window as any).tokenGlobal = tokenRecebido;
+        setTemToken(true);
+        setEstadoBotao("salvo");
+        setTimeout(() => {
+          setEstadoBotao("padrao");
+        }, 2000);
+
+        setStatusMsg("Autenticado com sucesso!");
+        setTimeout(() => setStatusMsg(""), 3000);
+        toast.success("Autenticado com sucesso!");
+        console.log("[Auth] Token salvo com sucesso:", tokenRecebido);
+      } else {
+        throw new Error("Token inválido ou resposta inesperada.");
+      }
+    } catch (error) {
+      toast.error("Token Inválido ou erro na autenticação.");
+      console.error("Erro ao autenticar:", error);
+      setStatusMsg("Falha na autenticação. Verifique o token fixo.");
+      setTimeout(() => setStatusMsg(""), 4000);
+      setTemToken(false);
+      setEstadoBotao("padrao");
+      localStorage.removeItem("access_token");
+      (window as any).tokenGlobal = "";
     }
-  } catch (error) {
-    toast.error("Token Inválido ou erro na autenticação.");
-    console.error("Erro ao autenticar:", error);
-    setStatusMsg("Falha na autenticação. Verifique o token fixo.");
-    setTimeout(() => setStatusMsg(""), 4000);
-  }
-};
+  };
 
   const salvar = async () => {
     if (!tokenFixo.trim()) {
@@ -57,6 +72,16 @@ const autenticar = async (tokenManual: string) => {
     setSalvando(false);
     setEditando(false);
   };
+
+  const corBotaoToken = (() => {
+    if (estadoBotao === "salvo") {
+      return "#16a34a";
+    }
+    if (temToken) {
+      return "rgba(15, 15, 15, 1)";
+    }
+    return "rgba(135, 25, 25, 0.62)";
+  })();
 
   return (
     <div
@@ -80,16 +105,29 @@ const autenticar = async (tokenManual: string) => {
             padding: "6px 10px",
             marginRight: "8px",
             cursor: "pointer",
-            backgroundColor: "rgba(135, 25, 25, 0.62)",
+            backgroundColor: corBotaoToken,
             color: "#fff",
             border: "none",
             borderRadius: "8px",
             transition: "background-color 0.3s ease",
             fontSize: "14px",
             fontWeight: "bold",
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
           }}
         >
-          Token
+          {estadoBotao === "salvo" ? (
+            <>
+              salvo! <i className="fa-solid fa-lock"></i>
+            </>
+          ) : temToken ? (
+            <>
+              Token <i className="fa-solid fa-lock"></i>
+            </>
+          ) : (
+            "Token"
+          )}
         </button>
       )}
 

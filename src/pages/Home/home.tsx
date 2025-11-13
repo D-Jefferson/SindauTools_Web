@@ -3,10 +3,18 @@ import "../../assets/global.css";
 import { useNavigate } from "react-router-dom";
 
 const Home: React.FC = () => {
-  const formatador1 = () => console.log("Formatador 1 acionado");
-  const formatador2 = () => console.log("Formatador 2 acionado");
-  const formatador3 = () => console.log("Formatador 3 acionado");
-  const formatador4 = () => console.log("Formatador 4 acionado");
+  const formatador1 = () =>
+    navigate("/ferramentas", { state: { abaInicial: "notificacao" } });
+
+  const formatador2 = () =>
+    navigate("/ferramentas", { state: { abaInicial: "vincular" } });
+
+  const formatador3 = () =>
+    navigate("/ferramentas", { state: { abaInicial: "desvincular" } });
+
+  const formatador4 = () =>
+    navigate("/ferramentas", { state: { abaInicial: "matricula" } });
+
   const abrirVideo = () => console.log("Abrir vídeo");
   const fecharVideo = () => console.log("Fechar vídeo");
   const navigate = useNavigate();
@@ -73,7 +81,7 @@ const Home: React.FC = () => {
           <div className="alerta-aute" onClick={abrirVideo}>
             <div className="noti" data-tooltip="Notificações">
               <i className="fas fa-bell"></i>
-              <span className="contador-noti">1</span>
+              {/*<span className="contador-noti">0</span>*/}
             </div>
           </div>
         </div>

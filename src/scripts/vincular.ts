@@ -1,7 +1,7 @@
-// src/components/Ferramentas/useVincular.ts
 import { useState } from "react";
 import { exportToCSV } from "../utils/csvExport";
 import { formatDateTime } from "../utils/datetime";
+import { copiarTexto } from "../utils/clipboard";
 
 interface Vincular {
   _id: string;
@@ -47,5 +47,17 @@ export function useVincular() {
 
   const limpar = () => setResultados([]);
 
-  return { resultados, formatar, exportar, limpar };
+  const copiar = async () => {
+    if (!resultados.length) return;
+    const texto = resultados
+      .map(
+        (r) =>
+          `${r._id};${r.operacao};${r.data_hora};${r.agendamento.uuid};${r.candidato.cpf}`
+      )
+      .join("\n");
+
+    await copiarTexto(texto);
+  };
+
+  return { resultados, formatar, exportar, limpar, copiar };
 }

@@ -79,14 +79,8 @@ const Ajuda: React.FC = () => {
           <h2>Central de Ajuda</h2>
         </div>
 
-        <div className="abas-filtro">
-          <div className="aba-filtro ativo">Todos</div>
-          <div className="aba-filtro">Erros Comuns</div>
-          <div className="aba-filtro">Contatos</div>
-        </div>
-
         <div className="grade-ajuda">
-          {/* AJUDA 1 */}
+          {/* AJUDA */}
           <div className="ajuda-itens">
             <div className="ajuda-icone vermelho">
               <i className="fas fa-minus"></i>

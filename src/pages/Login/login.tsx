@@ -68,6 +68,10 @@ const LoginPage: React.FC = () => {
             ENTRAR
           </button>
 
+          <button className="button1" onClick={entrar}>
+            DEMO
+          </button>
+
           <div className="rodape-login">
             © 2025 Jefferson Levy. Todos os direitos reservados.
           </div>

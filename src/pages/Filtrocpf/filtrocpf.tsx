@@ -28,17 +28,27 @@ const FiltroCPF: React.FC = () => {
     return resto === parseInt(cpf.charAt(10));
   };
 
+  // --- NOVO: extrai apenas CPFs do texto, sem ponto e sem traço ---
+  const extrairCpfs = (texto: string): string[] => {
+    // pega qualquer padrão de CPF com ou sem pontuação
+    const matches = texto.match(/\d{3}\.?\d{3}\.?\d{3}-?\d{2}/g);
+    if (!matches) return [];
+
+    // remove tudo que não for dígito e remove duplicados
+    const limpos = matches.map((cpf) => cpf.replace(/\D/g, ""));
+    const unicos = Array.from(new Set(limpos));
+    return unicos;
+  };
+
   // --- Atualiza estatísticas em tempo real ---
   const atualizarListas = (texto: string) => {
-    const linhas = texto
-      .split(/\r?\n/)
-      .map((l) => l.trim())
-      .filter((l) => l !== "");
+    // NOVO: em vez de confiar em "linhas", agora eu extraio só os CPFs do texto
+    const cpfs = extrairCpfs(texto);
 
     const v: string[] = [];
     const i: string[] = [];
 
-    linhas.forEach((cpf) => {
+    cpfs.forEach((cpf) => {
       if (validarCPF(cpf)) v.push(cpf);
       else i.push(cpf);
     });
@@ -61,9 +71,39 @@ const FiltroCPF: React.FC = () => {
     toast.success("Campos limpos com sucesso!");
   };
 
-  const copiar = () => {
-    navigator.clipboard.writeText(validos.join("\n"));
-    toast.success("CPFs válidos copiados para a área de transferência!");
+  // --- NOVO: botão copiar corrigido (async + tratamento de erro) ---
+  const copiar = async () => {
+    if (!validos.length) {
+      toast.warn("Não há CPFs válidos para copiar.");
+      return;
+    }
+
+    const texto = validos.join("\n");
+
+    try {
+      await navigator.clipboard.writeText(texto);
+      toast.success("CPFs válidos (um por linha) copiados!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Não foi possível copiar automaticamente. Verifique as permissões do navegador.");
+    }
+  };
+
+  const envirgular = async () => {
+    if (!validos.length) {
+      toast.warn("Não há CPFs válidos para envirgular.");
+      return;
+    }
+
+    const texto = validos.join(", ");
+
+    try {
+      await navigator.clipboard.writeText(texto);
+      toast.success("CPFs válidos separados por vírgula copiados!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Não foi possível copiar automaticamente. Verifique as permissões do navegador.");
+    }
   };
 
   const exportarCsv = () => {
@@ -147,7 +187,7 @@ const FiltroCPF: React.FC = () => {
           <textarea
             value={input}
             onChange={handleInput}
-            placeholder="Cole aqui os CPFs, um por linha..."
+            placeholder="Cole aqui o texto contendo CPFs, nomes, etc... que eu extraio só os CPFs."
             className="textarea-cpf"
           />
 
@@ -162,7 +202,14 @@ const FiltroCPF: React.FC = () => {
                   ))}
                 </div>
               </div>
-              <button className="botaofiltro2" onClick={copiar}>Copiar</button>
+
+              <button className="botaofiltro2" onClick={copiar}>
+                Copiar (sem vírgula)
+              </button>
+              <button className="botaofiltro2" onClick={envirgular}>
+                Copiar (com vírgula)
+              </button>
+
               <div>
                 <strong>CPFs Inválidos:</strong>
                 <div id="invalidList">
@@ -181,8 +228,12 @@ const FiltroCPF: React.FC = () => {
         </section>
 
         <div style={{ marginTop: 10 }}>
-          <button className="botaofiltro" onClick={limpar}>Limpar</button>
-          <button className="botaofiltro" onClick={exportarCsv}>Exportar CSV</button>
+          <button className="botaofiltro" onClick={limpar}>
+            Limpar
+          </button>
+          <button className="botaofiltro" onClick={exportarCsv}>
+            Exportar CSV
+          </button>
         </div>
       </main>
     </div>

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./formatadores.module.css";
 import { toast } from "react-toastify";
+import { copiarTexto } from "../../utils/clipboard";
 
 
 import { useNotificacao } from "../../scripts/notificacao";
@@ -12,10 +13,15 @@ import { getToken } from "../../utils/tokenManager";
 
 const Formatadores: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const state = location.state as
+    | { abaInicial?: "notificacao" | "vincular" | "desvincular" | "matricula" }
+    | undefined;
 
   const [abaAtiva, setAbaAtiva] = useState<
     "notificacao" | "vincular" | "desvincular" | "matricula"
-  >("notificacao");
+  >(state?.abaInicial || "notificacao");
 
   const [texto, setTexto] = useState("");
   const [cpf, setCpf] = useState("");
@@ -32,6 +38,14 @@ const Formatadores: React.FC = () => {
     if (secao === "matricula") matricula.limpar();
     if (secao === "vincular") vincular.limpar();
     if (secao === "desvincular") desvincular.limpar();
+  };
+  const [copiadoIndex, setCopiadoIndex] = useState<number | null>(null);
+
+  const handleCopiar = async (dados: any, index: number) => {
+    const texto = JSON.stringify(dados, null, 2);
+    await copiarTexto(texto);
+    toast.success("Copiado para a área de transferência!");
+    setCopiadoIndex(index);
   };
 
   const handleEnviar = async (item: any) => {
@@ -200,7 +214,13 @@ const Formatadores: React.FC = () => {
                 {vincular.resultados.map((r, i) => (
                   <div key={i} className={styles["resultados-item"]}>
                     <pre>{JSON.stringify(r, null, 2)}</pre>
-                    <button className={styles["botao-copiar"]}>Copiar</button>
+                    <button className={styles["botao-copiar"]} onClick={() => handleCopiar(r, i)}
+                        style={{
+                            backgroundColor:
+                              copiadoIndex === i ? "#2e6592ff" : undefined,
+                          }}
+                        >
+                          {copiadoIndex === i ? "Copiado!" : "Copiar"}</button>
                   </div>
                 ))}
               </div>
@@ -209,7 +229,7 @@ const Formatadores: React.FC = () => {
             <div className={styles["botoes"]}>
               <button
                 className={styles["formatar"]}
-                onClick={() => vincular.formatar(texto, cpf)}
+                onClick={() => { vincular.formatar(texto, cpf);setCopiadoIndex([]);}}
               >
                 Formatar
               </button>
@@ -253,7 +273,13 @@ const Formatadores: React.FC = () => {
                 {desvincular.resultados.map((r, i) => (
                   <div key={i} className={styles["resultados-item"]}>
                     <pre>{JSON.stringify(r, null, 2)}</pre>
-                    <button className={styles["botao-copiar"]}>Copiar</button>
+                      <button className={styles["botao-copiar"]} onClick={() => handleCopiar(r, i)}
+                        style={{
+                            backgroundColor:
+                              copiadoIndex === i ? "#2e6592ff" : undefined,
+                          }}
+                        >
+                          {copiadoIndex === i ? "Copiado!" : "Copiar"}</button>
                   </div>
                 ))}
               </div>
@@ -262,7 +288,7 @@ const Formatadores: React.FC = () => {
             <div className={styles["botoes"]}>
               <button
                 className={styles["formatar"]}
-                onClick={() => desvincular.formatar(texto, cpf)}
+                onClick={() => {desvincular.formatar(texto, cpf); setCopiadoIndex([]);}}
               >
                 Formatar
               </button>
@@ -306,7 +332,13 @@ const Formatadores: React.FC = () => {
                 {matricula.resultados.map((r, i) => (
                   <div key={i} className={styles["resultados-item"]}>
                     <pre>{JSON.stringify(r, null, 2)}</pre>
-                    <button className={styles["botao-copiar"]}>Copiar</button>
+                      <button className={styles["botao-copiar"]} onClick={() => handleCopiar(r, i)}
+                        style={{
+                            backgroundColor:
+                              copiadoIndex === i ? "#2e6592ff" : undefined,
+                          }}
+                        >
+                          {copiadoIndex === i ? "Copiado!" : "Copiar"}</button>
                   </div>
                 ))}
               </div>
@@ -315,7 +347,7 @@ const Formatadores: React.FC = () => {
             <div className={styles["botoes"]}>
               <button
                 className={styles["formatar"]}
-                onClick={() => matricula.formatar(texto)}
+                onClick={() => {matricula.formatar(texto); setCopiadoIndex([]);}}
               >
                 Formatar
               </button>
