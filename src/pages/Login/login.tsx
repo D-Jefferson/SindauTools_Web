@@ -9,6 +9,10 @@ const LoginPage: React.FC = () => {
     navigate("/home");
   };
 
+  const entrar2 = () => {
+    navigate("/demo/home");
+  };
+
   const abrirVideo = () => {
     const popup = document.getElementById("popupVideo");
     if (popup) popup.style.display = "flex";
@@ -68,7 +72,7 @@ const LoginPage: React.FC = () => {
             ENTRAR
           </button>
 
-          <button className="button1" onClick={entrar}>
+          <button className="button1" onClick={entrar2}>
             DEMO
           </button>
 

@@ -4,14 +4,14 @@ import styles from "./formatadores.module.css";
 import { toast } from "react-toastify";
 import { copiarTexto } from "../../utils/clipboard";
 
+
 import { useNotificacao } from "../../scripts/notificacao";
 import { useMatricula } from "../../scripts/matricula";
 import { useVincular } from "../../scripts/vincular";
 import { useDesvincular } from "../../scripts/desvincular";
 import { getToken } from "../../utils/tokenManager";
-import { getapi } from "../../modals/ModalGetMatricula";
 
-const Formatadores: React.FC = () => {
+const Formatadores2: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -77,24 +77,28 @@ const Formatadores: React.FC = () => {
           </div>
         </div>
 
-        <nav className={styles["lateral-nav"]}>
-          <a onClick={() => navigate("/home")}>
+        <nav className="lateral-nav">
+          <a onClick={() => navigate("/demo/home")} >
             <i className="fas fa-home"></i>
             <span>Início</span>
           </a>
-          <a className={styles["active"]}>
+
+          <a onClick={() => navigate("/demo/ferramentas")} className="active">
             <i className="fas fa-tools"></i>
             <span>Ferramentas</span>
           </a>
-          <a onClick={() => navigate("/sobre")}>
+
+          <a onClick={() => navigate("/demo/sobre")}>
             <i className="fas fa-book"></i>
             <span>Sobre</span>
           </a>
-          <a onClick={() => navigate("/filtrocpf")}>
+
+          <a onClick={() => navigate("/demo/filtrocpf")}>
             <i className="fa-solid fa-filter"></i>
             <span>Filtro CPF</span>
           </a>
-          <a onClick={() => navigate("/ajuda")}>
+
+          <a onClick={() => navigate("/demo/ajuda")}>
             <i className="fas fa-info-circle"></i>
             <span>Ajuda</span>
           </a>
@@ -194,20 +198,6 @@ const Formatadores: React.FC = () => {
                 Exportar CSV
               </button>
             </div>
-              <div className={styles["h22"]} style={{marginTop: '40px'}}>
-                <h2>Buscar matrícula Renova</h2>
-                <input
-                  id="puxaruuid"
-                  type="text"
-                  placeholder="Digite o CPF"
-                  style={{ padding: "8px 12px", borderRadius: 6, border: "1px solid #444",backgroundColor: "#181818ff", color: "#fff", marginLeft: 10 }}
-                />
-                <button
-                  style={{marginLeft:"10px", padding: "8px 12px", borderRadius: 6, border: "none", backgroundColor: "#866b12ff", color: "#ffffffff", cursor: "pointer" }}
-                  onClick={getapi}>
-                  Buscar na Renova
-                </button>
-              </div>
           </section>
         )}
 
@@ -385,4 +375,4 @@ const Formatadores: React.FC = () => {
   );
 };
 
-export default Formatadores;
+export default Formatadores2;

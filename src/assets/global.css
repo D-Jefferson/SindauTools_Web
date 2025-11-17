@@ -35,6 +35,10 @@ body::-webkit-scrollbar {
     --positivo: #27ae60;
     --info: #3498db;
 }
+
+body.demo {
+    --terceira-cor: #3498db;
+}
   
 .menu-lateral-inicio {
     width: 250px;
@@ -95,7 +99,7 @@ body::-webkit-scrollbar {
     font-weight: 600;
     letter-spacing: 1px;
     padding-left: 10px;
-    border-left: 4px solid #c4404b;
+    border-left: 4px solid var(--terceira-cor);
     display: flex;
     align-items: center;
 }
@@ -295,6 +299,7 @@ input:checked + .barra:before {
     display: flex;
     align-items: center;
     gap: 1rem;
+    z-index: 2;
 }
 
 .noti {
@@ -484,19 +489,19 @@ input:checked + .barra:before {
 }
 
 .ferramenta:nth-child(1)::before {
-    background: linear-gradient(90deg, #4CAF50, #4CAF50, #76d275);
+    background: var(--terceira-cor);
 }
 
 .ferramenta:nth-child(2)::before {
-    background: linear-gradient(90deg, #64B5F6,  #64B5F6,#82b1ff);
+    background: var(--terceira-cor);
 }
 
 .ferramenta:nth-child(3)::before {
-    background: linear-gradient(90deg, #EF5350, #EF5350, #ff867f);
+    background: var(--terceira-cor);
 }
 
 .ferramenta:nth-child(4)::before {
-    background: linear-gradient(90deg,#9575CD,#9575CD,  #b39ddb);
+    background: var(--terceira-cor);
 }
 
 .ferramenta:hover::before {
@@ -545,19 +550,19 @@ input:checked + .barra:before {
 }
 
 .notification-icon {
-    color: #4CAF50;
+    color: var(--terceira-cor);
 }
 
 .link-icon {
-    color: #64B5F6;
+    color: var(--terceira-cor);
 }
 
 .unlink-icon {
-    color: #EF5350;
+    color: var(--terceira-cor);
 }
 
 .send-icon {
-    color: #9575CD;
+    color: var(--terceira-cor);
 }
 
 .fundo-sobrepor {
@@ -655,7 +660,7 @@ input:checked + .barra:before {
 
 .cargo-membro {
     font-size: 12px;
-    color: #c4404b;
+    color: var(--terceira-cor);
 }
 
 .extensoes {
