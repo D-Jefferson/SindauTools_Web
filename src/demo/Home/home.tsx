@@ -30,11 +30,7 @@ const Home2: React.FC = () => {
         </div>
 
         <div className="perfil">
-          <div className="perfil-icone">S</div>
-          <div className="perfil-info">
-            <div className="perfil-nome">Suporte</div>
-            <div className="perfil-tipo">Administrador</div>
-          </div>
+          <button className="button1">DEMO</button>
         </div>
 
         <nav className="lateral-nav">
@@ -50,17 +46,17 @@ const Home2: React.FC = () => {
 
           <a onClick={() => navigate("/demo/sobre")}>
             <i className="fas fa-book"></i>
-            <span>Sobre</span>
+            <span>Informações</span>
           </a>
 
-          <a onClick={() => navigate("/demo/filtrocpf")}>
-            <i className="fa-solid fa-filter"></i>
-            <span>Filtro CPF</span>
+          <a onClick={() => navigate("/demo/CloudBeaver")}>
+            <i className="fa-solid fa-database"></i>
+            <span>Banco de Dados</span>
           </a>
 
-          <a onClick={() => navigate("/demo/ajuda")}>
-            <i className="fas fa-info-circle"></i>
-            <span>Ajuda</span>
+          <a onClick={() => navigate("/home")}>
+            <i className="fas fa-undo"></i>
+            <span>Voltar</span>
           </a>
         </nav>
         

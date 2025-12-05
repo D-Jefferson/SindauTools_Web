@@ -70,11 +70,7 @@ const Formatadores2: React.FC = () => {
         </div>
 
         <div className={styles["perfil"]}>
-          <div className={styles["perfil-icone"]}>S</div>
-          <div className={styles["perfil-info"]}>
-            <div className={styles["perfil-nome"]}>Suporte</div>
-            <div className={styles["perfil-tipo"]}>Administrador</div>
-          </div>
+          <button className="button1">DEMO</button>
         </div>
 
         <nav className="lateral-nav">
@@ -90,17 +86,12 @@ const Formatadores2: React.FC = () => {
 
           <a onClick={() => navigate("/demo/sobre")}>
             <i className="fas fa-book"></i>
-            <span>Sobre</span>
+            <span>Informações</span>
           </a>
 
-          <a onClick={() => navigate("/demo/filtrocpf")}>
-            <i className="fa-solid fa-filter"></i>
-            <span>Filtro CPF</span>
-          </a>
-
-          <a onClick={() => navigate("/demo/ajuda")}>
-            <i className="fas fa-info-circle"></i>
-            <span>Ajuda</span>
+          <a onClick={() => navigate("/demo/CloudBeaver")}>
+            <i className="fa-solid fa-database"></i>
+            <span>Banco de Dados</span>
           </a>
         </nav>
 

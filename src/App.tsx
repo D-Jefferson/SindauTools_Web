@@ -13,9 +13,8 @@ import Ajuda from "./pages/Ajuda/ajuda";
 import Home2 from "./demo/Home/home";
 import Formatadores2 from "./demo/Formatadores/formatadores";
 import Sobre2 from "./demo/Sobre/sobre";
-import FiltroCPF2 from "./demo/Filtrocpf/filtrocpf";
-import Ajuda2 from "./demo/Ajuda/ajuda";
-
+import Banco from "./demo/Banco/banco";
+import Banco2 from "./pages/Banco/banco";
 import TokenButton from "./api/autorizacao";
 
 function AppContent() {
@@ -47,8 +46,8 @@ function AppContent() {
         <Route path="/demo/home" element={<Home2 />} />
         <Route path="/demo/ferramentas" element={<Formatadores2 />} />
         <Route path="/demo/sobre" element={<Sobre2 />} />
-        <Route path="/demo/filtrocpf" element={<FiltroCPF2 />} />
-        <Route path="/demo/ajuda" element={<Ajuda2 />} />
+        <Route path="/demo/CloudBeaver" element={<Banco />} />
+        <Route path="/CloudBeaver" element={<Banco2 />} />
       </Routes>
       {mostrarBotao && <TokenButton />}
       <ToastContainer position="top-right" autoClose={2500} theme="dark" />

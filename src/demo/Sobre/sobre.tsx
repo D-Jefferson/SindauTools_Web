@@ -16,11 +16,7 @@ const Sobre2: React.FC = () => {
         </div>
 
         <div className="perfil">
-          <div className="perfil-icone">S</div>
-          <div className="perfil-info">
-            <div className="perfil-nome">Suporte</div>
-            <div className="perfil-tipo">Administrador</div>
-          </div>
+          <button className="button1">DEMO</button>
         </div>
 
         <nav className="lateral-nav">
@@ -36,17 +32,12 @@ const Sobre2: React.FC = () => {
 
           <a onClick={() => navigate("/demo/sobre")} className="active">
             <i className="fas fa-book"></i>
-            <span>Sobre</span>
+            <span>Informações</span>
           </a>
 
-          <a onClick={() => navigate("/demo/filtrocpf")}>
-            <i className="fa-solid fa-filter"></i>
-            <span>Filtro CPF</span>
-          </a>
-
-          <a onClick={() => navigate("/demo/ajuda")}>
-            <i className="fas fa-info-circle"></i>
-            <span>Ajuda</span>
+          <a onClick={() => navigate("/demo/CloudBeaver")}>
+            <i className="fa-solid fa-database"></i>
+            <span>Banco de Dados</span>
           </a>
         </nav>
 
@@ -77,12 +68,12 @@ const Sobre2: React.FC = () => {
           <div className="extensao">
             <i className="fas fa-puzzle-piece extensao-fundo"></i>
             <div className="extensao-descricao" style={{ width: "90%" }}>
-              O <strong>SindauTools</strong> é uma plataforma desenvolvida
-              especialmente para otimizar a rotina de quem lida diariamente com
-              tickets de demanda relacionada a API, Banco de Dados e atendimento
-              ao público-alvo do Sindicato. O <strong>SindauTools_Web</strong>{" "}
-              oferece uma experiência mais fluida, produtiva e alinhada às
-              necessidades do suporte técnico do Sindauto-BA.
+              Essa parte do <strong>SindauTools</strong> é apenas uma demonstração
+              das funcionalidades desenvolvidas simulando um ambiente de banco de
+              dados utilizando o <strong>CloudBeaver</strong>. O objetivo principal é
+              apresentar as capacidades e recursos que podem ser integrados ao
+              sistema para melhorar a gestão de dados e facilitar o trabalho do
+              suporte técnico.
               <br />
               <br />
               Minha missão é fornecer soluções tecnológicas que permitam que
@@ -92,53 +83,6 @@ const Sobre2: React.FC = () => {
               <br />
               Projeto criado voluntariamente que aumentou a eficiência de
               resolução de tickets em cerca de <strong>65%</strong>.
-            </div>
-          </div>
-
-          <div className="h22">
-            <h3 style={{ color: "#b8b8b8" }}>Recursos</h3>
-          </div>
-
-          <div className="extensao">
-            <i className="fas fa-puzzle-piece extensao-fundo"></i>
-            <div className="extensao-descricao" style={{ width: "90%" }}>
-              <p>
-                <strong>Formatadores:</strong> Os formatadores têm como objetivo
-                transformar dados em JSON para enviar pela API. Os dados são
-                coletados em linhas do banco de dados e, após formatados, são
-                enviados para a empresa parceira.
-              </p>
-              <p>
-                <strong>Dashboard / Estatísticas:</strong> Exibe e monitora o
-                uso dos formatadores padrões, permitindo uma análise completa do
-                desempenho e da utilização das ferramentas.
-              </p>
-              <p>
-                <strong>Central de Ajuda:</strong> Criada para auxiliar não
-                apenas os que têm acesso ao banco de dados, mas também
-                estagiários e analistas N1, oferecendo orientações úteis para o
-                atendimento ao público — os CFCs.
-              </p>
-            </div>
-          </div>
-
-          <div className="h22">
-            <h3 style={{ color: "#b8b8b8" }}>Equipe</h3>
-          </div>
-
-          <div className="extensao">
-            <i className="fas fa-puzzle-piece extensao-fundo"></i>
-            <div className="extensao-descricao">
-              O SindauTools é desenvolvido e mantido por um desenvolvedor
-              prestes a se formar e dedicado, comprometido em fornecer as
-              melhores soluções para nossa equipe de suporte.
-              <div className="equipe-grid">
-                <div className="cartao-membro">
-                  <div className="foto-membro">J</div>
-                  <div className="nome-membro">Jefferson Levy</div>
-                  <div className="cargo-membro">Desenvolvedor</div>
-                </div>
-              </div>
             </div>
           </div>
 

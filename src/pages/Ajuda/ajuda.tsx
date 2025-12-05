@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../../assets/global.css";
 
-const Ajuda: React.FC = () => {
+const Ajuda2: React.FC = () => {
   const navigate = useNavigate();
 
   return (
@@ -28,19 +28,23 @@ const Ajuda: React.FC = () => {
             <i className="fas fa-home"></i>
             <span>Início</span>
           </a>
+
           <a onClick={() => navigate("/ferramentas")}>
             <i className="fas fa-tools"></i>
             <span>Ferramentas</span>
           </a>
+
           <a onClick={() => navigate("/sobre")}>
             <i className="fas fa-book"></i>
             <span>Sobre</span>
           </a>
+
           <a onClick={() => navigate("/filtrocpf")}>
             <i className="fa-solid fa-filter"></i>
             <span>Filtro CPF</span>
           </a>
-          <a className="active" onClick={() => navigate("/ajuda")}>
+
+          <a onClick={() => navigate("/ajuda")} className="active">
             <i className="fas fa-info-circle"></i>
             <span>Ajuda</span>
           </a>
@@ -162,4 +166,4 @@ const Ajuda: React.FC = () => {
   );
 };
 
-export default Ajuda;
+export default Ajuda2;

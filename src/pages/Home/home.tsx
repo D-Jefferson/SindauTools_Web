@@ -2,6 +2,7 @@ import React from "react";
 import "../../assets/global.css";
 import { useNavigate } from "react-router-dom";
 
+
 const Home: React.FC = () => {
   const formatador1 = () =>
     navigate("/ferramentas", { state: { abaInicial: "notificacao" } });
@@ -62,11 +63,13 @@ const Home: React.FC = () => {
             <i className="fas fa-info-circle"></i>
             <span>Ajuda</span>
           </a>
+
         </nav>
         
         <div className="assina" style={{ backgroundColor: "rgba(240,248,255,0)" }}>
           <p style={{ color: "#b8b8b8" }}>@By Jefferson Levy</p>
         </div>
+
       </aside>
 
       {/* CONTEÚDO PRINCIPAL */}

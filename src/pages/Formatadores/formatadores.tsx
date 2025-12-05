@@ -110,7 +110,6 @@ const Formatadores: React.FC = () => {
 
       {/* CONTEÚDO PRINCIPAL */}
       <main className={styles["container"]}>
-        {/* Botões de navegação entre os formatadores */}
         <div className={styles["nav-menus"]}>
           <button
             className={`${styles["nav-menu"]} ${
