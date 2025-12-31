@@ -1,12 +1,99 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../../assets/global.css";
+import sindatImg from "../../assets/sindat.png";
+
 
 const Sobre: React.FC = () => {
   const navigate = useNavigate();
 
   return (
     <div className="page-container">
+      <style dangerouslySetInnerHTML={{ __html: `
+        :root {
+          --primeira-cor: #1f1f1f;
+          --segunda-cor: #2c2c2c;
+          --terceira-cor: #c4404b;
+          --cor-texto: #f5f5f5;
+          --fundo: #2c2c2c;
+          --sombra: 0 4px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .t-container {
+          display: flex;
+          flex-direction: column;
+          gap: 40px;
+          padding: 20px;
+          background-color: var(--fundo);
+          color: var(--cor-texto);
+        }
+
+        .t-hero {
+          background-color: var(--primeira-cor);
+          border-bottom: 4px solid var(--terceira-cor);
+          padding: 60px 40px;
+          display: flex;
+          align-items: center;
+          gap: 40px;
+          border-radius: 8px;
+        }
+
+        .t-hero-content { flex: 1; }
+        .t-hero-title { font-size: 2.5rem; font-weight: 900; line-height: 1.1; margin-bottom: 20px; text-transform: uppercase; }
+        .t-hero-title span { color: var(--terceira-cor); }
+        
+        .t-btn {
+          display: inline-block;
+          background-color: var(--terceira-cor);
+          color: white;
+          padding: 15px 30px;
+          border-radius: 4px;
+          font-weight: bold;
+          text-decoration: none;
+          text-transform: uppercase;
+          transition: 0.3s;
+          border: none;
+          cursor: pointer;
+        }
+
+        .t-btn:hover { filter: brightness(1.2); transform: translateY(-2px); }
+
+        .t-section {
+          display: flex;
+          align-items: center;
+          gap: 60px;
+          padding: 60px 40px;
+          border-radius: 8px;
+        }
+
+        .t-bg-1 { background-color: var(--segunda-cor); }
+        .t-bg-2 { background-color: var(--primeira-cor); }
+        .t-reverse { flex-direction: row-reverse; }
+
+        .t-text-box { flex: 1; border-left: 4px solid var(--terceira-cor); padding-left: 20px; }
+        .t-text-box h2 { font-size: 1.8rem; margin-bottom: 15px; text-transform: uppercase; }
+
+        .t-img-placeholder {
+          flex: 1;
+          background: var(--primeira-cor);
+          height: 300px;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 2px dashed var(--terceira-cor);
+          color: var(--terceira-cor);
+          font-weight: bold;
+        }
+
+        .t-skin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; flex: 1; }
+        .t-skin-item { background: var(--primeira-cor); height: 150px; border-bottom: 3px solid var(--terceira-cor); border-radius: 4px; }
+
+        @media (max-width: 768px) {
+          .t-hero, .t-section { flex-direction: column; text-align: center; }
+          .t-text-box { border-left: none; border-top: 4px solid var(--terceira-cor); padding: 20px 0; }
+        }
+      `}} />
+  
       {/* MENU LATERAL */}
       <aside className="menu-lateral-inicio">
         <div className="menu-lateral-logo">
@@ -51,113 +138,30 @@ const Sobre: React.FC = () => {
         </div>
       </aside>
 
-      {/* CONTEÚDO PRINCIPAL */}
+      {/* CONTEÚDO PRINCIPAL ESTILO TLAUNCHER */}
       <main className="container">
-        <div className="pesquisa">
-          <div className="sub-info">
-            <a onClick={() => navigate("/home")}>Início</a>
-            <span className="separado">/</span>
-            <span>Sobre</span>
-          </div>
-        </div>
-
-        <div className="h22">
-          <h2>Sobre</h2>
-        </div>
-
-        <div className="extensoes">
-          <div className="h22">
-            <h3 style={{ color: "#b8b8b8" }}>SindauTools</h3>
-          </div>
-
-          <div className="extensao">
-            <i className="fas fa-puzzle-piece extensao-fundo"></i>
-            <div className="extensao-descricao" style={{ width: "90%" }}>
-              O <strong>SindauTools</strong> é uma plataforma desenvolvida
-              especialmente para otimizar a rotina de quem lida diariamente com
-              tickets de demanda relacionada a API, Banco de Dados e atendimento
-              ao público-alvo do Sindicato. O <strong>SindauTools_Web</strong>{" "}
-              oferece uma experiência mais fluida, produtiva e alinhada às
-              necessidades do suporte técnico do Sindauto-BA.
-              <br />
-              <br />
-              Minha missão é fornecer soluções tecnológicas que permitam que
-              minha equipe e eu possamos crescer e aprimorar nosso conhecimento
-              e eficiência.
-              <br />
-              <br />
-              Projeto criado voluntariamente que aumentou a eficiência de
-              resolução de tickets em cerca de <strong>65%</strong>.
+        <div className="t-container">
+          
+          {/* HERO */}
+          <header className="t-hero">
+            <div className="t-hero-content">
+              <h1 className="t-hero-title">Sindau<span>Tools</span></h1>
+              <p style={{marginBottom: '30px', opacity: 0.8}}>Otimização de rotina, banco de dados e atendimento técnico em um só lugar.</p>
+              <button className="t-btn" onClick={() => window.open('https://github.com/D-Jefferson/SindauTools_Web', '_blank')}>Ver no GitHub</button>
             </div>
-          </div>
+            <img src={sindatImg} className="t-img-placeholder" alt="Sindat" />
+          </header>
 
-          <div className="h22">
-            <h3 style={{ color: "#b8b8b8" }}>Recursos</h3>
-          </div>
+          {/* SECTION 1 */}
+          <section className="t-section t-bg-1">
+            <div className="t-text-box">
+              <h2>História</h2>
+              <p>Projeto criado voluntariamente, responsável por aumentar a eficiência na resolução de tickets em cerca de 65%.
+Inicialmente, a empresa parceira disponibilizou apenas a API para a execução das demandas. No início, as requisições eram realizadas diretamente na API, o que tornava o processo mais técnico e menos produtivo.
 
-          <div className="extensao">
-            <i className="fas fa-puzzle-piece extensao-fundo"></i>
-            <div className="extensao-descricao" style={{ width: "90%" }}>
-              <p>
-                <strong>Formatadores:</strong> Os formatadores têm como objetivo
-                transformar dados em JSON para enviar pela API. Os dados são
-                coletados em linhas do banco de dados e, após formatados, são
-                enviados para a empresa parceira.
-              </p>
-              <p>
-                <strong>Dashboard / Estatísticas:</strong> Exibe e monitora o
-                uso dos formatadores padrões, permitindo uma análise completa do
-                desempenho e da utilização das ferramentas.
-              </p>
-              <p>
-                <strong>Central de Ajuda:</strong> Criada para auxiliar não
-                apenas os que têm acesso ao banco de dados, mas também
-                estagiários e analistas N1, oferecendo orientações úteis para o
-                atendimento ao público — os CFCs.
-              </p>
+Diante desse cenário, surgiu a iniciativa de desenvolver uma interface web para a API, dando origem ao SindauTools Web, atualmente utilizado diariamente pela equipe de suporte, proporcionando mais agilidade, padronização e eficiência no atendimento.</p>
             </div>
-          </div>
-
-          <div className="h22">
-            <h3 style={{ color: "#b8b8b8" }}>Equipe</h3>
-          </div>
-
-          <div className="extensao">
-            <i className="fas fa-puzzle-piece extensao-fundo"></i>
-            <div className="extensao-descricao">
-              O SindauTools é desenvolvido e mantido por um desenvolvedor
-              prestes a se formar e dedicado, comprometido em fornecer as
-              melhores soluções para nossa equipe de suporte.
-              <div className="equipe-grid">
-                <div className="cartao-membro">
-                  <div className="foto-membro">J</div>
-                  <div className="nome-membro">Jefferson Levy</div>
-                  <div className="cargo-membro">Desenvolvedor</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="h22">
-            <h3 style={{ color: "#b8b8b8" }}>Projeto</h3>
-          </div>
-
-          <div className="extensao">
-            <i className="fas fa-puzzle-piece extensao-fundo"></i>
-            <div className="extensao-titulo">Veja o projeto no GitHub</div>
-            <div className="extensao-descricao">
-              <p className="paragrafo">
-                <a
-                  href="https://github.com/D-Jefferson/SindauTools_Web"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: "rgb(225,225,225)" }}
-                >
-                  https://github.com/D-Jefferson/SindauTools_Web
-                </a>
-              </p>
-            </div>
-          </div>
+          </section>
         </div>
       </main>
     </div>

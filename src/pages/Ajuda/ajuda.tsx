@@ -57,26 +57,13 @@ const Ajuda2: React.FC = () => {
 
       {/* CONTEÚDO PRINCIPAL */}
       <main className="container">
+
         <div className="pesquisa">
-          <div className="pesquisa-ajuda">
-            <input type="text" placeholder="Pesquisar na Central de Ajuda" />
-            <button className="botao-pesquisa">
-              <i className="fas fa-search"></i>
-            </button>
+          <div className="sub-info">
+            <a onClick={() => navigate("/home")}>Início</a>
+            <span className="separado">/</span>
+            <span>Ajuda</span>
           </div>
-
-          <div className="alerta-aute">
-            <div className="noti" data-tooltip="Notificações">
-              <i className="fas fa-bell"></i>
-              <span className="contador-noti">0</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="sub-info">
-          <a onClick={() => navigate("/home")}>Início</a>
-          <span className="separado">/</span>
-          <span>Ajuda</span>
         </div>
 
         <div className="h22">
@@ -84,21 +71,6 @@ const Ajuda2: React.FC = () => {
         </div>
 
         <div className="grade-ajuda">
-          {/* AJUDA */}
-          <div className="ajuda-itens">
-            <div className="ajuda-icone vermelho">
-              <i className="fas fa-minus"></i>
-            </div>
-            <div className="ajuda-conteudo">
-              <h3>Notificação Financeira</h3>
-              <p>
-                "A situação financeira do candidato não permite agendamento."
-                <br />
-                Verifique se o boleto foi pago no Sistema de Gestão Sindauto e
-                abra um ticket caso esteja pago.
-              </p>
-            </div>
-          </div>
 
           {/* CONTATOS */}
           {[

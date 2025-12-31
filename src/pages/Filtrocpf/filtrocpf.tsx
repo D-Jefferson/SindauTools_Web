@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../assets/global.css";
 import { toast } from "react-toastify";
+import styles from "../Formatadores/formatadores.module.css";
+import Ajuda from "../../components/modalAjuda";
 
 const FiltroCPF: React.FC = () => {
   const navigate = useNavigate();
@@ -9,7 +11,6 @@ const FiltroCPF: React.FC = () => {
   const [validos, setValidos] = useState<string[]>([]);
   const [invalidos, setInvalidos] = useState<string[]>([]);
 
-  // --- Função de validação de CPF ---
   const validarCPF = (cpf: string): boolean => {
     cpf = cpf.replace(/[^\d]/g, "");
     if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
@@ -28,21 +29,15 @@ const FiltroCPF: React.FC = () => {
     return resto === parseInt(cpf.charAt(10));
   };
 
-  // --- NOVO: extrai apenas CPFs do texto, sem ponto e sem traço ---
   const extrairCpfs = (texto: string): string[] => {
-    // pega qualquer padrão de CPF com ou sem pontuação
     const matches = texto.match(/\d{3}\.?\d{3}\.?\d{3}-?\d{2}/g);
     if (!matches) return [];
-
-    // remove tudo que não for dígito e remove duplicados
     const limpos = matches.map((cpf) => cpf.replace(/\D/g, ""));
     const unicos = Array.from(new Set(limpos));
     return unicos;
   };
 
-  // --- Atualiza estatísticas em tempo real ---
   const atualizarListas = (texto: string) => {
-    // NOVO: em vez de confiar em "linhas", agora eu extraio só os CPFs do texto
     const cpfs = extrairCpfs(texto);
 
     const v: string[] = [];
@@ -57,7 +52,6 @@ const FiltroCPF: React.FC = () => {
     setInvalidos(i);
   };
 
-  // --- Eventos ---
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     setInput(value);
@@ -71,7 +65,6 @@ const FiltroCPF: React.FC = () => {
     toast.success("Campos limpos com sucesso!");
   };
 
-  // --- NOVO: botão copiar corrigido (async + tratamento de erro) ---
   const copiar = async () => {
     if (!validos.length) {
       toast.warn("Não há CPFs válidos para copiar.");
@@ -228,14 +221,18 @@ const FiltroCPF: React.FC = () => {
         </section>
 
         <div style={{ marginTop: 10 }}>
-          <button className="botaofiltro" onClick={limpar}>
+          <button className={styles["exportar"]} style={{backgroundColor:"#6d1818", marginRight:"10px"}} onClick={limpar}>
             Limpar
           </button>
-          <button className="botaofiltro" onClick={exportarCsv}>
+          <button className={styles["exportar"]} onClick={exportarCsv}>
             Exportar CSV
           </button>
         </div>
       </main>
+      <Ajuda
+        titulo="Como funciona?"
+        texto="Basta adicionar o texto ao qual deseja extrair os cpfs e o sistema filtrará os CPFs e apresentará em lista."
+      />
     </div>
   );
 };

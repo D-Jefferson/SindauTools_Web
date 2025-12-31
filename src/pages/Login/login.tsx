@@ -9,10 +9,6 @@ const LoginPage: React.FC = () => {
     navigate("/home");
   };
 
-  const entrar2 = () => {
-    navigate("/demo/home");
-  };
-
   const abrirVideo = () => {
     const popup = document.getElementById("popupVideo");
     if (popup) popup.style.display = "flex";
@@ -34,14 +30,13 @@ const LoginPage: React.FC = () => {
         <div className="info-lateral">
           <h1>Bem-vindo(a)</h1>
           <p>
-            SindauTools é a versão aprimorada do SindauTools, desenvolvida
+            SindauTools foi desenvolvido
             especialmente para otimizar as operações dos analistas de dados e
             analistas de suporte técnico do Sindauto-BA. Com foco na agilidade,
             praticidade e eficiência, este sistema integrado de gerenciamento
             visa transformar a maneira como os analistas lidam com tickets e
             demandas relacionadas à API e Banco de Dados.
           </p>
-          <p>Versão Definitiva</p>
         </div>
       </div>
 
@@ -63,7 +58,7 @@ const LoginPage: React.FC = () => {
 
             <div className="texto-perfil">
               <div className="rotulo-perfil">Perfil de acesso</div>
-              <div className="valor-perfil">Suporte</div>
+              <div className="valor-perfil">SUPORTE</div>
             </div>
             <div className="ponto-status"></div>
           </div>
@@ -72,29 +67,11 @@ const LoginPage: React.FC = () => {
             ENTRAR
           </button>
 
-          <button className="button1" onClick={entrar2}>
-            DEMO
-          </button>
-
           <div className="rodape-login">
             © 2025 Jefferson Levy. Todos os direitos reservados.
           </div>
         </div>
 
-        <div className="icone-ajuda" title="Ajuda" onClick={abrirVideo}>
-          <i className="fas fa-question"></i>
-        </div>
-      </div>
-
-      <div id="popupVideo">
-        <div className="popup-content">
-          <button className="close-btn" onClick={fecharVideo}>
-            <i className="fa-solid fa-xmark"></i>
-          </button>
-          <video id="meuVideo" controls>
-            <source src="icones/SindauTools.mp4" type="video/mp4" />
-          </video>
-        </div>
       </div>
     </div>
   );

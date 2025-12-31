@@ -1280,3 +1280,47 @@ video {
     51%, 100% { opacity: 0; }
 }
 
+.icone-ajuda {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  cursor: pointer;
+  font-size: 22px;
+  color: #d6d6d6;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 50px;
+  z-index: 10000;
+}
+
+.modal-ajuda {
+  background: #2e2e2e;
+  padding: 16px 20px;
+  border-radius: 8px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-ajuda h4 {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.modal-ajuda p {
+  font-size: 14px;
+  color: #b6b6b6;
+  margin-bottom: 12px;
+}
+
+.modal-ajuda button {
+  padding: 6px 12px;
+  cursor: pointer;
+}

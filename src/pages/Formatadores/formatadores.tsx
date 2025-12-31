@@ -14,6 +14,9 @@ import { getapi } from "../../modals/ModalGetMatricula";
 const Formatadores: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const entrar2 = () => {
+    navigate("/demo/ferramentas");
+  };
 
   const state = location.state as
     | { abaInicial?: "notificacao" | "vincular" | "desvincular" | "matricula" }
@@ -192,6 +195,15 @@ const Formatadores: React.FC = () => {
               >
                 Exportar CSV
               </button>
+
+              <button
+                className={styles["exportar"]}
+                style={{background: "linear-gradient(to right, #3c8ce7, #2b67c0)"}}
+                onClick={entrar2}
+              >
+                MODO DEMONSTRAÇÃO
+              </button>
+                
             </div>
               <div className={styles["h22"]} style={{marginTop: '40px'}}>
                 <h2>Buscar matrícula Renova</h2>
@@ -205,6 +217,7 @@ const Formatadores: React.FC = () => {
                   style={{marginLeft:"10px", padding: "8px 12px", borderRadius: 6, border: "none", backgroundColor: "#866b12ff", color: "#ffffffff", cursor: "pointer" }}
                   onClick={getapi}>
                   Buscar na Renova
+                  
                 </button>
               </div>
           </section>
