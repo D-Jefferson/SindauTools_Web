@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./home.css";
 import "../../assets/global.css";
+import FotoBiometria from "../FotoBiometria/fotobiometria";
 
 const ConsultaCandidato: React.FC = () => {
   const navigate = useNavigate();
@@ -176,47 +177,7 @@ const ConsultaCandidato: React.FC = () => {
             </>
           )}
 
-          {pageMode === "fotobiometria" && (
-            <div className="fb-container">
-              <div className="st-search-titles">
-                <h1>Foto Biometria</h1>
-                <p>Busque os registros biométricos por período.</p>
-              </div>
-
-              <div className="fb-filter-row">
-                <div className="fb-filter-group">
-                  <label>Data início</label>
-                  <input
-                    type="date"
-                    value={fbDataInicio}
-                    onChange={(e) => setFbDataInicio(e.target.value)}
-                    className="fb-input"
-                  />
-                </div>
-                <div className="fb-filter-group">
-                  <label>Data fim</label>
-                  <input
-                    type="date"
-                    value={fbDataFim}
-                    onChange={(e) => setFbDataFim(e.target.value)}
-                    className="fb-input"
-                  />
-                </div>
-                <button
-                  className="fb-btn-buscar"
-                  onClick={buscarFotobiometria}
-                  disabled={fbLoading}
-                >
-                  {fbLoading ? (
-                    <i className="fas fa-circle-notch fa-spin"></i>
-                  ) : (
-                    <i className="fas fa-search"></i>
-                  )}
-                  {fbLoading ? " Buscando..." : " Buscar"}
-                </button>
-              </div>
-            </div>
-          )}
+          {pageMode === "fotobiometria" && <FotoBiometria />}
 
           {pageMode === "grades" && (
             <>
