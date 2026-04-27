@@ -1,33 +1,14 @@
 import React, { useState } from "react";
 import { buscarFotobiometria } from "../../api/Sindauto/fotobiometria";
 import "../Home/home.css";
-
-const fmtCpf = (v: string) => {
-  const r = v.replace(/\D/g, "");
-  if (r.length > 9) return `${r.slice(0, 3)}.${r.slice(3, 6)}.${r.slice(6, 9)}-${r.slice(9, 11)}`;
-  if (r.length > 6) return `${r.slice(0, 3)}.${r.slice(3, 6)}.${r.slice(6)}`;
-  if (r.length > 3) return `${r.slice(0, 3)}.${r.slice(3)}`;
-  return r;
-};
-const fmtDate = (iso?: string) =>
-  iso ? new Date(iso).toLocaleDateString("pt-BR") : "—";
-const fmtTime = (iso?: string) =>
-  iso
-    ? new Date(iso).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })
-    : "—";
+import {fmtCpf,fmtDate,fmtTime} from "../../utils/formatos"
 
 const FotoBiometria: React.FC = () => {
-  const [fbDataInicio, setFbDataInicio] = useState(
-    () => new Date().toISOString().split("T")[0]
-  );
-  const [fbDataFim, setFbDataFim] = useState(
-    () => new Date().toISOString().split("T")[0]
-  );
-
+  const [fbDataInicio, setFbDataInicio] = useState(() => new Date().toISOString().split("T")[0]);
+  const [fbDataFim, setFbDataFim] = useState(() => new Date().toISOString().split("T")[0]);
   const [fbData, setFbData] = useState<any[]>([]);
   const [fbLoading, setFbLoading] = useState(false);
   const [fbErro, setFbErro] = useState("");
-
   const [fbPresenca, setFbPresenca] = useState<Record<string, "Presente" | "Ausente">>(
     () => {
       try {

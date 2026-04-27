@@ -464,7 +464,6 @@
    ========================================================================= */
 @media (max-width: 600px) {
   .st-search-wrapper:has(.fb-container) { padding: 1rem; }
-  /* esconde CPF em telas pequenas */
   .fb-table thead th:nth-child(3),
   .fb-table td:nth-child(3) { display: none; }
 }

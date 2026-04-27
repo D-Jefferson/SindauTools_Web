@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./home.css";
 import "../../assets/global.css";
 import FotoBiometria from "../FotoBiometria/fotobiometria";
+import { fmtCpf } from "../../utils/formatos";
 
 const ConsultaCandidato: React.FC = () => {
   const navigate = useNavigate();
@@ -14,10 +15,6 @@ const ConsultaCandidato: React.FC = () => {
   const [resultado, setResultado] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
-
-  const [fbDataInicio, setFbDataInicio] = useState("");
-  const [fbDataFim, setFbDataFim] = useState("");
-  const [fbLoading, setFbLoading] = useState(false);
 
   const [dateFilter, setDateFilter] = useState("");
 
@@ -36,15 +33,6 @@ const ConsultaCandidato: React.FC = () => {
     }, 180);
   };
 
-  const fmtCpf = (value: string) => {
-    return value
-      .replace(/\D/g, "")
-      .replace(/(\d{3})(\d)/, "$1.$2")
-      .replace(/(\d{3})(\d)/, "$1.$2")
-      .replace(/(\d{3})(\d{1,2})$/, "$1-$2")
-      .slice(0, 14);
-  };
-
   const handleBuscar = async () => {
     if (!cpfInput) return;
     setLoading(true);
@@ -54,17 +42,6 @@ const ConsultaCandidato: React.FC = () => {
       setErro("Erro ao buscar matrícula.");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const buscarFotobiometria = async () => {
-    if (!fbDataInicio || !fbDataFim) return;
-    setFbLoading(true);
-    try {
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setFbLoading(false);
     }
   };
 

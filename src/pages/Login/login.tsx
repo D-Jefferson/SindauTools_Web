@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { login, setToken } from "../../api/Sindauto/autenticacao";
 import "./login.css";
+import { fmtCpf } from "../../utils/formatos";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -10,16 +11,6 @@ const LoginPage: React.FC = () => {
   const [senha, setSenha]     = useState("");
   const [erro, setErro]       = useState("");
   const [loading, setLoading] = useState(false);
-
-  // ── Formatação de CPF ──────────────────────────────────────────────
-  const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value.replace(/\D/g, "").slice(0, 11);
-    let fmt = raw;
-    if (raw.length > 9) fmt = `${raw.slice(0,3)}.${raw.slice(3,6)}.${raw.slice(6,9)}-${raw.slice(9)}`;
-    else if (raw.length > 6) fmt = `${raw.slice(0,3)}.${raw.slice(3,6)}.${raw.slice(6)}`;
-    else if (raw.length > 3) fmt = `${raw.slice(0,3)}.${raw.slice(3)}`; setCpf(fmt);
-  };
-
   const [verSenha, setVerSenha] = useState(false);
 
   // ── Login ──────────────────────────────────────────────────────────
@@ -67,7 +58,7 @@ const LoginPage: React.FC = () => {
                 type="text"
                 placeholder="CPF"
                 value={cpf}
-                onChange={handleCpfChange}
+                onChange={(e) => setCpf(fmtCpf(e.target.value))}
                 onKeyDown={(e) => e.key === "Enter" && entrar()}
                 maxLength={14}
                 autoComplete="username"
