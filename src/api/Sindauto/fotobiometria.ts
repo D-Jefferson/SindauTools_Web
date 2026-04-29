@@ -1,9 +1,9 @@
 import { getToken } from "./autenticacao";
 
-export async function buscarFotobiometria(dataInicio: string, dataFim: string): Promise<any[]> {
+export async function buscarFotobiometria(dataInicio: string, dataFim: string, idLocal: number): Promise<any[]> {
   const token = getToken();
   const base = import.meta.env.VITE_API_SINDAUTO;
-  const url = `${base}/gestao/api/v1/fotobiometria?pageNumber=1&pageSize=200&idLocal=5&dataInicio=${dataInicio}&dataFim=${dataFim}`;
+  const url = `${base}/gestao/api/v1/fotobiometria?pageNumber=1&pageSize=200&idLocal=${idLocal}&dataInicio=${dataInicio}&dataFim=${dataFim}`;
 
   const res = await fetch(url, {
     headers: { Authorization: `Bearer ${token}` },

@@ -3,9 +3,18 @@ import { buscarFotobiometria } from "../../api/Sindauto/fotobiometria";
 import "../Home/home.css";
 import {fmtCpf,fmtDate,fmtTime} from "../../utils/formatos"
 
+const LOCAIS = [
+  { id: 1, nome: "SALVADOR" },
+  { id: 2, nome: "XIQUE XIQUE" },
+  { id: 3, nome: "FEIRA DE SANTANA" },
+  { id: 4, nome: "ITABUNA" },
+  { id: 5, nome: "VITÓRIA DA CONQUISTA" },
+];
+
 const FotoBiometria: React.FC = () => {
   const [fbDataInicio, setFbDataInicio] = useState(() => new Date().toISOString().split("T")[0]);
   const [fbDataFim, setFbDataFim] = useState(() => new Date().toISOString().split("T")[0]);
+  const [fbIdLocal, setFbIdLocal] = useState<number>(5);
   const [fbData, setFbData] = useState<any[]>([]);
   const [fbLoading, setFbLoading] = useState(false);
   const [fbErro, setFbErro] = useState("");
@@ -35,7 +44,7 @@ const handleBuscar = async () => {
   setFbErro("");
   setFbData([]);
   try {
-    const dados = await buscarFotobiometria(fbDataInicio, fbDataFim);
+    const dados = await buscarFotobiometria(fbDataInicio, fbDataFim, fbIdLocal);
     setFbData(dados);
   } catch (e: any) {
     setFbErro(e.message || "Erro ao buscar dados.");
@@ -74,6 +83,20 @@ const handleBuscar = async () => {
             onChange={(e) => setFbDataFim(e.target.value)}
             className="fb-input"
           />
+        </div>
+        <div className="fb-filter-group">
+          <label>Local</label>
+          <select
+            value={fbIdLocal}
+            onChange={(e) => setFbIdLocal(Number(e.target.value))}
+            className="fb-input"
+          >
+            {LOCAIS.map((l) => (
+              <option key={l.id} value={l.id}>
+                {l.nome}
+              </option>
+            ))}
+          </select>
         </div>
         <button
           className="fb-btn-buscar"
