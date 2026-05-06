@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./home.css";
 import "../../assets/global.css";
 import FotoBiometria from "../FotoBiometria/fotobiometria";
+import Matricula from "../Matricula/matricula";
 import { fmtCpf } from "../../utils/formatos";
 
 const ConsultaCandidato: React.FC = () => {
@@ -120,39 +121,7 @@ const ConsultaCandidato: React.FC = () => {
               : ""
           }`}
         >
-          {pageMode === "matricula" && (
-            <>
-              {!resultado && (
-                <div className="st-search-titles">
-                  <h1>Consulta de Matrícula</h1>
-                  <p>Digite o CPF para abrir a ficha completa.</p>
-                </div>
-              )}
-              <div className="st-input-group">
-                <input
-                  type="text"
-                  placeholder="000.000.000-00"
-                  value={cpfInput}
-                  onChange={(e) => setCpfInput(fmtCpf(e.target.value))}
-                  onKeyDown={(e) => e.key === "Enter" && handleBuscar()}
-                  disabled={loading}
-                  autoFocus
-                />
-                <button onClick={handleBuscar} disabled={loading}>
-                  {loading ? (
-                    <i className="fas fa-circle-notch fa-spin"></i>
-                  ) : (
-                    "BUSCAR"
-                  )}
-                </button>
-              </div>
-              {erro && (
-                <div className="st-erro-msg">
-                  <i className="fas fa-exclamation-circle"></i> {erro}
-                </div>
-              )}
-            </>
-          )}
+          {pageMode === "matricula" && <Matricula />}
 
           {pageMode === "fotobiometria" && <FotoBiometria />}
 

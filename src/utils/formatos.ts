@@ -37,3 +37,13 @@ export const iniciais = (nome: string) => {
 
 export const toISOWithOffset = (iso?: string) =>
   iso ? new Date(iso).toISOString().replace("Z", "-0300") : "";
+
+
+export const fmtHml = (s?: string) => {
+  const st = (s || "").toUpperCase();
+  return st === "CRIADO"   ? "Não enviado"
+    : st === "PENDENTE"    ? "Aguardando"
+    : st === "GERADO"      ? "Homologado"
+    : st === "ERRO"        ? "Erro"
+    : s || "—";
+};
