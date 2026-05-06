@@ -4,6 +4,7 @@ import "./home.css";
 import "../../assets/global.css";
 import FotoBiometria from "../FotoBiometria/fotobiometria";
 import Matricula from "../Matricula/matricula";
+import {ModalConfiguracoes} from "../../modals/configuracao";
 import { fmtCpf } from "../../utils/formatos";
 
 const ConsultaCandidato: React.FC = () => {
@@ -11,7 +12,7 @@ const ConsultaCandidato: React.FC = () => {
   const [theme, setTheme] = useState(localStorage.getItem("sindautools-theme") || "dark");
   const [pageMode, setPageMode] = useState<"matricula" | "fotobiometria" | "grades">("matricula");
   const [sliding, setSliding] = useState<"left" | "right" | null>(null);
-
+  const [modalConfig, setModalConfig] = useState(false);
   const [cpfInput, setCpfInput] = useState("");
   const [resultado, setResultado] = useState<any>(null);
   const [loading, setLoading] = useState(false);
@@ -108,6 +109,11 @@ const ConsultaCandidato: React.FC = () => {
             <button className="st-logout-btn" onClick={() => navigate("/")}>
               <i className="fas fa-sign-out-alt"></i> Sair
             </button>
+            <button className="ds-btn-inline" onClick={() => setModalConfig(true)}>
+              <i className="fas fa-cog" />
+            </button>
+
+            <ModalConfiguracoes aberto={modalConfig} onFechar={() => setModalConfig(false)} />
           </div>
         </header>
 

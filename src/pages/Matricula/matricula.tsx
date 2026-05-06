@@ -2,16 +2,24 @@ import React, { useState } from "react";
 import { consultarCandidato } from "../../api/Sindauto/matricula";
 import { consultarRenova } from "../../api/Renova/matricula";
 import "../Home/home.css";
-import type {ResultadoConsulta} from "../../api/Sindauto/types";
+import type { ResultadoConsulta } from "../../api/Sindauto/types";
 import { rawCpf, fmtCpf, fmtDate, fmtTime, fmtMoney, fmtHml } from "../../utils/formatos";
+import { useNotificacaoFinanceira } from "../../scripts/notificacao";
+import { useTeleaulaToken } from "../../scripts/teleaulatoken";
 
 const statusCor = (key: string): string =>
-  ({ M: "verde", A: "verde", ATIVO: "verde", P: "vermelho", C: "vermelho", I: "vermelho",
-     paid: "verde", pending: "azul", GERADO: "verde", PENDENTE: "azul", CRIADO: "cinza", ERRO: "vermelho" }[key] ?? "cinza");
+  ({
+    M: "verde", A: "verde", ATIVO: "verde",
+    P: "vermelho", C: "vermelho", I: "vermelho",
+    paid: "verde", pending: "azul",
+    GERADO: "verde", PENDENTE: "azul", CRIADO: "cinza", ERRO: "vermelho",
+  }[key] ?? "cinza");
 
 const statusLabel = (key: string, fallback: string): string =>
-  ({ M: "Matriculado", A: "Ativo", P: "Pendente", C: "Cancelado", I: "Inativo",
-     paid: "Pago", pending: "Pendente" }[key] ?? fallback);
+  ({
+    M: "Matriculado", A: "Ativo", P: "Pendente", C: "Cancelado", I: "Inativo",
+    paid: "Pago", pending: "Pendente",
+  }[key] ?? fallback);
 
 const Badge: React.FC<{ valor: string; extra?: string }> = ({ valor, extra }) => {
   const key = extra ?? valor;
@@ -29,7 +37,23 @@ const Matricula: React.FC = () => {
   const [resultado, setResultado] = useState<ResultadoConsulta | null>(null);
   const [activeTab, setActiveTab] = useState<"geral" | "teleaulas" | "financeiro" | "renova">("geral");
   const [expandidos, setExpandidos] = useState<Record<number, boolean>>({});
-  const [renova, setRenova] = useState<{ hom: string | null; fin: any; loading: boolean }>({hom: null, fin: null, loading: false,});
+  const [renova, setRenova] = useState<{ hom: string | null; fin: any; loading: boolean }>({
+    hom: null,
+    fin: null,
+    loading: false,
+  });
+  const { token: teleaulaToken } = useTeleaulaToken();
+
+  const lancamentoPago = resultado?.lancamentos.find(
+    (l) => l.statusIntegracao?.toLowerCase() === "paid"
+  );
+
+  const {
+    estado: notifEstado,
+    erro: notifErro,
+    enviar: enviarNotif,
+    resetar: resetarNotif,
+  } = useNotificacaoFinanceira();
 
   const handleConsultarRenova = async (cpf: string) => {
     setRenova({ hom: null, fin: null, loading: true });
@@ -49,12 +73,16 @@ const Matricula: React.FC = () => {
     setLoading(true);
     setActiveTab("geral");
     setExpandidos({});
+    resetarNotif();
     try {
       const res = await consultarCandidato(cpf);
       setResultado(res);
       handleConsultarRenova(cpf);
-    } catch { setErro("Candidato não encontrado ou erro na consulta."); }
-    finally { setLoading(false); }
+    } catch {
+      setErro("Candidato não encontrado ou erro na consulta.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const m = resultado?.matricula;
@@ -88,7 +116,11 @@ const Matricula: React.FC = () => {
               {loading ? <i className="fas fa-circle-notch fa-spin" /> : "BUSCAR"}
             </button>
           </div>
-          {erro && <div className="st-erro-msg"><i className="fas fa-exclamation-circle" /> {erro}</div>}
+          {erro && (
+            <div className="st-erro-msg">
+              <i className="fas fa-exclamation-circle" /> {erro}
+            </div>
+          )}
         </div>
 
         {/* ── FICHA ── */}
@@ -114,7 +146,7 @@ const Matricula: React.FC = () => {
                 <strong className="ds-value">{m.cfcNomeFantasia || m.cfcNome || "—"}</strong>
               </div>
               <div className="ds-header-block">
-                <span className="ds-label">CPNJ CFC</span>
+                <span className="ds-label">CNPJ CFC</span>
                 <strong className="ds-value">{m.cfcCnpj || "—"}</strong>
               </div>
             </div>
@@ -161,7 +193,7 @@ const Matricula: React.FC = () => {
                     <Badge valor={m.status} />
                   </div>
                   <div className="ds-field-value">
-                    <label>CPF : </label>
+                    <label>CPF: </label>
                     {fmtCpf(m.candidatoCpf)}
                   </div>
                   <div className="ds-field-value">
@@ -185,6 +217,7 @@ const Matricula: React.FC = () => {
                       <i className="fas fa-plug" /> Status das Integrações
                     </h3>
                     <div className="ds-timeline">
+
                       <div className="ds-tl-item">
                         <div className={`ds-tl-dot ${hCor}`} />
                         <div className="ds-tl-content">
@@ -216,14 +249,49 @@ const Matricula: React.FC = () => {
                         <div className="ds-tl-content">
                           <div className="ds-tl-header">
                             <strong>Notificação Financeira (Renova)</strong>
-                            <span>{renova.loading ? "Consultando..." : "Atualizado agora"}</span>
+
+                             <button
+                              className="ds-btn-inline warning"
+                              title={!lancamentoPago ? "O boleto precisa estar pago no Sindauto para notificar" : finPago ? "Pagamento já consta no Renova" : "Enviar notificação"}
+                              disabled={!lancamentoPago || notifEstado === "loading" || finPago}
+                              onClick={() => {
+                                enviarNotif(
+                                  teleaulaToken || "",
+                                  {
+                                    lancamentoId: lancamentoPago?.boletoId?.toString() ?? "0",
+                                    uuidMatricula: m.uuid ?? m.id.toString(),
+                                    cnpj: m.cfcCnpj ?? "",
+                                    valor: lancamentoPago?.valor ?? 0,
+                                    dataVencimento: lancamentoPago?.dataVencimento ?? new Date().toISOString(),
+                                    dataCriacao: lancamentoPago?.dataCadastro ?? new Date().toISOString(),
+                                    status: lancamentoPago?.statusIntegracao ?? "A",
+                                  },
+                                  () => handleConsultarRenova(rawCpf(cpfInput))
+                                );
+                              }}
+                            >
+                              <i className={`fas ${notifEstado === "loading" ? "fa-circle-notch fa-spin" : "fa-paper-plane"}`} />
+                              {notifEstado === "loading" ? "Enviando..." : "Notificar Renova"}
+                            </button>
                           </div>
-                          <p>{renova.loading ? "Buscando status financeiro..." : finPago ? "Candidato possui pagamentos confirmados." : "Nenhum pagamento homologado encontrado."}</p>
+                          <p>
+                            {renova.loading
+                              ? "Buscando status financeiro no Renova..."
+                              : finPago
+                              ? "Boleto pago e homologado no Renova."
+                              : "Sem pagamento homologado no Renova."}
+                          </p>
+                          
+                          {notifErro && (
+                            <p className="ds-inline-error">
+                              <i className="fas fa-exclamation-triangle" /> {notifErro}
+                            </p>
+                          )}
                         </div>
                       </div>
 
                       <div className="ds-tl-item">
-                        <div className={`ds-tl-dot ${resultado.lancamentos.some(l => l.statusIntegracao === "paid") ? "verde" : "vermelho"}`} />
+                        <div className={`ds-tl-dot ${lancamentoPago || finPago ? "verde" : "vermelho"}`} />
                         <div className="ds-tl-content">
                           <div className="ds-tl-header">
                             <strong>Situação Financeira (Sindauto)</strong>
@@ -231,11 +299,20 @@ const Matricula: React.FC = () => {
                           </div>
                           <p>
                             {resultado.lancamentos.length === 0
-                              ? "Nenhum boleto encontrado."
-                              : `${resultado.lancamentos.length} lançamento(s) — Teleaula: ${resultado.lancamentos.some(l => l.status?.toLowerCase() === "p") ? "Pago" : "Não Pago"}`}
+                              ? finPago 
+                                ? "Pago na Renova" 
+                                : "Nenhum boleto encontrado."
+                              : `${resultado.lancamentos.length} lançamento(s) — Teleaula: ${
+                                  lancamentoPago
+                                    ? "Pago"
+                                    : finPago
+                                    ? "Pago na Renova"
+                                    : "Não Pago"
+                                }`}
                           </p>
                         </div>
                       </div>
+
                     </div>
                   </>
                 )}
@@ -249,99 +326,131 @@ const Matricula: React.FC = () => {
                       </span>
                       <button
                         className="btn-remover-grade-inline"
-                        onClick={() => { if (window.confirm("Remover candidato da grade?")) console.log("remover da grade"); }}
+                        onClick={() => {
+                          if (window.confirm("Remover candidato da grade?")) console.log("remover da grade");
+                        }}
                       >
                         <i className="fas fa-trash" /> Remover da Grade
                       </button>
                     </div>
 
-                    {resultado.agendamentos.length === 0
-                      ? <p className="ds-empty">Nenhum agendamento encontrado.</p>
-                      : resultado.agendamentos.map((a) => {
-                          const dataObj = a.agendamentoAgenda ? new Date(a.agendamentoAgenda) : null;
-                          return (
-                            <div className="cc-agend-item modern" key={a.id}>
-                              <div className="cc-agend-grade-bar">
-                                <span className="cc-agend-grade-label">
-                                  <i className="fas fa-th-large" /> GRADE #{a.agendamentoGradeId}
+                    {resultado.agendamentos.length === 0 ? (
+                      <p className="ds-empty">Nenhum agendamento encontrado.</p>
+                    ) : (
+                      resultado.agendamentos.map((a) => {
+                        const dataObj = a.agendamentoAgenda ? new Date(a.agendamentoAgenda) : null;
+                        return (
+                          <div className="cc-agend-item modern" key={a.id}>
+                            <div className="cc-agend-grade-bar">
+                              <span className="cc-agend-grade-label">
+                                <i className="fas fa-th-large" /> GRADE #{a.agendamentoGradeId}
+                              </span>
+                            </div>
+                            <div
+                              className="cc-agend-header"
+                              onClick={() =>
+                                setExpandidos((p) => ({
+                                  ...p,
+                                  [a.agendamentoId ?? a.id]: !p[a.agendamentoId ?? a.id],
+                                }))
+                              }
+                            >
+                              <div className="cc-date-block">
+                                <span className="cc-date-day">
+                                  {dataObj?.getDate().toString().padStart(2, "0") ?? "—"}
+                                </span>
+                                <span className="cc-date-mon">
+                                  {dataObj?.toLocaleDateString("pt-BR", { month: "short" }) ?? ""}
                                 </span>
                               </div>
-                              <div
-                                className="cc-agend-header"
-                                onClick={() => setExpandidos(p => ({ ...p, [a.agendamentoId ?? a.id]: !p[a.agendamentoId ?? a.id] }))}
-                              >
-                                <div className="cc-date-block">
-                                  <span className="cc-date-day">{dataObj?.getDate().toString().padStart(2, "0") ?? "—"}</span>
-                                  <span className="cc-date-mon">{dataObj?.toLocaleDateString("pt-BR", { month: "short" }) ?? ""}</span>
-                                </div>
-                                <div className="cc-agend-info">
-                                  <div className="cc-agend-title-row">
-                                    <span className="grade-badge">ID AGEND: {a.agendamentoId ?? a.id}</span>
-                                    <div className="cc-agend-hora">{fmtTime(a.agendamentoAgenda)} – {fmtTime(a.agendamentoAgendaFim)}</div>
-                                  </div>
-                                  <div className="cc-agend-meta">
-                                    <span><i className="fas fa-chalkboard-teacher" /> {a.agendamentoInstrutorNome || "—"}</span>
-                                    <span><i className="fas fa-info-circle" /> {a.agendamentoGradeDescricao || "—"}</span>
-                                    {a.agendamentoSituacao && <Badge valor={a.agendamentoSituacao} />}
+                              <div className="cc-agend-info">
+                                <div className="cc-agend-title-row">
+                                  <span className="grade-badge">ID AGEND: {a.agendamentoId ?? a.id}</span>
+                                  <div className="cc-agend-hora">
+                                    {fmtTime(a.agendamentoAgenda)} – {fmtTime(a.agendamentoAgendaFim)}
                                   </div>
                                 </div>
-                                <div className="cc-agend-actions">
-                                  <i className={`fas fa-chevron-down cc-chevron ${expandidos[a.agendamentoId ?? a.id] ? "aberto" : ""}`} />
+                                <div className="cc-agend-meta">
+                                  <span><i className="fas fa-chalkboard-teacher" /> {a.agendamentoInstrutorNome || "—"}</span>
+                                  <span><i className="fas fa-info-circle" /> {a.agendamentoGradeDescricao || "—"}</span>
+                                  {a.agendamentoSituacao && <Badge valor={a.agendamentoSituacao} />}
                                 </div>
                               </div>
-
-                              {expandidos[a.agendamentoId ?? a.id] && a.agendamentoAulas?.length > 0 && (
-                                <div className="cc-aulas-lista">
-                                  {a.agendamentoAulas.map((au: any) => (
-                                    <div className="cc-aula-row" key={au.id}>
-                                      <span className="aula-badge">Aula {au.numeroAula}</span>
-                                      <div className="cc-aula-desc">{au.cursoDescricao}</div>
-                                      <div className="cc-aula-time">{fmtTime(au.inicio)} às {fmtTime(au.fim)}</div>
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
+                              <div className="cc-agend-actions">
+                                <i
+                                  className={`fas fa-chevron-down cc-chevron ${
+                                    expandidos[a.agendamentoId ?? a.id] ? "aberto" : ""
+                                  }`}
+                                />
+                              </div>
                             </div>
-                          );
-                        })}
+
+                            {expandidos[a.agendamentoId ?? a.id] && a.agendamentoAulas?.length > 0 && (
+                              <div className="cc-aulas-lista">
+                                {a.agendamentoAulas.map((au: any) => (
+                                  <div className="cc-aula-row" key={au.id}>
+                                    <span className="aula-badge">Aula {au.numeroAula}</span>
+                                    <div className="cc-aula-desc">{au.cursoDescricao}</div>
+                                    <div className="cc-aula-time">
+                                      {fmtTime(au.inicio)} às {fmtTime(au.fim)}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })
+                    )}
                   </div>
                 )}
 
                 {/* ── ABA: FINANCEIRO ── */}
                 {activeTab === "financeiro" && (
                   <div className="list-container">
-                    {resultado.lancamentos.length === 0
-                      ? <p className="ds-empty">Nenhum lançamento financeiro encontrado.</p>
-                      : resultado.lancamentos.map((l) => (
-                          <div className="cc-lanc-item" key={l.id}>
-                            <div className="cc-lanc-top">
-                              <div className="cc-lanc-icon"><i className="fas fa-file-invoice-dollar" /></div>
-                              <div className="cc-lanc-info">
-                                <div className="cc-lanc-desc">
-                                  {l.descricao || "—"}
-                                  <Badge valor={l.status} extra={l.statusIntegracao ?? l.status} />
-                                </div>
-                                <div className="cc-lanc-meta">
-                                  <span><i className="fas fa-hashtag" /> ID {l.id}</span>
-                                  <span><i className="fas fa-layer-group" /> Parcela {l.parcela || 1}</span>
-                                  <span><i className="fas fa-calendar-day" /> Venc: {fmtDate(l.dataVencimento)}</span>
-                                  {l.dataPagamento && <span><i className="fas fa-check" /> Pago: {fmtDate(l.dataPagamento)}</span>}
-                                </div>
-                              </div>
+                    {resultado.lancamentos.length === 0 ? (
+                      <p className="ds-empty">Nenhum lançamento financeiro encontrado.</p>
+                    ) : (
+                      resultado.lancamentos.map((l) => (
+                        <div className="cc-lanc-item" key={l.id}>
+                          <div className="cc-lanc-top">
+                            <div className="cc-lanc-icon">
+                              <i className="fas fa-file-invoice-dollar" />
                             </div>
-                            <div className="cc-lanc-valor-row">
-                              <div>
-                                <div className="cc-lanc-total">{fmtMoney(l.valor)}</div>
-                                <div className="cc-lanc-pago" />
+                            <div className="cc-lanc-info">
+                              <div className="cc-lanc-desc">
+                                {l.descricao || "—"}
+                                <Badge valor={l.status} extra={l.statusIntegracao ?? l.status} />
                               </div>
-                              {(l as any).boleto && (
-                                <a href={(l as any).boleto} target="_blank" rel="noreferrer" className="cc-link-btn cc-link-btn--green">
-                                  <i className="fas fa-file-pdf" /> Ver Boleto
-                                </a>
-                              )}
+                              <div className="cc-lanc-meta">
+                                <span><i className="fas fa-hashtag" /> ID {l.id}</span>
+                                <span><i className="fas fa-layer-group" /> Parcela {l.parcela || 1}</span>
+                                <span><i className="fas fa-calendar-day" /> Venc: {fmtDate(l.dataVencimento)}</span>
+                                {l.dataPagamento && (
+                                  <span><i className="fas fa-check" /> Pago: {fmtDate(l.dataPagamento)}</span>
+                                )}
+                              </div>
                             </div>
                           </div>
-                        ))}
+                          <div className="cc-lanc-valor-row">
+                            <div>
+                              <div className="cc-lanc-total">{fmtMoney(l.valor)}</div>
+                              <div className="cc-lanc-pago" />
+                            </div>
+                            {(l as any).boleto && (
+                              <a
+                                href={(l as any).boleto}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="cc-link-btn cc-link-btn--green"
+                              >
+                                <i className="fas fa-file-pdf" /> Ver Boleto
+                              </a>
+                            )}
+                          </div>
+                        </div>
+                      ))
+                    )}
                   </div>
                 )}
 
