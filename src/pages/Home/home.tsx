@@ -4,6 +4,7 @@ import "./home.css";
 import "../../assets/global.css";
 import FotoBiometria from "../FotoBiometria/fotobiometria";
 import Matricula from "../Matricula/matricula";
+import Grades from "../Grades/grades";
 import {ModalConfiguracoes} from "../../modals/configuracao";
 import { fmtCpf } from "../../utils/formatos";
 
@@ -131,26 +132,8 @@ const ConsultaCandidato: React.FC = () => {
 
           {pageMode === "fotobiometria" && <FotoBiometria />}
 
-          {pageMode === "grades" && (
-            <>
-              <div className="st-search-titles">
-                <h1>Grades</h1>
-                <p>Filtre as grades por dia.</p>
-              </div>
-              <div className="st-input-group">
-                <input
-                  type="date"
-                  value={dateFilter}
-                  onChange={(e) => setDateFilter(e.target.value)}
-                  disabled={loading}
-                  autoFocus
-                />
-                <button onClick={() => alert(`Filtrar grades do dia ${dateFilter}`)}>
-                  FILTRAR
-                </button>
-              </div>
-            </>
-          )}
+          {pageMode === "grades" && <Grades />}
+
         </div>
       </main>
     </div>

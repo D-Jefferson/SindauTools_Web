@@ -131,18 +131,6 @@ const handleBuscar = async () => {
                 <i className="fas fa-arrow-down" /> Data crescente
               </span>
             </div>
-            <div className="fb-actions-right">
-              {totalPresente > 0 && (
-                <span className="fb-status-badge verde">
-                  <i className="fas fa-check" /> {totalPresente} Presente{totalPresente !== 1 ? "s" : ""}
-                </span>
-              )}
-              {totalAusente > 0 && (
-                <span className="fb-status-badge vermelho">
-                  <i className="fas fa-times" /> {totalAusente} Ausente{totalAusente !== 1 ? "s" : ""}
-                </span>
-              )}
-            </div>
           </div>
 
           {/* Tabela */}
