@@ -6,7 +6,7 @@ import FotoBiometria from "../FotoBiometria/fotobiometria";
 import Matricula from "../Matricula/matricula";
 import Grades from "../Grades/grades";
 import {ModalConfiguracoes} from "../../modals/configuracao";
-import { fmtCpf } from "../../utils/formatos";
+import { useDemo } from "../../context/demo";
 
 const ConsultaCandidato: React.FC = () => {
   const navigate = useNavigate();
@@ -18,6 +18,7 @@ const ConsultaCandidato: React.FC = () => {
   const [resultado, setResultado] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
+  const { isDemo, setIsDemo } = useDemo();
 
   const [dateFilter, setDateFilter] = useState("");
 
@@ -50,6 +51,25 @@ const ConsultaCandidato: React.FC = () => {
 
   return (
     <div className="st-page-wrapper">
+      {isDemo && (
+        <div style={{
+          background: "var(--brand-red)",
+          color: "white",
+          textAlign: "center",
+          padding: "0.4rem",
+          fontSize: "0.78rem",
+          fontWeight: 700,
+          letterSpacing: "0.1em"
+        }}>
+          <i className="fas fa-flask" /> MODO DEMONSTRAÇÃO — Dados Fictícios
+          <button
+            onClick={() => { setIsDemo(false); navigate("/"); }}
+            style={{ marginLeft: "1rem", background: "transparent", border: "1px solid white", color: "white", borderRadius: 4, padding: "0 0.5rem", cursor: "pointer" }}
+          >
+            Sair
+          </button>
+        </div>
+      )}
       <main className="st-main-content">
         <header className="st-header">
           <div className="st-logo">

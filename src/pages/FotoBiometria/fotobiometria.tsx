@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { buscarFotobiometria } from "../../api/Sindauto/fotobiometria";
 import "../Home/home.css";
 import {fmtCpf,fmtDate,fmtTime} from "../../utils/formatos"
+import { useDemo } from "../../context/demo";
+import { DEMO_FOTOBIOMETRIA } from "../../api/Demo/dadosficticios";
 
 const LOCAIS = [
   { id: 1, nome: "SALVADOR" },
@@ -27,6 +29,7 @@ const FotoBiometria: React.FC = () => {
       }
     }
   );
+  const { isDemo } = useDemo();
 
   const salvarPresenca = (cpf: string, status: "Presente" | "Ausente") => {
     const novo = { ...fbPresenca };
@@ -40,6 +43,11 @@ const FotoBiometria: React.FC = () => {
   };
 
 const handleBuscar = async () => {
+    if (isDemo) {
+    await new Promise(r => setTimeout(r, 500));
+    setFbData(DEMO_FOTOBIOMETRIA);
+    return;
+  }
   setFbLoading(true);
   setFbErro("");
   setFbData([]);
@@ -52,9 +60,6 @@ const handleBuscar = async () => {
     setFbLoading(false);
   }
 };
-
-  const totalPresente = Object.values(fbPresenca).filter((s) => s === "Presente").length;
-  const totalAusente = Object.values(fbPresenca).filter((s) => s === "Ausente").length;
 
   return (
     <div className="fb-container">

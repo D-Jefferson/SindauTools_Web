@@ -91,8 +91,9 @@
   align-items: center;
   flex: 1;
   width: 100%;
-  padding: 2rem;
+  height: 10px;
   transition: all 0.4s ease;
+  overflow-y: auto; 
 }
 
 .st-search-wrapper.is-results-mode {
@@ -106,6 +107,7 @@
   padding: 2rem;
   justify-content: flex-start;
   align-items: stretch;
+  overflow-y: auto;
 }
 
 .st-search-titles { text-align: center; margin-bottom: 2rem; animation: slideUpFade 0s ease; }
@@ -522,8 +524,6 @@
   flex-wrap: wrap;
   gap: 1rem;
   flex-shrink: 0;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
 }
 
 .ds-header-block {

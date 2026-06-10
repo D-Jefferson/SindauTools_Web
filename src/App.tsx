@@ -3,11 +3,10 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Login from "./pages/Login/login";
 import Home from "./pages/Home/home";
+import { DemoProvider } from "./context/demo"; // <- adiciona
 
 function AppContent() {
   const location = useLocation();
-
-
   return (
     <>
       <Routes>
@@ -20,9 +19,11 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <DemoProvider> 
+      <Router>
+        <AppContent />
+      </Router>
+    </DemoProvider>
   );
 }
 

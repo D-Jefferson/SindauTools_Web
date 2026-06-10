@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { buscarGrades } from "../../api/Sindauto/grades";
 import "../Home/home.css";
 import {fmtDate} from "../../utils/formatos"
+import { useDemo } from "../../context/demo";
+import { DEMO_GRADES } from "../../api/Demo/dadosficticios";
+
 
 const SITUACAO = [
   { id: "", nome: "TODAS AS GRADES" },
@@ -19,12 +22,18 @@ const Grades: React.FC = () => {
   const [situacaoData, setSituacaoData] = useState<any[]>([]);
   const [situacaoLoading, setSituacaoLoading] = useState(false);
   const [situacaoErro, setSituacaoErro] = useState("");
+  const { isDemo } = useDemo();
 
 const handleBuscar = async () => {
   setSituacaoLoading(true);
   setSituacaoErro("");
   setSituacaoData([]);
   try {
+    if (isDemo) {
+      await new Promise(r => setTimeout(r, 500));
+      setSituacaoData(DEMO_GRADES);
+      return;
+    }
     const dados = await buscarGrades(situacaoDataInicio, situacaoDataFinal, situacao);
     setSituacaoData(dados);
   } catch (e: any) {

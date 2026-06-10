@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDemo } from "../../context/demo";
 import { login, setToken } from "../../api/Sindauto/autenticacao";
 import "./login.css";
 import { fmtCpf } from "../../utils/formatos";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
-
+  const { setIsDemo } = useDemo();
   const [cpf, setCpf]         = useState("");
   const [senha, setSenha]     = useState("");
   const [erro, setErro]       = useState("");
   const [loading, setLoading] = useState(false);
   const [verSenha, setVerSenha] = useState(false);
+
+  const entrarDemo = () => {
+    setIsDemo(true);
+    navigate("/home");
+  };
 
   // ── Login ──────────────────────────────────────────────────────────
   const entrar = async () => { setErro("");
@@ -94,6 +100,13 @@ const LoginPage: React.FC = () => {
                 ? <><i className="fas fa-circle-notch fa-spin"></i>&nbsp;ENTRANDO...</>
                 : "ENTRAR"
               }
+            </button>
+            <button
+              className="botao"
+              style={{ marginTop: "0.75rem", background: "transparent", border: "1px solid var(--brand-red)", color: "var(--brand-red)" }}
+              onClick={entrarDemo}
+            >
+              <i className="fas fa-flask" /> MODO DEMONSTRAÇÃO
             </button>
 
             <div className="rodape-login">

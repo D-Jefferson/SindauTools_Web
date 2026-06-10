@@ -6,6 +6,8 @@ import type { ResultadoConsulta } from "../../api/Sindauto/types";
 import { rawCpf, fmtCpf, fmtDate, fmtTime, fmtMoney, fmtHml } from "../../utils/formatos";
 import { useNotificacaoFinanceira } from "../../scripts/notificacao";
 import { useTeleaulaToken } from "../../scripts/teleaulatoken";
+import { useDemo } from "../../context/demo";
+import { DEMO_MATRICULA } from "../../api/Demo/dadosficticios";
 
 const statusCor = (key: string): string =>
   ({
@@ -30,6 +32,7 @@ const Badge: React.FC<{ valor: string; extra?: string }> = ({ valor, extra }) =>
   );
 };
 
+
 const Matricula: React.FC = () => {
   const [cpfInput, setCpfInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -43,6 +46,8 @@ const Matricula: React.FC = () => {
     loading: false,
   });
   const { token: teleaulaToken } = useTeleaulaToken();
+  const { isDemo } = useDemo();
+  
 
   const lancamentoPago = resultado?.lancamentos.find(
     (l) => l.statusIntegracao?.toLowerCase() === "paid"
@@ -75,9 +80,15 @@ const Matricula: React.FC = () => {
     setExpandidos({});
     resetarNotif();
     try {
-      const res = await consultarCandidato(cpf);
-      setResultado(res);
-      handleConsultarRenova(cpf);
+      if (isDemo) {
+        await new Promise(r => setTimeout(r, 600));
+        setResultado(DEMO_MATRICULA as any);
+        return;
+      } else {
+        const res = await consultarCandidato(cpf);
+        setResultado(res);
+        handleConsultarRenova(cpf);
+      }
     } catch {
       setErro("Candidato não encontrado ou erro na consulta.");
     } finally {
@@ -91,6 +102,7 @@ const Matricula: React.FC = () => {
   const finPago = renova.fin?.situacao === "BOLETO_PAGO";
 
   return (
+    
     <div className="st-page-wrapper">
       <div className="st-main-content">
 
