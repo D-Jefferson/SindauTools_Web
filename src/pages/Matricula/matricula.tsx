@@ -8,20 +8,27 @@ import { useNotificacaoFinanceira } from "../../scripts/notificacao";
 import { useTeleaulaToken } from "../../scripts/teleaulatoken";
 import { useDemo } from "../../context/demo";
 import { DEMO_MATRICULA } from "../../api/Demo/dadosficticios";
+import { ModalNotificarRenova } from "../../modals/modalNotificarRenova";
+import { ModalConfiguracoes } from "../../modals/configuracao";
+import {
+  buildNotificacaoPayload,
+  buscarMatriculaRenova,
+  type DadosMatriculaRenova,
+} from "../../api/Teleaula/notificacao";
 
 const statusCor = (key: string): string =>
-  ({
-    M: "verde", A: "verde", ATIVO: "verde",
-    P: "vermelho", C: "vermelho", I: "vermelho",
-    paid: "verde", pending: "azul",
-    GERADO: "verde", PENDENTE: "azul", CRIADO: "cinza", ERRO: "vermelho",
-  }[key] ?? "cinza");
+({
+  M: "verde", A: "verde", ATIVO: "verde",
+  P: "vermelho", C: "vermelho", I: "vermelho",
+  paid: "verde", pending: "azul",
+  GERADO: "verde", PENDENTE: "azul", CRIADO: "cinza", ERRO: "vermelho",
+}[key] ?? "cinza");
 
 const statusLabel = (key: string, fallback: string): string =>
-  ({
-    M: "Matriculado", A: "Ativo", P: "Pendente", C: "Cancelado", I: "Inativo",
-    paid: "Pago", pending: "Pendente",
-  }[key] ?? fallback);
+({
+  M: "Matriculado", A: "Ativo", P: "Pendente", C: "Cancelado", I: "Inativo",
+  paid: "Pago", pending: "Pendente",
+}[key] ?? fallback);
 
 const Badge: React.FC<{ valor: string; extra?: string }> = ({ valor, extra }) => {
   const key = extra ?? valor;
@@ -45,9 +52,24 @@ const Matricula: React.FC = () => {
     fin: null,
     loading: false,
   });
+
+  const [modalNotificarAberto, setModalNotificarAberto] = useState(false);
+  const [modalConfigAberto, setModalConfigAberto] = useState(false);
+  const [matriculaRenova, setMatriculaRenova] = useState<{
+    dados: DadosMatriculaRenova | null;
+    loading: boolean;
+    erro: string | null;
+  }>({
+    dados: null,
+    loading: false,
+    erro: null,
+  });
+  const [mostrarRawRenova, setMostrarRawRenova] = useState(false);
+  const [copiadoUuid, setCopiadoUuid] = useState(false);
+
   const { token: teleaulaToken } = useTeleaulaToken();
   const { isDemo } = useDemo();
-  
+
 
   const lancamentoPago = resultado?.lancamentos.find(
     (l) => l.statusIntegracao?.toLowerCase() === "paid"
@@ -56,7 +78,7 @@ const Matricula: React.FC = () => {
   const {
     estado: notifEstado,
     erro: notifErro,
-    enviar: enviarNotif,
+    enviarRaw: enviarNotifRaw,
     resetar: resetarNotif,
   } = useNotificacaoFinanceira();
 
@@ -78,6 +100,8 @@ const Matricula: React.FC = () => {
     setLoading(true);
     setActiveTab("geral");
     setExpandidos({});
+    setMatriculaRenova({ dados: null, loading: false, erro: null });
+    setMostrarRawRenova(false);
     resetarNotif();
     try {
       if (isDemo) {
@@ -101,8 +125,41 @@ const Matricula: React.FC = () => {
   const hCor = statusCor(renova.hom ?? "cinza");
   const finPago = renova.fin?.situacao === "BOLETO_PAGO";
 
+  const payloadNotificacao = m
+    ? buildNotificacaoPayload({
+      lancamentoId: lancamentoPago?.boletoId?.toString() ?? lancamentoPago?.id?.toString() ?? "0",
+      uuidMatricula: m.uuid ?? m.id?.toString() ?? "",
+      cnpj: m.cfcCnpj ?? "",
+      valor: lancamentoPago?.valor ?? 0,
+      dataVencimento: lancamentoPago?.dataVencimento ?? new Date().toISOString(),
+      dataCriacao: lancamentoPago?.dataCadastro ?? new Date().toISOString(),
+      status: lancamentoPago?.statusIntegracao ?? "A",
+    })
+    : null;
+
+  const handleEnviarNotificacao = async (payload: any) => {
+    await enviarNotifRaw(teleaulaToken || "", payload, () => {
+      handleConsultarRenova(rawCpf(cpfInput));
+    });
+  };
+
+  const handleBuscarMatriculaRenova = async () => {
+    const cpf = rawCpf(cpfInput);
+    setMatriculaRenova({ dados: null, loading: true, erro: null });
+    try {
+      const res = await buscarMatriculaRenova(teleaulaToken || "", cpf, isDemo);
+      setMatriculaRenova({ dados: res, loading: false, erro: null });
+    } catch (e: any) {
+      setMatriculaRenova({
+        dados: null,
+        loading: false,
+        erro: e.message || "Erro ao consultar matrícula no Renova.",
+      });
+    }
+  };
+
   return (
-    
+
     <div className="st-page-wrapper">
       <div className="st-main-content">
 
@@ -261,44 +318,15 @@ const Matricula: React.FC = () => {
                         <div className="ds-tl-content">
                           <div className="ds-tl-header">
                             <strong>Notificação Financeira (Renova)</strong>
-
-                             <button
-                              className="ds-btn-inline warning"
-                              title={!lancamentoPago ? "O boleto precisa estar pago no Sindauto para notificar" : finPago ? "Pagamento já consta no Renova" : "Enviar notificação"}
-                              disabled={!lancamentoPago || notifEstado === "loading" || finPago}
-                              onClick={() => {
-                                enviarNotif(
-                                  teleaulaToken || "",
-                                  {
-                                    lancamentoId: lancamentoPago?.boletoId?.toString() ?? "0",
-                                    uuidMatricula: m.uuid ?? m.id.toString(),
-                                    cnpj: m.cfcCnpj ?? "",
-                                    valor: lancamentoPago?.valor ?? 0,
-                                    dataVencimento: lancamentoPago?.dataVencimento ?? new Date().toISOString(),
-                                    dataCriacao: lancamentoPago?.dataCadastro ?? new Date().toISOString(),
-                                    status: lancamentoPago?.statusIntegracao ?? "A",
-                                  },
-                                  () => handleConsultarRenova(rawCpf(cpfInput))
-                                );
-                              }}
-                            >
-                              <i className={`fas ${notifEstado === "loading" ? "fa-circle-notch fa-spin" : "fa-paper-plane"}`} />
-                              {notifEstado === "loading" ? "Enviando..." : "Notificar Renova"}
-                            </button>
+                            <span>{renova.loading ? "Consultando..." : finPago ? "Homologado" : "Pendente"}</span>
                           </div>
                           <p>
                             {renova.loading
                               ? "Buscando status financeiro no Renova..."
                               : finPago
-                              ? "Boleto pago e homologado no Renova."
-                              : "Sem pagamento homologado no Renova."}
+                                ? "Boleto pago e homologado no Renova."
+                                : "Sem pagamento homologado no Renova."}
                           </p>
-                          
-                          {notifErro && (
-                            <p className="ds-inline-error">
-                              <i className="fas fa-exclamation-triangle" /> {notifErro}
-                            </p>
-                          )}
                         </div>
                       </div>
 
@@ -311,16 +339,15 @@ const Matricula: React.FC = () => {
                           </div>
                           <p>
                             {resultado.lancamentos.length === 0
-                              ? finPago 
-                                ? "Pago na Renova" 
+                              ? finPago
+                                ? "Pago na Renova"
                                 : "Nenhum boleto encontrado."
-                              : `${resultado.lancamentos.length} lançamento(s) — Teleaula: ${
-                                  lancamentoPago
-                                    ? "Pago"
-                                    : finPago
-                                    ? "Pago na Renova"
-                                    : "Não Pago"
-                                }`}
+                              : `${resultado.lancamentos.length} lançamento(s) — Teleaula: ${lancamentoPago
+                                ? "Pago"
+                                : finPago
+                                  ? "Pago na Renova"
+                                  : "Não Pago"
+                              }`}
                           </p>
                         </div>
                       </div>
@@ -390,9 +417,8 @@ const Matricula: React.FC = () => {
                               </div>
                               <div className="cc-agend-actions">
                                 <i
-                                  className={`fas fa-chevron-down cc-chevron ${
-                                    expandidos[a.agendamentoId ?? a.id] ? "aberto" : ""
-                                  }`}
+                                  className={`fas fa-chevron-down cc-chevron ${expandidos[a.agendamentoId ?? a.id] ? "aberto" : ""
+                                    }`}
                                 />
                               </div>
                             </div>
@@ -472,6 +498,8 @@ const Matricula: React.FC = () => {
                     <h3 className="ds-section-title">
                       <i className="fas fa-satellite-dish" /> Status e Ações Renova
                     </h3>
+
+                    {/* Status Cards */}
                     <div className="renova-status-grid">
                       <div className={`renova-status-card ${hCor}`}>
                         <label>Status do Curso</label>
@@ -484,11 +512,160 @@ const Matricula: React.FC = () => {
                         <p>{finPago ? "Boleto pago e homologado." : "Sem pagamento homologado."}</p>
                       </div>
                     </div>
+
+                    {/* Barra de Ações com os 2 botões */}
+                    <div className="renova-actions-bar">
+                      <button
+                        className="ds-btn-action primary"
+                        title={
+                          !lancamentoPago
+                            ? "O boleto precisa estar pago no Sindauto para notificar"
+                            : finPago
+                              ? "Pagamento já consta no Renova"
+                              : "Revisar JSON e notificar Renova"
+                        }
+                        onClick={() => {
+                          resetarNotif();
+                          setModalNotificarAberto(true);
+                        }}
+                      >
+                        <i className="fas fa-paper-plane" />
+                        Notificar Renova
+                      </button>
+
+                      <button
+                        className="ds-btn-action secondary"
+                        onClick={handleBuscarMatriculaRenova}
+                        disabled={matriculaRenova.loading}
+                      >
+                        {matriculaRenova.loading ? (
+                          <>
+                            <i className="fas fa-circle-notch fa-spin" /> Buscando Matrícula...
+                          </>
+                        ) : (
+                          <>
+                            <i className="fas fa-id-card" /> Buscar Matrícula Renova
+                          </>
+                        )}
+                      </button>
+                    </div>
+
+                    {/* Feedback de erro ao buscar matrícula */}
+                    {matriculaRenova.erro && (
+                      <div className="st-erro-msg" style={{ margin: "1rem 0", textAlign: "left" }}>
+                        <i className="fas fa-exclamation-triangle" /> {matriculaRenova.erro}
+                      </div>
+                    )}
+
+                    {/* Card de Apresentação dos Dados da Matrícula Renova */}
+                    {matriculaRenova.dados && (
+                      <div className="renova-matricula-card">
+                        <div className="renova-matricula-header">
+                          <h4>
+                            <i className="fas fa-user-check" style={{ color: "var(--brand-red)" }} />
+                            Dados da Matrícula no Renova
+                          </h4>
+                          <span
+                            className={`cc-badge cc-badge--${matriculaRenova.dados.isDeleted === 0 ? "verde" : "vermelho"
+                              }`}
+                          >
+                            {matriculaRenova.dados.isDeleted === 0
+                              ? "Ativo (isDeleted: 0)"
+                              : `isDeleted: ${matriculaRenova.dados.isDeleted}`}
+                          </span>
+                        </div>
+
+                        <div className="renova-matricula-grid">
+                          <div className="renova-matricula-item">
+                            <label>Número do Processo</label>
+                            <strong>{matriculaRenova.dados.numero_processo || "—"}</strong>
+                          </div>
+
+                          <div className="renova-matricula-item">
+                            <label>Nome do Candidato</label>
+                            <strong>{matriculaRenova.dados.nome || "—"}</strong>
+                          </div>
+
+                          <div className="renova-matricula-item">
+                            <label>CPF</label>
+                            <strong>{fmtCpf(matriculaRenova.dados.cpf)}</strong>
+                          </div>
+
+                          <div className="renova-matricula-item">
+                            <label>UUID Matrícula</label>
+                            <div
+                              className="renova-copyable"
+                              title="Clique para copiar UUID"
+                              onClick={() => {
+                                if (matriculaRenova.dados?.uuid) {
+                                  navigator.clipboard.writeText(matriculaRenova.dados.uuid);
+                                  setCopiadoUuid(true);
+                                  setTimeout(() => setCopiadoUuid(false), 2000);
+                                }
+                              }}
+                            >
+                              <span>{matriculaRenova.dados.uuid || "—"}</span>
+                              <i className={`fas ${copiadoUuid ? "fa-check" : "fa-copy"}`} />
+                            </div>
+                          </div>
+
+                          <div className="renova-matricula-item">
+                            <label>Status Deleção (isDeleted)</label>
+                            <strong>
+                              {matriculaRenova.dados.isDeleted !== undefined
+                                ? String(matriculaRenova.dados.isDeleted)
+                                : "—"}
+                            </strong>
+                          </div>
+                        </div>
+
+                        <div>
+                          <button
+                            type="button"
+                            className="renova-raw-toggle"
+                            onClick={() => setMostrarRawRenova(!mostrarRawRenova)}
+                          >
+                            <i className="fas fa-code" />
+                            {mostrarRawRenova ? "Ocultar JSON bruto" : "Ver JSON bruto da resposta"}
+                          </button>
+
+                          {mostrarRawRenova && (
+                            <pre className="renova-raw-json-box">
+                              {JSON.stringify(matriculaRenova.dados, null, 2)}
+                            </pre>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
                   </div>
                 )}
 
               </div>
             </div>
+
+            {/* Modal de Notificação Renova com editor JSON */}
+            <ModalNotificarRenova
+              aberto={modalNotificarAberto}
+              onFechar={() => {
+                setModalNotificarAberto(false);
+                resetarNotif();
+              }}
+              payloadInicial={payloadNotificacao}
+              onEnviar={handleEnviarNotificacao}
+              loading={notifEstado === "loading"}
+              erro={notifErro}
+              sucesso={notifEstado === "success"}
+              temToken={Boolean(teleaulaToken && teleaulaToken.trim())}
+              onAbrirConfigToken={() => setModalConfigAberto(true)}
+            />
+
+            {/* Modal de Configurações de Token (caso precise configurar direto do aviso) */}
+            <ModalConfiguracoes
+              aberto={modalConfigAberto}
+              onFechar={() => setModalConfigAberto(false)}
+            />
+
           </div>
         )}
 

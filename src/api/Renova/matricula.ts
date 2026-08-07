@@ -10,12 +10,12 @@ export async function consultarRenova(cpf: string): Promise<{ hom: string | null
   };
 
   const [rFin, rServ] = await Promise.all([
-    fetch(`${RENOVA_BASE}/candidatosituacaofinanceira?matriculaId=${matriculaId}`, { headers }),
-    fetch(`${RENOVA_BASE}/servicocandidato?matriculaId=${matriculaId}`, { headers }),
+    fetch(`${RENOVA_BASE}/agendamentoonline/api/v1/candidatosituacaofinanceira?matriculaId=${matriculaId}`, { headers }),
+    fetch(`${RENOVA_BASE}/agendamentoonline/api/v1/servicocandidato?matriculaId=${matriculaId}`, { headers }),
   ]);
 
   let fin = null, hom = null;
-  if (rFin.ok)  { const d = await rFin.json();  fin = Array.isArray(d) ? d[0] : d; }
+  if (rFin.ok) { const d = await rFin.json(); fin = Array.isArray(d) ? d[0] : d; }
   if (rServ.ok) { const d = await rServ.json(); hom = (Array.isArray(d) ? d[0] : d)?.situacaoHomologacao ?? null; }
 
   return { hom, fin };

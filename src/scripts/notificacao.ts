@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { enviarNotificacaoFinanceira, type DadosNotificacao } from "../api/Teleaula/notificacao";
+import {
+  enviarNotificacaoFinanceira,
+  enviarNotificacaoFinanceiraRaw,
+  type DadosNotificacao,
+} from "../api/Teleaula/notificacao";
 
 type Estado = "idle" | "loading" | "success" | "error";
 
@@ -24,7 +28,27 @@ export function useNotificacaoFinanceira() {
     }
   };
 
-  const resetar = () => { setEstado("idle"); setErro(null); };
+  const enviarRaw = async (
+    acessToken: string,
+    payload: any,
+    onSucesso?: () => void
+  ) => {
+    setEstado("loading");
+    setErro(null);
+    try {
+      await enviarNotificacaoFinanceiraRaw(acessToken, payload);
+      setEstado("success");
+      onSucesso?.();
+    } catch (e: any) {
+      setErro(e.message ?? "Erro desconhecido");
+      setEstado("error");
+    }
+  };
 
-  return { estado, erro, enviar, resetar };
+  const resetar = () => {
+    setEstado("idle");
+    setErro(null);
+  };
+
+  return { estado, erro, enviar, enviarRaw, resetar };
 }
