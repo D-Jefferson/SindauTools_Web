@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { atualizarUmCfc, type Cfc } from "../../api/Sindauto/cfcs";
 import { adquirirAtualizacao, executarFila } from "./filaCfcs";
 import { motivoIgnorarCfc } from "./validarCadastroFila";
+import { ConsultaCfcInvalida } from "../../api/Sindauto/respostaConsultaCfc";
 
 export default function AtualizarCfcsModal({ dados, disabled, onAtualizado, onExecutando }: {
   dados: Cfc[]; disabled: boolean; onAtualizado: (cfc: Cfc) => void; onExecutando: (valor: boolean) => void;
@@ -11,6 +12,8 @@ export default function AtualizarCfcsModal({ dados, disabled, onAtualizado, onEx
   const montado = useRef(false);
   const [erroInicio, setErroInicio] = useState("");
   const trava = useRef(false);
+  const progresso = useRef<{ fila: Cfc[]; proximo: number; feitos: number; ignorados: string[] } | null>(null);
+  const [pendentes, setPendentes] = useState(0);
   const [executando, setExecutando] = useState(false);
   const [cancelando, setCancelando] = useState(false);
   const [ignorados, setIgnorados] = useState<string[]>([]);
@@ -21,7 +24,7 @@ export default function AtualizarCfcsModal({ dados, disabled, onAtualizado, onEx
   }, []);
   useEffect(() => { if (disabled) cancelar.current?.abort(); }, [disabled]);
   function parar() { cancelar.current?.abort(); setCancelando(true); }
-  async function iniciar() {
+  async function iniciar(continuar = false) {
     if (trava.current || disabled || !dados.length) return;
     const liberar = adquirirAtualizacao();
     if (!liberar) { setErroInicio("Uma atualização anterior ainda está terminando. Aguarde antes de iniciar outra."); return; }
@@ -30,31 +33,46 @@ export default function AtualizarCfcsModal({ dados, disabled, onAtualizado, onEx
     const controller = new AbortController();
     cancelar.current = controller;
     setCancelando(false);
-    setIgnorados([]);
+    if (!continuar || !progresso.current) {
+      progresso.current = { fila: [...dados], proximo: 0, feitos: 0, ignorados: [] };
+    }
+    const checkpoint = progresso.current;
+    setIgnorados([...checkpoint.ignorados]);
     setExecutando(true);
     onExecutando(true);
-    const fila = [...dados];
-    let feitos = 0;
+    const fila = checkpoint.fila;
+    let feitos = checkpoint.feitos;
     let mensagem = "";
     setEstado({ total: fila.length, feitos, atual: "", mensagem: "" });
     try {
-      dialog.current?.showModal();
-      await executarFila({ itens: fila, signal: controller.signal, atualizar: atualizarUmCfc,
+      if (!dialog.current?.open) dialog.current?.showModal();
+      await executarFila({ itens: fila.slice(checkpoint.proximo), signal: controller.signal, atualizar: atualizarUmCfc,
         motivoIgnorar: motivoIgnorarCfc,
+        erroIgnoravel: (erro) => erro instanceof ConsultaCfcInvalida,
         aoIgnorar: (cfc, motivo) => {
-          if (montado.current) setIgnorados(lista => [...lista, `${cfc.nomeFantasia || cfc.nome || "CFC"} (ID ${cfc.id}) — ${cfc.cnpj || "sem CNPJ"}: ${motivo}`]);
+          checkpoint.proximo++;
+          checkpoint.ignorados.push(`${cfc.nomeFantasia || cfc.nome || "CFC"} (ID ${cfc.id}) — ${cfc.cnpj || "sem CNPJ"}: ${motivo}`);
+          if (montado.current) setIgnorados([...checkpoint.ignorados]);
         },
         aoIniciar: (cfc) => { if (montado.current) setEstado({ total: fila.length, feitos, atual: (cfc.nomeFantasia || cfc.nome || "CFC") + " — " + cfc.cnpj, mensagem: "" }); },
-        aoConcluir: (atualizado, quantidade) => {
-          feitos = quantidade;
+        aoConcluir: (atualizado) => {
+          checkpoint.proximo++;
+          feitos = ++checkpoint.feitos;
           if (montado.current) { onAtualizado(atualizado); setEstado((valor) => ({ ...valor, feitos })); }
         },
       });
       mensagem = controller.signal.aborted ? "Cancelado. As alterações já concluídas foram mantidas." : "Atualização concluída.";
     } catch (e: unknown) {
-      mensagem = "Fila interrompida: " + (e instanceof Error ? e.message : "Erro inesperado.") + " Nenhum próximo CFC será iniciado. Confira o cadastro e recarregue a lista antes de tentar novamente.";
+      const cfc = fila[checkpoint.proximo];
+      if (cfc) {
+        checkpoint.ignorados.push(`${cfc.nomeFantasia || cfc.nome || "CFC"} (ID ${cfc.id}): requer conferência após erro. Não será repetido ao continuar.`);
+        checkpoint.proximo++;
+      }
+      mensagem = "Fila interrompida: " + (e instanceof Error ? e.message : "Erro inesperado.") + " Confira o último cadastro. Continuar seguirá para o próximo, sem repetir o cadastro com erro.";
     } finally {
       if (montado.current) {
+        setPendentes(fila.length - checkpoint.proximo);
+        setIgnorados([...checkpoint.ignorados]);
         setEstado((valor) => ({ ...valor, feitos, mensagem }));
         setExecutando(false);
         onExecutando(false);
@@ -64,9 +82,12 @@ export default function AtualizarCfcsModal({ dados, disabled, onAtualizado, onEx
     }
   }
   return <>
-    <button className="fb-btn-buscar" disabled={disabled || executando || !dados.length} onClick={iniciar}>
+    <button className="fb-btn-buscar" disabled={disabled || executando || !dados.length || pendentes > 0} onClick={() => iniciar()}>
       Atualizar todos os CFCs carregados ({dados.length})
     </button>
+    {pendentes > 0 && <button className="fb-btn-buscar" disabled={disabled || executando} onClick={() => iniciar(true)}>
+      Continuar atualização ({pendentes} restantes)
+    </button>}
     {erroInicio && <p role="alert">{erroInicio}</p>}
 
     <dialog ref={dialog} aria-labelledby="atualizar-cfcs-titulo" aria-describedby="atualizar-cfcs-descricao"
@@ -88,6 +109,8 @@ export default function AtualizarCfcsModal({ dados, disabled, onAtualizado, onEx
         onClick={() => executando ? parar() : dialog.current?.close()}>
         {executando ? (cancelando ? "Cancelando..." : "Cancelar atualização") : "Fechar"}
       </button>
+      {!executando && pendentes > 0 && <button className="fb-btn-buscar" style={{ marginTop: "1rem", marginLeft: "1rem" }}
+        disabled={disabled} onClick={() => iniciar(true)}>Continuar atualização</button>}
     </dialog>
   </>;
 }

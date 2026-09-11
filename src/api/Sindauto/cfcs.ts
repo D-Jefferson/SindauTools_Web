@@ -1,5 +1,6 @@
 import { getToken } from "./autenticacao";
 import { montarAtualizacao } from "./atualizacaoValidadeCfc";
+import { lerConsultaCfc } from "./respostaConsultaCfc";
 export { montarAtualizacao } from "./atualizacaoValidadeCfc";
 
 export interface Cfc {
@@ -43,7 +44,7 @@ export async function atualizarUmCfc(cfc: Cfc): Promise<Cfc> {
   const autenticacao = headers();
   const consulta = await fetch(`${base()}/gestao/api/v1/detranba/consultacfc?cnpj=${cnpj}`, { headers: autenticacao });
   await verificar(consulta, "Falha ao consultar o CFC no DETRAN");
-  const payload = montarAtualizacao(cfc, await consulta.json());
+  const payload = montarAtualizacao(cfc, await lerConsultaCfc(consulta));
   let resposta: Response;
   try {
     resposta = await fetch(`${base()}/gestao/api/v1/cfcs`, {

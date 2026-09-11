@@ -13,6 +13,7 @@ export async function executarFila<T>(opcoes: {
   aoIniciar: (item: T) => void;
   aoConcluir: (item: T, feitos: number) => void;
   motivoIgnorar?: (item: T) => string | null;
+  erroIgnoravel?: (erro: unknown) => boolean;
   aoIgnorar?: (item: T, motivo: string) => void;
   esperar?: () => Promise<void>;
 }) {
@@ -28,8 +29,16 @@ export async function executarFila<T>(opcoes: {
     }
     aoIniciar(item);
     // Do not abort or retry an uncertain write. Cancellation stops the next item.
-    const atualizado = await atualizar(item);
-    aoConcluir(atualizado, ++feitos);
+    let atualizado: T;
+    try {
+      atualizado = await atualizar(item);
+    } catch (erro) {
+      if (!opcoes.erroIgnoravel?.(erro)) throw erro;
+      opcoes.aoIgnorar?.(item, erro instanceof Error ? erro.message : "Consulta inválida");
+      // Still wait below: a request was sent even though no write occurred.
+      atualizado = undefined as T;
+    }
+    if (atualizado !== undefined) aoConcluir(atualizado, ++feitos);
     if (!signal.aborted && indice < itens.length - 1) {
       if (opcoes.esperar) await opcoes.esperar();
       else await new Promise<void>((resolve) => {

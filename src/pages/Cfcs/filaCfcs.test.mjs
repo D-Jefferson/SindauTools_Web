@@ -2,6 +2,36 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { adquirirAtualizacao, executarFila } from './filaCfcs.ts';
 import { motivoIgnorarCfc } from './validarCadastroFila.ts';
+import { ConsultaCfcInvalida, lerConsultaCfc } from '../../api/Sindauto/respostaConsultaCfc.ts';
+
+test('empty/truncated DETRAN body is skipped before PUT with interval preserved', async () => {
+  for (const body of ['', '   ', '{"cnpj":']) {
+    const puts = [], ignored = [], intervals = [];
+    await executarFila(options({
+      atualizar: async item => {
+        await lerConsultaCfc(new Response(item === 2 ? body : '{"ok":true}'));
+        puts.push(item);
+        return item;
+      },
+      erroIgnoravel: error => error instanceof ConsultaCfcInvalida,
+      aoIgnorar: item => ignored.push(item), esperar: async () => intervals.push('wait'),
+    }));
+    assert.deepEqual(puts, [1, 3]);
+    assert.deepEqual(ignored, [2]);
+    assert.equal(intervals.length, 2);
+  }
+});
+
+test('write and transport errors are not skippable', async () => {
+  for (const error of [new Error('PUT incerto'), new TypeError('Failed to fetch')]) {
+    const called = [];
+    await assert.rejects(executarFila(options({
+      atualizar: async item => { called.push(item); throw error; },
+      erroIgnoravel: value => value instanceof ConsultaCfcInvalida,
+    })), error);
+    assert.deepEqual(called, [1]);
+  }
+});
 
 test('invalid CNPJ in middle is skipped without request; next valid CFC completes', async () => {
   const itens = [{ id: 1, cnpj: '12.345.678/0001-90' }, { id: 2, cnpj: null }, { id: 3, cnpj: '123' }, { id: 4, cnpj: '12345678000190' }];
