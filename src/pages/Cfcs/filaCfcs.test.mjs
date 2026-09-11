@@ -1,6 +1,31 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { adquirirAtualizacao, executarFila } from './filaCfcs.ts';
+import { motivoIgnorarCfc } from './validarCadastroFila.ts';
+
+test('invalid CNPJ in middle is skipped without request; next valid CFC completes', async () => {
+  const itens = [{ id: 1, cnpj: '12.345.678/0001-90' }, { id: 2, cnpj: null }, { id: 3, cnpj: '123' }, { id: 4, cnpj: '12345678000190' }];
+  const calls = [], skipped = [];
+  const result = await executarFila({ itens, signal: new AbortController().signal,
+    motivoIgnorar: motivoIgnorarCfc, aoIgnorar: item => skipped.push(item.id),
+    atualizar: async item => { calls.push(item.id); return item; },
+    aoIniciar() {}, aoConcluir() {}, esperar: async () => {},
+  });
+  assert.deepEqual(calls, [1, 4]);
+  assert.deepEqual(skipped, [2, 3]);
+  assert.equal(result.feitos, 2);
+});
+
+test('all invalid records finish without requests or delays', async () => {
+  let skipped = 0;
+  const result = await executarFila({ itens: [{ id: 1 }, { id: null, cnpj: '12345678000190' }],
+    signal: new AbortController().signal, motivoIgnorar: motivoIgnorarCfc,
+    aoIgnorar: () => skipped++, atualizar: async () => assert.fail('request'),
+    aoIniciar() {}, aoConcluir() {}, esperar: async () => assert.fail('delay'),
+  });
+  assert.equal(skipped, 2);
+  assert.equal(result.feitos, 0);
+});
 
 const deferred = () => {
   let resolve;
@@ -63,13 +88,13 @@ test('cancel during real interval prevents next write promptly', async () => {
   assert.deepEqual(started, [1]);
 });
 
-test('default interval is five seconds', async t => {
+test('default interval is two seconds', async t => {
   t.mock.timers.enable({ apis: ['setTimeout'] });
   const started = [];
   const run = executarFila(options({ itens: [1, 2],
     atualizar: async item => { started.push(item); return item; },
   }));
-  await flush(); t.mock.timers.tick(4999); await flush();
+  await flush(); t.mock.timers.tick(1999); await flush();
   assert.deepEqual(started, [1]);
   t.mock.timers.tick(1); await run;
   assert.deepEqual(started, [1, 2]);
@@ -100,4 +125,5 @@ test('pre-cancelled queue never starts', async () => {
   const result = await executarFila(options({ signal: controller.signal, atualizar: () => assert.fail('started') }));
   assert.equal(result.feitos, 0);
 });
+
 

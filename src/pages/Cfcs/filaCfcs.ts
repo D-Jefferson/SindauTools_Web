@@ -12,18 +12,25 @@ export async function executarFila<T>(opcoes: {
   atualizar: (item: T) => Promise<T>;
   aoIniciar: (item: T) => void;
   aoConcluir: (item: T, feitos: number) => void;
+  motivoIgnorar?: (item: T) => string | null;
+  aoIgnorar?: (item: T, motivo: string) => void;
   esperar?: () => Promise<void>;
 }) {
   const { signal, atualizar, aoIniciar, aoConcluir } = opcoes;
   const itens = [...opcoes.itens];
   let feitos = 0;
-  for (const item of itens) {
+  for (const [indice, item] of itens.entries()) {
     if (signal.aborted) break;
+    const motivo = opcoes.motivoIgnorar?.(item);
+    if (motivo) {
+      opcoes.aoIgnorar?.(item, motivo);
+      continue;
+    }
     aoIniciar(item);
     // Do not abort or retry an uncertain write. Cancellation stops the next item.
     const atualizado = await atualizar(item);
     aoConcluir(atualizado, ++feitos);
-    if (!signal.aborted && feitos < itens.length) {
+    if (!signal.aborted && indice < itens.length - 1) {
       if (opcoes.esperar) await opcoes.esperar();
       else await new Promise<void>((resolve) => {
         const terminar = () => {
@@ -31,7 +38,7 @@ export async function executarFila<T>(opcoes: {
           signal.removeEventListener("abort", terminar);
           resolve();
         };
-        const timer = setTimeout(terminar, 5000);
+        const timer = setTimeout(terminar, 2000);
         signal.addEventListener("abort", terminar, { once: true });
         if (signal.aborted) terminar();
       });
