@@ -1,4 +1,3 @@
-
 .pagina-login {
   font-family: "Sora", sans-serif;
   display: flex;
@@ -31,7 +30,7 @@
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.5em;
-  color: var(--text-primary);
+  color: #1a1a1a;
 }
 
 .conteudo-principal::after {
@@ -158,7 +157,9 @@
   transform: translateY(-2px);
 }
 
-.botao:active:not(:disabled) { transform: translateY(0); }
+.botao:active:not(:disabled) {
+  transform: translateY(0);
+}
 
 .rodape-login {
   margin-top: 2rem;
@@ -168,17 +169,27 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 480px) {
-  .container-login { 
-    padding: 2rem; 
+  .container-login {
+    padding: 2rem;
     max-width: 90%;
     border: none;
     background: transparent;
     backdrop-filter: none;
   }
-  .conteudo-principal::before { top: 2rem; }
+
+  .conteudo-principal::before {
+    top: 2rem;
+  }
 }

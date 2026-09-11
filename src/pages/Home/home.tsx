@@ -4,14 +4,14 @@ import "./home.css";
 import "../../assets/global.css";
 import FotoBiometria from "../FotoBiometria/fotobiometria";
 import Matricula from "../Matricula/matricula";
-import Grades from "../Grades/grades";
+import Cfcs from "../Cfcs/cfcs";
 import {ModalConfiguracoes} from "../../modals/configuracao";
 import { useDemo } from "../../context/demo";
 
 const ConsultaCandidato: React.FC = () => {
   const navigate = useNavigate();
   const [theme, setTheme] = useState(localStorage.getItem("sindautools-theme") || "dark");
-  const [pageMode, setPageMode] = useState<"matricula" | "fotobiometria" | "grades">("matricula");
+  const [pageMode, setPageMode] = useState<"matricula" | "fotobiometria" | "cfcs">("matricula");
   const [sliding, setSliding] = useState<"left" | "right" | null>(null);
   const [modalConfig, setModalConfig] = useState(false);
   const [cpfInput, setCpfInput] = useState("");
@@ -92,11 +92,11 @@ const ConsultaCandidato: React.FC = () => {
               <span>Matrículas</span>
             </button>
             <button
-              className={`st-mode-btn ${pageMode === "grades" ? "active" : ""}`}
-              onClick={() => changeMode("grades", "right")}
+              className={`st-mode-btn ${pageMode === "cfcs" ? "active" : ""}`}
+              onClick={() => changeMode("cfcs", "right")}
             >
               <i className="fas fa-th"></i>
-              <span>Grades</span>
+              <span>CFCs</span>
             </button>
           </div>
 
@@ -152,7 +152,7 @@ const ConsultaCandidato: React.FC = () => {
 
           {pageMode === "fotobiometria" && <FotoBiometria />}
 
-          {pageMode === "grades" && <Grades />}
+          {pageMode === "cfcs" && <Cfcs />}
 
         </div>
       </main>

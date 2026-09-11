@@ -1,0 +1,6 @@
+.fb-container .fb-filter-row { flex-wrap: wrap; }
+.fb-container .fb-filter-group { min-width: min(240px, 100%); }
+.cfc-export-dialog { margin: auto; padding: 2rem; width: min(540px, 92vw); max-height: 90vh; overflow: auto; border: 1px solid var(--border-color); border-radius: 16px; background: var(--surface-color); color: var(--text-primary); }
+.cfc-export-dialog::backdrop { background: rgb(0 0 0 / 55%); }
+.cfc-export-dialog p { margin: 1rem 0; }
+.cfc-export-actions { display: flex; flex-wrap: wrap; gap: 12px; }
