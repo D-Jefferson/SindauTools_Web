@@ -9,3 +9,24 @@
 .cfc-sort-button:hover { text-decoration: underline; }
 .cfc-sort-button:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; border-radius: 2px; }
 .cfc-sort-button span { font-size: 0.75em; }
+.fb-table .cfc-expand-button { display: inline-flex; align-items: center; gap: 10px; padding: 4px 0; border: 0; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.cfc-expand-button i { color: var(--brand-red); font-size: 11px; }
+.cfc-expand-button:hover .fb-td-name { text-decoration: underline; }
+.cfc-expand-button:focus-visible { outline: 2px solid var(--brand-red); outline-offset: 4px; border-radius: 3px; }
+.fb-table .cfc-details-row > td { background: var(--bg-color); padding: 20px 24px; white-space: normal; }
+.cfc-details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px 24px; margin: 0; }
+.cfc-details-grid dt { color: var(--text-secondary); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+.cfc-details-grid dd { margin: 0; color: var(--text-primary); font-size: 14px; overflow-wrap: anywhere; }
+.fb-table .cfc-city-cell { text-align: center; }
+.fb-table thead th.cfc-city-cell .cfc-sort-button { justify-content: center; text-align: center; }
+.fb-table .cfc-summary-row { cursor: pointer; }
+.fb-table .cfc-summary-row:has(.cfc-expand-button:focus-visible) { outline: 2px solid var(--brand-red); outline-offset: -2px; }
+.fb-table:has(.cfc-summary-row) thead th:nth-child(2),
+.fb-table:has(.cfc-summary-row) thead th:nth-child(3),
+.fb-table:has(.cfc-summary-row) thead th:nth-child(4),
+.fb-table .cfc-summary-row > td:nth-child(2),
+.fb-table .cfc-summary-row > td:nth-child(3),
+.fb-table .cfc-summary-row > td:nth-child(4) { text-align: center; }
+.fb-table:has(.cfc-summary-row) thead th:nth-child(2) .cfc-sort-button,
+.fb-table:has(.cfc-summary-row) thead th:nth-child(3) .cfc-sort-button,
+.fb-table:has(.cfc-summary-row) thead th:nth-child(4) .cfc-sort-button { justify-content: center; text-align: center; }
