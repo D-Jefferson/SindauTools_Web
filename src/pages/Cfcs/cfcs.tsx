@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from "react";
-import { atualizarUmCfc, buscarCfcs, type Cfc } from "../../api/Sindauto/cfcs";
+import { useEffect, useState } from "react";
+import { buscarCfcs, type Cfc } from "../../api/Sindauto/cfcs";
 import { useDemo } from "../../context/demo";
 import "../Home/home.css";
 import AtualizarCfcsModal from "./AtualizarCfcsModal";
-import { adquirirAtualizacao } from "./filaCfcs";
 import ExportarCfcs from "./ExportacaoCfcsModal";
 import "./cfcs.css";
 
@@ -15,6 +14,22 @@ const normalizar = (texto: string) => texto.normalize("NFD").replace(/[\u0300-\u
 const formatarCnpj = (cnpj?: string | null) =>
   cnpj?.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, "$1.$2.$3/$4-$5") || "—";
 
+type Coluna = "nome" | "cnpj" | "codigo" | "cidade" | "vencimento" | "foto";
+const colunas: { chave: Coluna; titulo: string }[] = [
+  { chave: "nome", titulo: "CFC" }, { chave: "cnpj", titulo: "CNPJ" },
+  { chave: "codigo", titulo: "Código DETRAN" }, { chave: "cidade", titulo: "Cidade / UF" },
+  { chave: "vencimento", titulo: "Vencimento" }, { chave: "foto", titulo: "Foto/Biometria" },
+];
+function valorColuna(cfc: Cfc, coluna: Coluna): string {
+  switch (coluna) {
+    case "nome": return cfc.nomeFantasia || cfc.razaoSocial || cfc.nome || "";
+    case "cnpj": return (cfc.cnpj || "").replace(/\D/g, "");
+    case "codigo": return String(cfc.codCfcDetran ?? "");
+    case "cidade": return [cfc.cidade, cfc.estado].filter(Boolean).join(" / ");
+    case "vencimento": return cfc.dataValidade?.slice(0, 10) || "";
+    case "foto": return cfc.idLocalFotoBiometria == null ? "" : locais[cfc.idLocalFotoBiometria] || `Local ${cfc.idLocalFotoBiometria}`;
+  }
+}
 export default function Cfcs() {
   const { isDemo } = useDemo();
   const [dados, setDados] = useState<Cfc[]>([]);
@@ -22,41 +37,9 @@ export default function Cfcs() {
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
   const [atualizacao, setAtualizacao] = useState(0);
-  const [selecionado, setSelecionado] = useState<number | null>(null);
-  const [atualizando, setAtualizando] = useState(false);
-  const [mensagem, setMensagem] = useState("");
-  const trava = useRef(false);
-  const montado = useRef(false);
   const [filaExecutando, setFilaExecutando] = useState(false);
-  const ocupado = atualizando || filaExecutando;
-  useEffect(() => {
-    montado.current = true;
-    return () => { montado.current = false; };
-  }, []);
-  const cfcSelecionado = dados.find((cfc) => cfc.id === selecionado);
-
-  async function atualizarSelecionado() {
-    if (trava.current || ocupado || carregando || !cfcSelecionado || isDemo) return;
-    const liberar = adquirirAtualizacao();
-    if (!liberar) { setErro("Uma atualização anterior ainda está terminando. Aguarde antes de iniciar outra."); return; }
-    trava.current = true;
-    setAtualizando(true);
-    setErro("");
-    setMensagem("");
-    try {
-      const atualizado = await atualizarUmCfc(cfcSelecionado);
-      if (!montado.current) return;
-      setDados((lista) => lista.map((item) => item.id === atualizado.id ? atualizado : item));
-      setMensagem('Atualização concluída: ' + (atualizado.nomeFantasia || atualizado.nome) + ' — CNPJ ' + formatarCnpj(atualizado.cnpj) + '. Apenas este CFC foi atualizado.');
-    } catch (e: unknown) {
-      if (montado.current) setErro(e instanceof Error ? e.message : "Erro ao atualizar o CFC.");
-    } finally {
-      trava.current = false;
-      liberar();
-      if (montado.current) setAtualizando(false);
-    }
-  }
-
+  const ocupado = filaExecutando;
+  const [ordenacao, setOrdenacao] = useState<{ coluna: Coluna; crescente: boolean }>({ coluna: "nome", crescente: true });
   useEffect(() => {
     const controller = new AbortController();
     setCarregando(true);
@@ -79,6 +62,13 @@ export default function Cfcs() {
   const filtrados = dados.filter((cfc) => {
     const texto = normalizar([cfc.nomeFantasia, cfc.razaoSocial, cfc.nome, cfc.cidade, cfc.cnpj, formatarCnpj(cfc.cnpj), cfc.codCfcDetran].join(" "));
     return texto.includes(termo);
+  }).sort((a, b) => {
+    const primeiro = valorColuna(a, ordenacao.coluna);
+    const segundo = valorColuna(b, ordenacao.coluna);
+    if (primeiro === "") return segundo === "" ? 0 : 1;
+    if (segundo === "") return -1;
+    const resultado = primeiro.localeCompare(segundo, "pt-BR", { numeric: true, sensitivity: "base" });
+    return ordenacao.crescente ? resultado : -resultado;
   });
 
   return (
@@ -100,26 +90,10 @@ export default function Cfcs() {
           {carregando ? " Carregando..." : " Recarregar lista"}
         </button>
         <ExportarCfcs dados={filtrados} disabled={carregando || ocupado || isDemo} />
+        <AtualizarCfcsModal dados={dados} disabled={carregando || isDemo}
+          onExecutando={setFilaExecutando}
+          onAtualizado={(atualizado) => setDados((lista) => lista.map((item) => item.id === atualizado.id ? atualizado : item))} />
       </div>
-      <div className="fb-filter-row">
-        <div className="fb-filter-group" style={{ flex: 1 }}>
-          <label htmlFor="cfc-teste">CFC para o teste (apenas um)</label>
-          <select id="cfc-teste" className="fb-input" value={selecionado ?? ""}
-            disabled={carregando || ocupado} onChange={(e) => setSelecionado(e.target.value ? Number(e.target.value) : null)}>
-            <option value="">Selecione um CFC</option>
-            {dados.map((cfc) => <option key={cfc.id} value={cfc.id}>{cfc.nomeFantasia || cfc.nome} — {formatarCnpj(cfc.cnpj)}</option>)}
-          </select>
-        </div>
-        <button className="fb-btn-buscar" onClick={atualizarSelecionado}
-          disabled={!cfcSelecionado || carregando || ocupado || isDemo}>
-          <i aria-hidden="true" className={atualizando ? "fas fa-circle-notch fa-spin" : "fas fa-sync-alt"} />
-          {atualizando ? " Atualizando 1 CFC..." : " Atualizar somente o CFC selecionado"}
-        </button>
-      <AtualizarCfcsModal dados={dados} disabled={carregando || atualizando || isDemo}
-        onExecutando={setFilaExecutando}
-        onAtualizado={(atualizado) => setDados((lista) => lista.map((item) => item.id === atualizado.id ? atualizado : item))} />
-      </div>
-      {(atualizando || mensagem) && <p role="status">{atualizando ? "Atualizando o CFC selecionado..." : mensagem}</p>}
       {erro && <div className="st-erro-msg" role="alert">{erro}</div>}
       {carregando && <p role="status">Carregando CFCs...</p>}
       {dados.length > 0 && (
@@ -128,12 +102,19 @@ export default function Cfcs() {
             <div className="fb-stat-chip">
               <span className="fb-stat-count">{filtrados.length}</span>
               <div className="fb-stat-labels"><span className="top">CFCs exibidos</span><span className="bot">de {dados.length} carregados · página 1, até 500</span></div>
-              <span className="fb-sort-badge">Nome A–Z</span>
+              <span className="fb-sort-badge">{colunas.find((item) => item.chave === ordenacao.coluna)?.titulo} · {ordenacao.crescente ? "Crescente" : "Decrescente"}</span>
             </div>
           </div>
           <div className="fb-table-scroll">
             <table className="fb-table">
-              <thead><tr><th>CFC</th><th>CNPJ</th><th>Código DETRAN</th><th>Cidade / UF</th><th>Vencimento</th><th>Foto/Biometria</th></tr></thead>
+              <thead><tr>{colunas.map(({ chave, titulo }) => (
+                <th key={chave} scope="col" aria-sort={ordenacao.coluna === chave ? (ordenacao.crescente ? "ascending" : "descending") : "none"}>
+                  <button type="button" className="cfc-sort-button"
+                    onClick={() => setOrdenacao((anterior) => ({ coluna: chave, crescente: anterior.coluna === chave ? !anterior.crescente : true }))}>
+                    {titulo} <span aria-hidden="true">{ordenacao.coluna === chave ? (ordenacao.crescente ? "▲" : "▼") : "↕"}</span>
+                  </button>
+                </th>
+              ))}</tr></thead>
               <tbody>{filtrados.map((cfc) => (
                 <tr key={cfc.id}>
                   <td><div className="fb-td-name">{cfc.nomeFantasia || cfc.razaoSocial || cfc.nome || "—"}</div>
@@ -156,8 +137,3 @@ export default function Cfcs() {
     </div>
   );
 }
-
-
-
-
-

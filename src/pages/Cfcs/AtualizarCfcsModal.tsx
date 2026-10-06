@@ -83,7 +83,7 @@ export default function AtualizarCfcsModal({ dados, disabled, onAtualizado, onEx
   }
   return <>
     <button className="fb-btn-buscar" disabled={disabled || executando || !dados.length || pendentes > 0} onClick={() => iniciar()}>
-      Atualizar todos os CFCs carregados ({dados.length})
+      Atualizar todos CFCs
     </button>
     {pendentes > 0 && <button className="fb-btn-buscar" disabled={disabled || executando} onClick={() => iniciar(true)}>
       Continuar atualização ({pendentes} restantes)
@@ -114,5 +114,6 @@ export default function AtualizarCfcsModal({ dados, disabled, onAtualizado, onEx
     </dialog>
   </>;
 }
+
 
 
